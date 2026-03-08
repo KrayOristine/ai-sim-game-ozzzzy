@@ -80,7 +80,7 @@ export async function runPiggybackAnalysis(gameState: GameState, lastNarration: 
     }, 100); // Delay nhẹ để nhường UI render xong
 }
 
-export async function fetchGraphContext(worldId: number, entityNames: string[]): Promise<string> {
+export async function fetchGraphContext(worldId: string, entityNames: string[]): Promise<string> {
     if (!entityNames || entityNames.length === 0) return "";
 
     try {

@@ -127,7 +127,7 @@ export const saveGame = async (gameState: GameState, saveType: 'manual' | 'auto'
 
     const newSave: SaveSlot = {
       ...gameState,
-      worldId: gameState.worldId || Date.now(), // Đảm bảo worldId luôn tồn tại khi lưu
+      worldId: gameState.worldId || new Crypto().randomUUID().replace('-',''), // Đảm bảo worldId luôn tồn tại khi lưu
       worldName: gameState.worldConfig.storyContext.worldName || 'Cuộc phiêu lưu không tên',
       saveId: Date.now(),
       saveDate: new Date().toISOString(),
@@ -135,9 +135,9 @@ export const saveGame = async (gameState: GameState, saveType: 'manual' | 'auto'
       saveType: saveType,
     };
 
-    // Gán worldId = saveId cho các save cũ chưa có
+    // Gán worldId cho các save cũ chưa có
     if (!newSave.worldId) {
-        newSave.worldId = newSave.saveId;
+        newSave.worldId = new Crypto().randomUUID().replace('-','');
     }
 
     await dbService.addSave(newSave);

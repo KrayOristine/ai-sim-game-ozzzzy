@@ -249,7 +249,7 @@ export interface GraphEdge {
 }
 
 export interface GameState {
-  worldId?: number; // Dấu vân tay định danh cho phiên chơi
+  worldId?: string; // Dấu vân tay định danh cho phiên chơi
   worldConfig: WorldConfig;
   character: CharacterConfig;
   history: GameTurn[];
@@ -406,7 +406,7 @@ export interface FandomDataset {
 // For storing vectors of individual game turns
 export interface TurnVector {
   turnId: number; // Could be Date.now() or an incrementing number
-  worldId: number; // Dấu vân tay của phiên chơi
+  worldId: string; // Dấu vân tay của phiên chơi
   turnIndex: number; // The index of the turn in the history array
   content: string; // The text content of the turn
   embedding: number[];
@@ -415,7 +415,7 @@ export interface TurnVector {
 // For storing vectors of summaries
 export interface SummaryVector {
   summaryId: number; // Could be Date.now()
-  worldId: number; // Dấu vân tay của phiên chơi
+  worldId: string; // Dấu vân tay của phiên chơi
   summaryIndex: number; // The index of the summary in the summaries array
   content: string; // The text content of the summary
   embedding: number[];
@@ -431,6 +431,6 @@ export interface VectorUpdate {
 // For storing entity vectors in the database
 export interface EntityVector {
     id: string; // Unique identifier (e.g., entity name), should match VectorUpdate id
-    worldId: number; // Dấu vân tay của phiên chơi
+    worldId: string; // Dấu vân tay của phiên chơi
     embedding: number[];
 }

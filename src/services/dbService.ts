@@ -227,7 +227,7 @@ export async function addTurnVector(vector: TurnVector): Promise<void> {
   });
 }
 
-export async function getAllTurnVectors(worldId: number): Promise<TurnVector[]> {
+export async function getAllTurnVectors(worldId: string): Promise<TurnVector[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(TURN_VECTORS_STORE_NAME, 'readonly');
@@ -251,7 +251,7 @@ export async function addSummaryVector(vector: SummaryVector): Promise<void> {
   });
 }
 
-export async function getAllSummaryVectors(worldId: number): Promise<SummaryVector[]> {
+export async function getAllSummaryVectors(worldId: string): Promise<SummaryVector[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(SUMMARY_VECTORS_STORE_NAME, 'readonly');
@@ -276,7 +276,7 @@ export async function addEntityVector(vector: EntityVector): Promise<void> {
     });
 }
 
-export async function getAllEntityVectors(worldId: number): Promise<EntityVector[]> {
+export async function getAllEntityVectors(worldId: string): Promise<EntityVector[]> {
     const db = await openDB();
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(ENTITY_VECTORS_STORE_NAME, 'readonly');
@@ -301,7 +301,7 @@ export async function deleteEntityVector(id: string): Promise<void> {
 
 // --- Graph Store Functions ---
 
-export async function addGraphNodes(nodes: (GraphNode & { worldId: number })[]): Promise<void> {
+export async function addGraphNodes(nodes: (GraphNode & { worldId: string })[]): Promise<void> {
     if (nodes.length === 0) return;
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -329,7 +329,7 @@ export async function addGraphNodes(nodes: (GraphNode & { worldId: number })[]):
     });
 }
 
-export async function addGraphEdges(edges: (GraphEdge & { worldId: number })[]): Promise<void> {
+export async function addGraphEdges(edges: (GraphEdge & { worldId: string })[]): Promise<void> {
     if (edges.length === 0) return;
     const db = await openDB();
     return new Promise((resolve, reject) => {
@@ -346,7 +346,7 @@ export async function addGraphEdges(edges: (GraphEdge & { worldId: number })[]):
     });
 }
 
-export async function getGraphEdgesBySource(worldId: number, sourceId: string): Promise<GraphEdge[]> {
+export async function getGraphEdgesBySource(worldId: string, sourceId: string): Promise<GraphEdge[]> {
     const db = await openDB();
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(GRAPH_EDGES_STORE_NAME, 'readonly');
@@ -358,7 +358,7 @@ export async function getGraphEdgesBySource(worldId: number, sourceId: string): 
         const request = index.getAll(sourceId);
 
         request.onsuccess = () => {
-            const edges = (request.result as (GraphEdge & { worldId: number })[])
+            const edges = (request.result as (GraphEdge & { worldId: string })[])
                 .filter(e => e.worldId === worldId);
             resolve(edges);
         };
@@ -366,7 +366,7 @@ export async function getGraphEdgesBySource(worldId: number, sourceId: string): 
     });
 }
 
-export async function getGraphEdgesByTarget(worldId: number, targetId: string): Promise<GraphEdge[]> {
+export async function getGraphEdgesByTarget(worldId: string, targetId: string): Promise<GraphEdge[]> {
     const db = await openDB();
     return new Promise((resolve, reject) => {
         const transaction = db.transaction(GRAPH_EDGES_STORE_NAME, 'readonly');
@@ -375,7 +375,7 @@ export async function getGraphEdgesByTarget(worldId: number, targetId: string): 
         const request = index.getAll(targetId);
 
         request.onsuccess = () => {
-            const edges = (request.result as (GraphEdge & { worldId: number })[])
+            const edges = (request.result as (GraphEdge & { worldId: string })[])
                 .filter(e => e.worldId === worldId);
             resolve(edges);
         };

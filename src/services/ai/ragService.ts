@@ -286,7 +286,7 @@ export async function distillKnowledgeForWorldCreation(
  * @param updates - Một mảng các đối tượng VectorUpdate.
  * @param worldId - ID của phiên chơi hiện tại.
  */
-export async function processVectorUpdates(updates: VectorUpdate[], worldId: number): Promise<void> {
+export async function processVectorUpdates(updates: VectorUpdate[], worldId: string): Promise<void> {
     if (!updates || updates.length === 0) return;
 
     const textsToEmbed = updates.map(u => u.content);

@@ -64,7 +64,7 @@ const App: React.FC = () => {
       }));
 
     setGameState({
-      worldId: Date.now(), // Tạo ID duy nhất cho thế giới mới
+      worldId: new Crypto().randomUUID().replace('-',''), // Tạo ID duy nhất cho thế giới mới
       worldConfig: worldConfigWithLore,
       character: {
         ...config.character,
@@ -118,7 +118,7 @@ const App: React.FC = () => {
     }
 
     const completeState: GameState = {
-      worldId: state.worldId || (state as any).saveId || Date.now(), // Gán worldId nếu chưa có
+      worldId: state.worldId || (state as any).saveId || new Crypto().randomUUID().replace('-',''), // Gán worldId nếu chưa có
       memories: [],
       summaries: [],
       playerStatus: [],

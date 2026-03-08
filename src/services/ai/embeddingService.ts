@@ -50,7 +50,7 @@ export async function embedContents(chunks: string[], onProgress: (progress: num
  * Tạo vector cho một thực thể duy nhất và lưu ngay vào Database.
  * Dùng cho tính năng "Tạo Codex" để đồng bộ dữ liệu tức thì.
  */
-export async function createEntityVector(entityId: string, content: string, worldId: number): Promise<void> {
+export async function createEntityVector(entityId: string, content: string, worldId: string): Promise<void> {
     try {
         const embeddings = await embedContents([content]);
         if (embeddings.length > 0) {
