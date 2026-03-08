@@ -7,11 +7,11 @@ import { GENRE_TAGGING_SYSTEMS } from './genreTagging';
 export const getResponseLengthDirective = (aiResponseLength?: string): string => {
     switch (aiResponseLength) {
         case 'Ngắn':
-            return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 1200 từ.";
+            return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 2000 từ.";
         case 'Trung bình':
-            return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 750 đến 1600 từ.";
+            return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 1000 đến 4000 từ.";
         case 'Chi tiết, dài':
-            return `Phần tường thuật của bạn phải CỰC KỲ CHI TIẾT, có chiều sâu và DÀI, hướng đến độ dài mục tiêu từ 1200 đến 2500 từ. Để đạt được độ dài và chất lượng yêu cầu, bạn PHẢI:
+            return `Phần tường thuật của bạn phải CỰC KỲ CHI TIẾT, có chiều sâu và DÀI, hướng đến độ dài mục tiêu từ tối thiểu 2000 đến tối đa 7500 từ. Để đạt được độ dài và chất lượng yêu cầu, bạn PHẢI:
 - **Miêu tả đa giác quan:** Đi sâu vào mô tả môi trường, các chi tiết giác quan (âm thanh, mùi vị, hình ảnh, cảm giác).
 - **Khám phá nội tâm:** Dành thời gian mô tả chi tiết suy nghĩ, cảm xúc, và mâu thuẫn nội tâm của nhân vật chính và các NPC quan trọng.
 - **Hành động & Phản ứng của NPC:** Mô tả chi tiết hành động, cử chỉ, và phản ứng của các NPC, khiến họ trở nên sống động.
