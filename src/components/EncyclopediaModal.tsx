@@ -29,7 +29,7 @@ const isKnowledgeItem = (item: AllEntities): item is KnowledgeFile => 'content' 
 const TabButton: React.FC<{ active: boolean; onClick: () => void; children: React.ReactNode; iconName: any; }> = ({ active, onClick, children, iconName }) => (
     <button
         onClick={onClick}
-        className={`flex items-center justify-start gap-2 px-3 py-3 text-xs sm:text-sm font-semibold transition-colors duration-200 focus:outline-none w-full text-left rounded-md ${
+        className={`cursor-pointer flex items-center justify-start gap-2 px-3 py-3 text-xs sm:text-sm font-semibold transition-colors duration-200 focus:outline-none w-full text-left rounded-md ${
             active
                 ? 'text-purple-300 bg-slate-900/50 whitespace-normal' // Active: wrap text
                 : 'text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 truncate' // Inactive: truncate
@@ -802,7 +802,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                 onClick={() => setMainView(view)}
                 className={`px-4 py-2 flex items-center gap-2 rounded-t-md border-b-2 font-semibold transition-all ${
                     isActive
-                        ? 'bg-slate-800 border-pink-500 text-pink-400'
+                        ? 'cursor-pointer bg-slate-800 border-pink-500 text-pink-400'
                         : 'bg-transparent border-transparent text-slate-400 hover:bg-slate-700/50 hover:text-slate-200'
                 }`}
             >
@@ -885,7 +885,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                         Bách Khoa Toàn Thư
                     </h2>
                      <div className="flex items-center gap-4">
-                        <button onClick={onClose} className="text-slate-400 hover:text-white transition">
+                        <button onClick={onClose} className="cursor-pointer text-slate-400 hover:text-white transition">
                             <Icon name="xCircle" className="w-7 h-7" />
                         </button>
                     </div>
@@ -931,7 +931,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                     <ul className="p-2">
                                         {filteredList.map((item, index) => (
                                             <li key={index}>
-                                                <button onClick={() => handleSelectItem(item)} className={`w-full text-left p-2 rounded-md transition-colors ${activeItem?.name === item.name ? 'bg-purple-600/30' : 'hover:bg-slate-700/50'}`}>
+                                                <button onClick={() => handleSelectItem(item)} className={`cursor-pointer w-full text-left p-2 rounded-md transition-colors ${activeItem?.name === item.name ? 'bg-purple-600/30' : 'hover:bg-slate-700/50'}`}>
                                                     <div className="flex justify-between items-center">
                                                         <p className={`font-semibold truncate ${(item as Quest)?.status === 'hoàn thành' ? 'text-slate-500 line-through' : 'text-slate-100'}`}>
                                                             {item.name}
@@ -962,8 +962,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                         <h3 className="text-2xl font-bold text-purple-300 mb-2">{activeItem.name}</h3>
                                         {activeTab !== 'knowledge' && (
                                             <div className="flex gap-2">
-                                                <Button onClick={handleStartEdit} variant="secondary" className=".text_wauto_py1_px3_sm"><Icon name="pencil" className="w-4 h-4 mr-1"/>Chỉnh sửa / Di chuyển</Button>
-                                                <Button onClick={handleDelete} variant="warning" className=".text_wauto_py1_px3_sm"><Icon name="trash" className="w-4 h-4 mr-1"/>Xóa</Button>
+                                                <Button onClick={handleStartEdit} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm"><Icon name="pencil" className="w-4 h-4 mr-1"/>Chỉnh sửa / Di chuyển</Button>
+                                                <Button onClick={handleDelete} variant="warning" className="cursor-pointer text_wauto_py1_px3_sm"><Icon name="trash" className="w-4 h-4 mr-1"/>Xóa</Button>
                                             </div>
                                         )}
                                     </div>
@@ -1144,8 +1144,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                         </div>
                                     </div>
                                     <div className="flex gap-4 mt-6">
-                                        <Button onClick={handleSaveEdit} variant="primary" className=".text_wauto_py2_px4_sm">Lưu Thay Đổi</Button>
-                                        <Button onClick={() => setIsEditing(false)} variant="secondary" className=".text_wauto_py2_px4_sm">Hủy</Button>
+                                        <Button onClick={handleSaveEdit} variant="primary" className="cursor-pointer text_wauto_py1_px3_sm">Lưu Thay Đổi</Button>
+                                        <Button onClick={() => setIsEditing(false)} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm">Hủy</Button>
                                     </div>
                                 </div>
                             ) : (
@@ -1212,7 +1212,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                     placeholder="Nhập tên danh mục mới..."
                                     className="grow bg-slate-800 border border-slate-600 rounded-md px-3 py-2 text-slate-200"
                                 />
-                                <Button onClick={handleAddCategory} variant="info" className=".text_wauto_py2_px4_sm"><Icon name="plus" className="w-4 h-4 mr-1"/>Thêm</Button>
+                                <Button onClick={handleAddCategory} variant="info" className="cursor-pointer text_wauto_py1_px3_sm"><Icon name="plus" className="w-4 h-4 mr-1"/>Thêm</Button>
                             </div>
 
                             {gameState.customCategories && gameState.customCategories.length > 0 ? (
@@ -1220,7 +1220,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                     {gameState.customCategories.map((cat, idx) => (
                                         <div key={idx} className="bg-slate-800 text-slate-200 text-sm px-3 py-1.5 rounded-full flex items-center gap-2 border border-slate-600">
                                             <span>{cat}</span>
-                                            <button onClick={() => initiateDeleteCategory(cat)} className="text-slate-400 hover:text-red-400"><Icon name="xCircle" className="w-4 h-4"/></button>
+                                            <button onClick={() => initiateDeleteCategory(cat)} className="cursor-pointer text-slate-400 hover:text-red-400"><Icon name="xCircle" className="w-4 h-4"/></button>
                                         </div>
                                     ))}
                                 </div>
@@ -1261,7 +1261,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                     />
                                 </div>
                                 <div className="flex justify-end">
-                                    <Button onClick={handleGenerateCodex} disabled={isGeneratingCodex || !codexCommand.trim()} variant="special" className=".text_wauto_py2_px4_sm">
+                                    <Button onClick={handleGenerateCodex} disabled={isGeneratingCodex || !codexCommand.trim()} variant="special" className="cursor-pointer text_wauto_py1_px3_sm">
                                         {isGeneratingCodex ? 'Đang Phân Tích...' : 'Thực Thi Lệnh'}
                                     </Button>
                                 </div>
@@ -1287,8 +1287,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                                             )}
                                         </div>
                                         <div className="flex justify-end gap-3">
-                                            <button onClick={() => setCodexPreview(null)} className="text-slate-400 hover:text-white px-3 py-1">Hủy</button>
-                                            <Button onClick={handleSaveCodex} variant="success" className="w-auto! py-1! px-4! text-sm!">
+                                            <button onClick={() => setCodexPreview(null)} className="cursor-pointer text-slate-400 hover:text-white px-3 py-1">Hủy</button>
+                                            <Button onClick={handleSaveCodex} variant="success" className="cursor-pointer w-auto! py-1! px-4! text-sm!">
                                                 {codexPreview.operation === 'update' ? 'Cập Nhật Dữ Liệu' : 'Lưu vào Bách Khoa'}
                                             </Button>
                                         </div>
@@ -1301,15 +1301,15 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({ isOpen, on
                             <h3 className="text-lg font-semibold text-slate-300 mb-3 flex items-center gap-2"><Icon name="download" className="w-5 h-5"/>Nhập / Xuất Dữ liệu Đầy đủ</h3>
                             <p className="text-sm text-slate-400 mb-4">Lưu trữ toàn bộ dữ liệu Bách khoa (bao gồm cả thực thể ban đầu, danh mục, v.v.) ra tệp .json hoặc nhập lại.</p>
                             <div className="flex gap-4">
-                                <Button onClick={handleExport} variant="secondary" className=".text_wauto_py2_px4_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Xuất Toàn Bộ</Button>
-                                <Button onClick={handleImportClick} variant="secondary" className=".text_wauto_py2_px4_sm"><Icon name="upload" className="w-4 h-4 mr-2"/>Nhập Toàn Bộ</Button>
+                                <Button onClick={handleExport} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Xuất Toàn Bộ</Button>
+                                <Button onClick={handleImportClick} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm"><Icon name="upload" className="w-4 h-4 mr-2"/>Nhập Toàn Bộ</Button>
                             </div>
                         </div>
 
                         <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700">
                             <h3 className="text-lg font-semibold text-slate-300 mb-3 flex items-center gap-2"><Icon name="magic" className="w-5 h-5"/>Chuẩn Hóa Thông Minh</h3>
                              <p className="text-sm text-slate-400 mb-4">Yêu cầu AI phân tích và gộp các "Phân loại tùy chỉnh" lộn xộn thành các danh mục lớn, có tổ chức hơn, sau đó gộp các thực thể trùng lặp trong từng danh mục.</p>
-                            <Button onClick={initiateAiOptimize} disabled={isAiOptimizing} variant="special" className=".text_wauto_py2_px4_sm">
+                            <Button onClick={initiateAiOptimize} disabled={isAiOptimizing} variant="special" className="cursor-pointer text_wauto_py1_px3_sm">
                                 {isAiOptimizing ? 'Đang Chuẩn Hóa...' : <><Icon name="magic" className="w-4 h-4 mr-2"/>Bắt đầu Chuẩn Hóa</>}
                             </Button>
                              {isAiOptimizing && <p className="text-sm text-slate-400 mt-2 animate-pulse">AI đang xử lý, quá trình này có thể mất một lúc...</p>}

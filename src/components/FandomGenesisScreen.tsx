@@ -454,7 +454,7 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
       <div className="max-w-4xl mx-auto p-4 sm:p-6 md:p-8">
         <div className="flex justify-between items-center mb-8 mt-4">
             <h1 className="text-2xl md:text-3xl font-bold text-slate-100">Kiến Tạo từ Nguyên Tác</h1>
-             <Button onClick={onBack} variant="secondary" className="w-auto! py-2! px-4! text-base!">
+             <Button onClick={onBack} variant="secondary" className="cursor-pointer w-auto! py-2! px-4! text-base!">
                 <Icon name="back" className="w-5 h-5 mr-2"/>
                 Quay lại
             </Button>
@@ -474,7 +474,7 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
                     </div>
                 </div>
                 <div className="mt-6 flex justify-end">
-                    <Button onClick={handleGenerateSummary} variant="info" disabled={loadingStates.summary || loadingStates.arc} className="w-auto! text-base! py-2! px-6!">
+                    <Button onClick={handleGenerateSummary} variant="info" disabled={loadingStates.summary || loadingStates.arc} className="cursor-pointer w-auto! text-base! py-2! px-6!">
                         {loadingStates.summary ? 'Đang tóm tắt...' : <><Icon name="magic" className="w-5 h-5 mr-2" />Tạo Tóm Tắt</>}
                     </Button>
                 </div>
@@ -485,7 +485,7 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
                 <div className="bg-slate-900/30 p-4 rounded-md border border-slate-700">
                     <h3 className="text-lg font-semibold text-slate-200 mb-3">Giai đoạn 2A: Quét danh sách Arc</h3>
                     <div className="flex flex-col sm:flex-row gap-4 items-center mb-4">
-                        <Button onClick={() => setIsSummarySelectModalOpen(true)} variant="secondary" className="w-full! sm:w-auto! text-sm! py-2!">
+                        <Button onClick={() => setIsSummarySelectModalOpen(true)} variant="secondary" className="cursor-pointer w-full! sm:w-auto! text-sm! py-2!">
                             <Icon name="save" className="w-4 h-4 mr-2" /> Chọn Tệp Tóm Tắt (.txt) Từ Kho
                         </Button>
                         {selectedSummary && (
@@ -493,7 +493,7 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
                         )}
                     </div>
                     <div className="flex justify-end">
-                        <Button onClick={handleExtractArcList} variant="info" disabled={!selectedSummary || loadingStates.arc} className="w-auto! text-base! py-2! px-6!">
+                        <Button onClick={handleExtractArcList} variant="info" disabled={!selectedSummary || loadingStates.arc} className="cursor-pointer w-auto! text-base! py-2! px-6!">
                             {loadingStates.arc && arcProcessingProgress.status === 'extracting_arcs' ? 'Đang phân tích...' : <><Icon name="news" className="w-5 h-5 mr-2" />Phân Tích Danh Sách Arc</>}
                         </Button>
                     </div>
@@ -603,8 +603,8 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
                           <span>Lưu ý: Tên tệp đã được chuẩn hóa thành <span className="font-mono bg-slate-700 px-1 rounded">tom_tat_...</span>. Vui lòng không đổi tên tệp này để AI có thể nhận diện và ưu tiên xử lý chính xác.</span>
                       </p>
                       <div className="flex gap-4 mt-4">
-                          <Button onClick={handleSaveToBrowser} variant="success" className=".text_wauto_py2_px4_sm"><Icon name="save" className="w-4 h-4 mr-2"/>Lưu vào kho</Button>
-                          <Button onClick={() => handleDownload(generatedResult.name, generatedResult.content, generatedResult.type)} variant="secondary" className=".text_wauto_py2_px4_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Tải về máy</Button>
+                          <Button onClick={handleSaveToBrowser} variant="success" className="text_wauto_py1_px3_sm"><Icon name="save" className="w-4 h-4 mr-2"/>Lưu vào kho</Button>
+                          <Button onClick={() => handleDownload(generatedResult.name, generatedResult.content, generatedResult.type)} variant="secondary" className="text_wauto_py1_px3_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Tải về máy</Button>
                           <button onClick={() => setGeneratedResult(null)} className="text-slate-400 hover:text-white transition text-sm font-medium px-4 py-2">Đóng</button>
                       </div>
                   </>
@@ -618,8 +618,8 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
                           <span>Lưu Dataset này vào kho để sử dụng làm "Kiến thức nền" trong màn hình "Kiến tạo Thế giới".</span>
                       </p>
                       <div className="flex gap-4 mt-4">
-                          <Button onClick={handleSaveDataset} variant="success" disabled={loadingStates.training} className=".text_wauto_py2_px4_sm"><Icon name="save" className="w-4 h-4 mr-2"/>Lưu Dataset vào kho</Button>
-                           <Button onClick={() => saveJsonToFile(trainedDataset, `[DATASET]_${trainedDataset.metadata.sourceName.replace(/\.txt$/i, '')}.json`)} variant="secondary" className=".text_wauto_py2_px4_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Tải Dataset (.json)</Button>
+                          <Button onClick={handleSaveDataset} variant="success" disabled={loadingStates.training} className="text_wauto_py1_px3_sm"><Icon name="save" className="w-4 h-4 mr-2"/>Lưu Dataset vào kho</Button>
+                           <Button onClick={() => saveJsonToFile(trainedDataset, `[DATASET]_${trainedDataset.metadata.sourceName.replace(/\.txt$/i, '')}.json`)} variant="secondary" className="text_wauto_py1_px3_sm"><Icon name="download" className="w-4 h-4 mr-2"/>Tải Dataset (.json)</Button>
                           <button onClick={() => setTrainedDataset(null)} className="text-slate-400 hover:text-white transition text-sm font-medium px-4 py-2">Hủy</button>
                       </div>
                   </>
@@ -630,7 +630,7 @@ const FandomGenesisScreen: React.FC<FandomGenesisScreenProps> = ({ onBack }) => 
         <div className="bg-slate-800/60 backdrop-blur-sm rounded-lg p-6 border border-slate-700/50 mt-8">
             <div className="flex justify-between items-center mb-4">
                 <h2 className="text-xl font-bold text-slate-100">Kho Nguyên Tác Đã Lưu</h2>
-                <Button onClick={() => fileUploadRef.current?.click()} variant="secondary" className=".text_wauto_py2_px4_sm">
+                <Button onClick={() => fileUploadRef.current?.click()} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm">
                     <Icon name="upload" className="w-4 h-4 mr-2"/> Tải lên từ máy
                 </Button>
             </div>

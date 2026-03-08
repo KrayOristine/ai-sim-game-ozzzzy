@@ -96,11 +96,11 @@ const TemporaryRulesModal: React.FC<TemporaryRulesModalProps> = ({ isOpen, onClo
         </div>
 
         <div className="mt-4 shrink-0 flex justify-between items-center">
-          <Button onClick={handleAddRule} variant="secondary" className=".text_wauto_py2_px4_sm">
+          <Button onClick={handleAddRule} variant="secondary" className="cursor-pointer text_wauto_py1_px3_sm">
             <Icon name="plus" className="w-5 h-5 mr-2" />
             Thêm Luật Mới
           </Button>
-           <Button onClick={handleCloseAndSave} variant="primary" className="w-auto! py-2! px-5! text-sm!">
+           <Button onClick={handleCloseAndSave} variant="primary" className="cursor-pointer w-auto! py-2! px-5! text-sm!">
             Đóng & Lưu
           </Button>
         </div>

@@ -196,17 +196,15 @@ export async function generate(prompt: string, systemInstruction?: string, retry
         effectiveThinkingBudget = 16384;
     }
 
-    if (isGemini3){
+    if (isGemini3 && thinkLevel !== "None"){
         if (isProModel){
             thinkConfig.thinkingLevel = ThinkingLevel.HIGH;
         } else {
-            if (thinkLevel !== "None"){
-                thinkConfig.thinkingLevel = thinkLevel.toUpperCase() as ThinkingLevel;
-            }
+            thinkConfig.thinkingLevel = thinkLevel.toUpperCase() as ThinkingLevel;
         }
+    } else {
+        thinkConfig.thinkingBudget = effectiveThinkingBudget;
     }
-
-    thinkConfig.thinkingBudget = thinkLevel === "None" ? 0 : effectiveThinkingBudget;
 
     // Mặc định là 0 (không thử lại) nếu không được chỉ định, tối đa là retryCount + 1 lần chạy
     const maxAttempts = 1 + retryCount;
@@ -318,17 +316,16 @@ export async function generateJson<T>(prompt: string, schema: any, systemInstruc
         effectiveThinkingBudget = 16384;
     }
 
-    if (isGemini3){
+    if (isGemini3 && thinkLevel !== "None"){
         if (isProModel){
             thinkConfig.thinkingLevel = ThinkingLevel.HIGH;
         } else {
-            if (thinkLevel !== "None"){
-                thinkConfig.thinkingLevel = thinkLevel.toUpperCase() as ThinkingLevel;
-            }
+            thinkConfig.thinkingLevel = thinkLevel.toUpperCase() as ThinkingLevel;
         }
+    } else {
+        thinkConfig.thinkingBudget = effectiveThinkingBudget;
     }
 
-    thinkConfig.thinkingBudget = thinkLevel === "None" ? 0 : effectiveThinkingBudget;
 
     incrementRequestCount(`${selectedModel} (JSON)`); // TRACKING
 

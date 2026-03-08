@@ -382,7 +382,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
             <div className="model-info">
                 <p><strong>Flash:</strong> Phản hồi nhanh, tiết kiệm ngân sách suy nghĩ. Phù hợp cho đa số người chơi.</p>
                 <p><strong>2.5 Pro:</strong> Khả năng suy luận sâu sắc, mạch văn chau chuốt hơn, nhưng tốc độ chậm hơn.</p>
-                <p><strong>3.1 Pro:</strong> Thế hệ mới. Hiểu ngữ cảnh siêu dài, sáng tạo vượt trội, nhưng tốc độ rùa bò. </p>
+                <p><strong>3.1 Pro:</strong> Thế hệ mới. Thông minh và hiểu ngữ cảnh siêu dài, sáng tạo vượt trội, nhưng tốc độ rùa bò. </p>
                 <p><strong>3.0 Flash & 3.1 Flash Lite:</strong> Thế hệ mới, ngon hơn, vượt trội hơn flash cũ, tốc độ ngang nhau</p>
                 <p><span className="text-warning">Lưu ý: Sử dụng model PRO sẽ kệ mẹ mấy cái tùy chỉnh ở dưới và luôn chạy ở công suất tối đa.</span></p>
             </div>
@@ -415,9 +415,9 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                 />
                 <p className="text-small-desc">Giới hạn số token tối đa AI có thể tạo ra. Hữu ích cho cả việc tạo JSON và tường thuật. Mặc định: 8000.</p>
               </div>
-              <div className="slider-section">
+              <div className={`slider-section ${(isGen3Model && !isHighEndModel) ? 'disabled-section' : ''}`}>
                 <div className="slider-label">
-                    <label htmlFor="thinking-budget" className="label-form">Thinking Budget (Dành cho Flash)</label>
+                    <label htmlFor="thinking-budget" className="label-form">Thinking Budget (dành cho thế hệ 2.0)</label>
                      <input
                       type="number"
                       id="thinking-budget-input"
@@ -439,7 +439,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                   max={maxThinkingBudget}
                   step="100"
                 />
-                <p className="text-small-desc">Cung cấp "ngân sách suy nghĩ" để AI xử lý các yêu cầu phức tạp. Mặc định: 1200.</p>
+                <p className="text-small-desc">Ngân sách suy nghĩ để AI thế hệ 2.0 xử lý các yêu cầu phức tạp. Mặc định: 1200.</p>
               </div>
               <div className={`slider-section ${(!isGen3Model && !isHighEndModel) ? 'disabled-section' : ''}`}>
                 <div className="slider-label">
@@ -461,7 +461,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
                   </select>
                 </div>
                 <p className="text-small-desc">
-                  Chọn mức độ tự suy nghĩ của model (lưu ý, nếu chọn không suy nghĩ thì hệ thống sẽ tự động xem ngân sách là 0)
+                  Mức độ tự suy nghĩ của model thế hệ 3.0, thế hệ mới sẽ sử dụng mức độ suy nghĩ thay cho ngân sách
                 </p>
               </div>
               <div className="slider-section">

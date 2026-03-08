@@ -87,7 +87,7 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
       >
         <div className="flex justify-between items-center mb-4 shrink-0">
           <h2 className="text-xl font-bold text-green-400">{title}</h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition">
+          <button onClick={onClose} className="cursor-pointer text-slate-400 hover:text-white transition">
              <Icon name="xCircle" className="w-7 h-7" />
           </button>
         </div>
@@ -126,7 +126,7 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
         </div>
 
         <div className="mt-6 shrink-0 flex justify-end">
-            <Button onClick={handleConfirm} disabled={selectedFileIds.size === 0} variant="primary" className="w-auto! py-2! px-5! text-base!">
+            <Button onClick={handleConfirm} disabled={selectedFileIds.size === 0} variant="primary" className="cursor-pointer w-auto! py-2! px-5! text-base!">
               Xác Nhận Lựa Chọn ({selectedFileIds.size})
             </Button>
         </div>

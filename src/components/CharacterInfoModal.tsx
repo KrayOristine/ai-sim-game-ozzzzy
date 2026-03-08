@@ -46,7 +46,7 @@ const InformationModal: React.FC<InformationModalProps> = ({ isOpen, onClose, ga
             <Icon name="user" className="w-6 h-6 mr-3" />
             Thông Tin Nhân Vật
           </h2>
-          <button onClick={onClose} className="text-slate-400 hover:text-white transition">
+          <button onClick={onClose} className="cursor-pointer text-slate-400 hover:text-white transition">
              <Icon name="xCircle" className="w-7 h-7" />
           </button>
         </div>
@@ -79,10 +79,10 @@ const InformationModal: React.FC<InformationModalProps> = ({ isOpen, onClose, ga
                                     <div className="flex justify-between items-center">
                                         <p className="font-bold text-yellow-400 flex-1 min-w-0">{stripTags(skill.name)}</p>
                                         <div className="flex items-center gap-1">
-                                            <button onClick={() => toggleSkill(index)} className="p-1 text-slate-400 hover:text-white transition" title={isExpanded ? "Thu gọn" : "Mở rộng"}>
+                                            <button onClick={() => toggleSkill(index)} className="cursor-pointer p-1 text-slate-400 hover:text-white transition" title={isExpanded ? "Thu gọn" : "Mở rộng"}>
                                                 <Icon name={isExpanded ? 'arrowUp' : 'arrowDown'} className="icon-sm" />
                                             </button>
-                                            <button onClick={() => onDeleteEntity({ name: skill.name })} className="p-1 text-slate-400 hover:text-red-400 transition" title="Xóa kỹ năng">
+                                            <button onClick={() => onDeleteEntity({ name: skill.name })} className="cursor-pointer p-1 text-slate-400 hover:text-red-400 transition" title="Xóa kỹ năng">
                                                 <Icon name="trash" className="icon-sm" />
                                             </button>
                                         </div>
@@ -112,7 +112,7 @@ const InformationModal: React.FC<InformationModalProps> = ({ isOpen, onClose, ga
                           <p className="font-bold text-yellow-400 flex-1 min-w-0 wrap-break-word">{stripTags(item.name)}</p>
                           <div className="flex items-center gap-2 ml-2">
                               <span className="text-xs font-mono bg-slate-700 px-1.5 py-0.5 rounded">x{item.quantity}</span>
-                               <button onClick={() => onDeleteEntity({ name: item.name })} className="p-1 text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                               <button onClick={() => onDeleteEntity({ name: item.name })} className="cursor-pointer p-1 text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <Icon name="trash" className="icon-sm" />
                               </button>
                           </div>

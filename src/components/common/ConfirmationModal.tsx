@@ -36,7 +36,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   const confirmBtnVariant = variant === 'danger' ? 'warning' : (variant === 'warning' ? 'special' : 'primary'); // Map variant to Button variant
 
   return (
-    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-[100] p-4" onClick={onClose}>
+    <div className="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-100 p-4" onClick={onClose}>
       <div
         className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6 w-full max-w-md relative animate-fade-in-up"
         onClick={(e) => e.stopPropagation()}
@@ -56,14 +56,14 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
         <div className="flex justify-end gap-3 mt-6">
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-700 transition text-sm font-medium"
+            className="cursor-pointer px-4 py-2 rounded-md text-slate-300 hover:text-white hover:bg-slate-700 transition text-sm font-medium"
           >
             {cancelLabel}
           </button>
           <Button
             onClick={handleConfirm}
             variant={confirmBtnVariant} // Use mapped variant
-            className="w-auto! py-2! px-5! text-sm!"
+            className="w-auto! py-2! px-5! text-sm! cursor-pointer"
           >
             {confirmLabel}
           </Button>

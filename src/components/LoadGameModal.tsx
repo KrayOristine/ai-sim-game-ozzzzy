@@ -23,11 +23,11 @@ const SaveItem: React.FC<{ save: SaveSlot; onLoad: (save: SaveSlot) => void; onD
             <p className="text-sm text-slate-400 italic mt-1 truncate">{save.previewText}</p>
         </div>
         <div className="flex items-center gap-2 shrink-0">
-            <Button onClick={() => onLoad(save)} variant="success" className=".text_wauto_py2_px4_sm">Tải</Button>
-            <button onClick={() => onDownload(save)} className="p-2 text-sky-400 hover:bg-sky-500/20 rounded-full transition" title="Tải xuống tệp lưu">
+            <Button onClick={() => onLoad(save)} variant="success" className="cursor-pointer text_wauto_py1_px3_sm">Tải</Button>
+            <button onClick={() => onDownload(save)} className="cursor-pointer p-2 text-sky-400 hover:bg-sky-500/20 rounded-full transition" title="Tải xuống tệp lưu">
                 <Icon name="download" className="w-5 h-5"/>
             </button>
-            <button onClick={() => onDelete(save.saveId)} className="p-2 text-red-400 hover:bg-red-500/20 rounded-full transition" title="Xóa bản lưu">
+            <button onClick={() => onDelete(save.saveId)} className="cursor-pointer p-2 text-red-400 hover:bg-red-500/20 rounded-full transition" title="Xóa bản lưu">
             <Icon name="trash" className="w-5 h-5"/>
             </button>
         </div>

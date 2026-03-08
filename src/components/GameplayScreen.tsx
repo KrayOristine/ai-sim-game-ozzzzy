@@ -121,14 +121,14 @@ const SuggestionCard: React.FC<{ suggestion: ActionSuggestion; onSelect: (descri
     return (
         <button
             onClick={() => onSelect(suggestion.description)}
-            className="bg-blue-800/50 border border-blue-700/60 rounded-lg p-3 text-left w-full h-full hover:bg-blue-700/60 transition-colors duration-200"
+            className="bg-blue-800/50 border border-blue-700/60 cursor-pointer rounded-lg p-3 text-left w-full h-full hover:bg-blue-700/60 transition-colors duration-200"
         >
             <p className="text-sm text-slate-100">
                 <span className="font-bold mr-1.5">{index + 1}.</span>
                 {stripTags(suggestion.description)}
             </p>
              <p className="text-blue-200/80 text-xs mt-1">
-                (Tỷ lệ thành công: {suggestion.successRate}%, Rủi ro: {stripTags(suggestion.risk)}, Phần thưởng: {stripTags(suggestion.reward)})
+                (% thành công: {suggestion.successRate}%, Rủi ro: {stripTags(suggestion.risk)}, Phần thưởng: {stripTags(suggestion.reward)})
             </p>
         </button>
     );
@@ -773,37 +773,37 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({ initialGameState, onBac
         </div>
 
         <div className="grow space-y-2">
-            <button onClick={() => { setIsInformationModalOpen(true); setIsSidePanelOpen(false); }} className="w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
+            <button onClick={() => { setIsInformationModalOpen(true); setIsSidePanelOpen(false); }} className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
                 <span className="flex items-center"><Icon name="info" className="w-5 h-5 mr-3 text-pink-400"/>Túi Đồ & Thông Tin</span>
                 {gameState.inventory.length > 0 && <span className="text-xs bg-slate-600 text-white font-bold px-1.5 py-0.5 rounded-full">{gameState.inventory.length}</span>}
             </button>
-            <button onClick={() => { setIsStatusHubOpen(true); setIsSidePanelOpen(false); }} className="w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
+            <button onClick={() => { setIsStatusHubOpen(true); setIsSidePanelOpen(false); }} className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
                 <span className="flex items-center"><Icon name="hub" className="w-5 h-5 mr-3 text-cyan-400"/>Trạng Thái & Nhiệm Vụ</span>
                 <div className="flex gap-2">
                     {gameState.playerStatus.length > 0 && <span className="text-xs bg-red-500/80 text-white font-bold px-1.5 py-0.5 rounded-full">{gameState.playerStatus.length}</span>}
                     {activeQuests.length > 0 && <span className="text-xs bg-blue-500/80 text-white font-bold px-1.5 py-0.5 rounded-full">{activeQuests.length}</span>}
                 </div>
             </button>
-            <button onClick={() => { setIsEncyclopediaModalOpen(true); setIsSidePanelOpen(false); }} className="w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
+            <button onClick={() => { setIsEncyclopediaModalOpen(true); setIsSidePanelOpen(false); }} className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
                 <span className="flex items-center"><Icon name="encyclopedia" className="w-5 h-5 mr-3 text-orange-400"/>Bách Khoa Toàn Thư</span>
             </button>
-            <button onClick={() => { setIsMemoryModalOpen(true); setIsSidePanelOpen(false); }} className="w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
+            <button onClick={() => { setIsMemoryModalOpen(true); setIsSidePanelOpen(false); }} className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
                 <span className="flex items-center"><Icon name="memory" className="w-5 h-5 mr-3 text-purple-400"/>Ký Ức</span>
                 {(gameState.memories.length + gameState.summaries.length) > 0 && <span className="text-xs bg-slate-600 text-white font-bold px-1.5 py-0.5 rounded-full">{gameState.memories.length + gameState.summaries.length}</span>}
             </button>
-             <button onClick={() => { setIsTempRulesModalOpen(true); setIsSidePanelOpen(false); }} className="w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
+             <button onClick={() => { setIsTempRulesModalOpen(true); setIsSidePanelOpen(false); }} className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition">
                 <span className="flex items-center"><Icon name="rules" className="w-5 h-5 mr-3 text-blue-400"/>Luật Tạm Thời / Ghi Chú</span>
             </button>
         </div>
 
         <div className="shrink-0 pt-4 border-t border-slate-700">
             <div className="grid grid-cols-2 gap-2">
-                <button onClick={handleManualSave} disabled={isSaving} className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-green-300 bg-green-900/40 hover:bg-green-800/60 rounded-lg transition disabled:opacity-50">
+                <button onClick={handleManualSave} disabled={isSaving} className="cursor-pointer flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-green-300 bg-green-900/40 hover:bg-green-800/60 rounded-lg transition disabled:opacity-50">
                     <Icon name="save" className="w-4 h-4"/>{isSaving ? 'Đang lưu...' : 'Lưu Game'}
                  </button>
-                <button onClick={handleUndoTurn} disabled={gameState.history.length < 2} className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-yellow-300 bg-yellow-900/40 hover:bg-yellow-800/60 rounded-lg transition disabled:opacity-50"><Icon name="undo" className="w-4 h-4"/>Lùi Lượt</button>
-                <button onClick={handleRestart} className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-pink-300 bg-pink-900/40 hover:bg-pink-800/60 rounded-lg transition"><Icon name="restart" className="w-4 h-4"/>Bắt Đầu Lại</button>
-                 <button onClick={() => setShowExitConfirm(true)} className="flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-slate-300 bg-slate-700/80 hover:bg-slate-700 rounded-lg transition">
+                <button onClick={handleUndoTurn} disabled={gameState.history.length < 2} className="cursor-pointer flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-yellow-300 bg-yellow-900/40 hover:bg-yellow-800/60 rounded-lg transition disabled:opacity-50"><Icon name="undo" className="w-4 h-4"/>Lùi Lượt</button>
+                <button onClick={handleRestart} className="cursor-pointer flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-pink-300 bg-pink-900/40 hover:bg-pink-800/60 rounded-lg transition"><Icon name="restart" className="w-4 h-4"/>Bắt Đầu Lại</button>
+                 <button onClick={() => setShowExitConfirm(true)} className="cursor-pointer flex items-center justify-center gap-2 px-3 py-2 text-xs font-semibold text-slate-300 bg-slate-700/80 hover:bg-slate-700 rounded-lg transition">
                     <Icon name="back" className="w-4 h-4"/>Thoát
                 </button>
             </div>
@@ -852,7 +852,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({ initialGameState, onBac
         <div className="flex-1 flex flex-col h-full p-2 sm:p-4 gap-2 sm:gap-4 lg:p-4 lg:pr-0">
             <header className="shrink-0 bg-slate-800/50 p-2 rounded-lg">
               <div className="flex justify-between items-center">
-                 <button onClick={() => setShowExitConfirm(true)} className="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-200 bg-slate-700/80 hover:bg-slate-700 rounded-lg transition">
+                 <button onClick={() => setShowExitConfirm(true)} className="cursor-pointer flex items-center gap-2 px-4 py-2 text-sm font-semibold text-slate-200 bg-slate-700/80 hover:bg-slate-700 rounded-lg transition">
                     <Icon name="back" className="w-4 h-4"/>
                     <span className="hidden sm:inline">Về Trang Chủ</span>
                 </button>
@@ -905,14 +905,14 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({ initialGameState, onBac
               <div className="shrink-0 mt-auto bg-slate-900/50 rounded-lg p-3 sm:p-4">
                 {gameState.suggestions && gameState.suggestions.length > 0 && (
                   <div className="mb-4">
-                    <div className="flex justify-between items-center mb-2"> <h3 className="text-lg font-bold text-green-400">Lựa chọn của ngươi:</h3> <button onClick={() => setShowSuggestions(!showSuggestions)} className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-purple-300 bg-purple-900/40 hover:bg-purple-800/60 rounded-lg transition" title={showSuggestions ? "Ẩn gợi ý" : "Hiện gợi ý"}> <span>{showSuggestions ? 'Ẩn' : 'Hiện'} Gợi Ý</span> <Icon name={showSuggestions ? 'arrowUp' : 'arrowDown'} className={`w-3 h-3 transition-transform duration-300 ${showSuggestions ? 'rotate-180' : ''}`} /> </button> </div>
+                    <div className="flex justify-between items-center mb-2"> <h3 className="text-lg font-bold text-green-400">Lựa chọn của ngươi:</h3> <button onClick={() => setShowSuggestions(!showSuggestions)} className="flex items-center gap-1.5 px-3 py-1 text-xs cursor-pointer font-semibold text-purple-300 bg-purple-900/40 hover:bg-purple-800/60 rounded-lg transition" title={showSuggestions ? "Ẩn gợi ý" : "Hiện gợi ý"}> <span>{showSuggestions ? 'Ẩn' : 'Hiện'} Gợi Ý</span> <Icon name={showSuggestions ? 'arrowUp' : 'arrowDown'} className={`w-3 h-3 transition-transform duration-300 ${showSuggestions ? 'rotate-180' : ''}`} /> </button> </div>
                     <div className={`grid transition-all duration-500 ease-in-out ${showSuggestions ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`}>
                       <div className="overflow-hidden"> <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 max-h-72 overflow-y-auto pr-2 pb-2">{gameState.suggestions.map((s, i) => <SuggestionCard key={i} index={i} suggestion={s} onSelect={handleActionSubmit}/>)}</div> </div>
                     </div>
                   </div>
                 )}
 
-                <div> <label className="text-slate-300 font-semibold mb-2 block text-sm">Hoặc nhập hành động tùy ý:</label> <div className="flex items-stretch gap-2 sm:gap-3"> <textarea value={playerInput} onChange={(e) => setPlayerInput(e.target.value)} onKeyPress={handleKeyPress} placeholder="Ví dụ: Nhìn xung quanh, Hỏi về chiếc chìa khóa..." disabled={isLoading} className="flex-1 bg-slate-900/70 border border-slate-700 rounded-lg p-3 text-slate-200 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition resize-none" rows={1} /> <Button onClick={handleSendAction} disabled={isLoading} variant="primary" className="w-auto! py-3! px-4! sm:px-6! self-stretch text-base!">{isTurnLoading ? <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> : 'Gửi'}</Button> </div> </div>
+                <div> <label className="text-slate-300 font-semibold mb-2 block text-sm">Hoặc nhập hành động tùy ý:</label> <div className="flex items-stretch gap-2 sm:gap-3"> <textarea value={playerInput} onChange={(e) => setPlayerInput(e.target.value)} onKeyPress={handleKeyPress} placeholder="Ví dụ: Nhìn xung quanh, Hỏi về chiếc chìa khóa..." disabled={isLoading} className="flex-1 bg-slate-900/70 border border-slate-700 rounded-lg p-3 text-slate-200 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition resize-none" rows={1} /> <Button onClick={handleSendAction} disabled={isLoading} variant="primary" className="w-auto! py-3! px-4! sm:px-6! self-stretch text-base! cursor-pointer">{isTurnLoading ? <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> : 'Gửi'}</Button> </div> </div>
                 <div className="flex items-center justify-center gap-2 mt-2 shrink-0"> <button onClick={() => handlePageChange(p => Math.max(0, p - 1))} disabled={currentPage === 0} className="px-2 py-1 rounded-md bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition"><Icon name="arrowUp" className="w-4 h-4 -rotate-90" /></button> <span className="text-xs text-slate-500 font-mono px-2">Trang {currentPage + 1}/{totalPages}</span> <button onClick={() => handlePageChange(p => Math.min(totalPages - 1, p + 1))} disabled={currentPage === totalPages - 1} className="px-2 py-1 rounded-md bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition"><Icon name="arrowDown" className="w-4 h-4 -rotate-90" /></button> </div>
               </div>
             </main>
