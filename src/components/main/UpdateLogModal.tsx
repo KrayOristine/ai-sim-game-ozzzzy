@@ -1,4 +1,4 @@
-import React, { Suspense, use } from "react";
+import React, { Suspense, use, useEffect, useState } from "react";
 import Icon from "#/components/helper/Icon";
 import Button from "#/components/helper/Button";
 import { Request } from "#/utils/axios";
@@ -23,7 +23,48 @@ interface requestFrame {
 }
 
 const UpdateDataDisplay: React.FC<updateDataDisplayProps> = ({ url }) => {
-  const r = use(Request.getJSON<requestFrame>(url));
+  const [requestData, setUpdates] = useState<requestFrame>({
+        updates: [{
+          version:"x.x.x",
+          "notes": ["**???**: Đang lấy data về các bản cập nhật..."],
+        }]
+      })
+  let requestSent = false;
+
+  useEffect(function(){
+    const CACHE_KEY = 'updateDataCache';
+    const TIMESTAMP_KEY = 'updateDataTimestamp';
+    const CACHE_DURATION = 12 * 60 * 60 * 1000; // 12 hours in milliseconds
+
+    const cachedData = localStorage.getItem(CACHE_KEY);
+    const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
+    const now = Date.now();
+
+    if (cachedData && cachedTimestamp && (now - parseInt(cachedTimestamp)) < CACHE_DURATION) {
+      setUpdates(JSON.parse(cachedData));
+      return;
+    }
+
+    if (requestSent) return;
+    requestSent = true;
+    Request.getJSON<requestFrame>(url).then(function(r){
+      setUpdates(r.data);
+      localStorage.setItem(CACHE_KEY, JSON.stringify(r.data));
+      localStorage.setItem(TIMESTAMP_KEY, now.toString());
+      requestSent = false;
+    }).catch(function(){
+      if (cachedData) {
+        setUpdates(JSON.parse(cachedData));
+      } else {
+        setUpdates({
+          updates: [{
+            version:"x.x.x",
+            "notes": ["**???**: Không thể lấy data về các bản cập nhật!"],
+          }]
+        })
+      }
+    })
+  }, [])
 
   const formatNote = (note: string) => {
     // A simple markdown-like bold formatter
@@ -40,7 +81,7 @@ const UpdateDataDisplay: React.FC<updateDataDisplayProps> = ({ url }) => {
 
   return (
     <>
-      {r.data.updates.map((update, index) => (
+      {requestData && requestData.updates.map((update, index) => (
         <div key={index}>
           <h3 className="update_modal_text_version">{update.version}</h3>
           <ul className="update_modal_text_notes">
@@ -78,9 +119,7 @@ const UpdateLogModal: React.FC<UpdateLogModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         <div className="update_modal_display">
-          <Suspense fallback={<Icon name="trash" />}>
-            <UpdateDataDisplay url="https://raw.githubusercontent.com/KrayOristine/ai-sim-game-ozzzzy/main/update_metadata.json" />
-          </Suspense>
+          <UpdateDataDisplay url="https://raw.githubusercontent.com/KrayOristine/ai-sim-game-ozzzzy/main/update_metadata.json" />
         </div>
 
         <div className="update_modal_close_div">
