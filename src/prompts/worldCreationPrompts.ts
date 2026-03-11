@@ -1,9 +1,4 @@
 import { Type } from "@google/genai";
-import { WorldConfig } from "../types/core";
-import { CoreEntityType } from "#/types/entity";
-import { InitialEntity } from "#/types/entity";
-import { AiPerformanceSettings } from "#/types/settings";
-import { CharacterMilestone } from "#/types/character";
 import {
   PERSONALITY_OPTIONS,
   GENDER_OPTIONS,

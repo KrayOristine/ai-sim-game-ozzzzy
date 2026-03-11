@@ -1,7 +1,4 @@
 import { Type } from "@google/genai";
-import { WorldConfig } from "../types/core";
-import { TimePassed } from "#/types/game";
-import { GameState } from "#/types/game";
 import {
   getGameMasterSystemInstruction,
   getResponseLengthDirective,

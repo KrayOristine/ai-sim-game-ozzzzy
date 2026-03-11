@@ -20,6 +20,7 @@ declare global {
     | "NPC"
     | "Vật phẩm"
     | "Địa điểm"
+    | "Tri thức thế giới"
     | "Phe phái/Thế lực"
     | "Hệ thống sức mạnh / Lore";
 }

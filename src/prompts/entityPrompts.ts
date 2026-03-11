@@ -1,5 +1,3 @@
-import { WorldConfig } from "#/types/core";
-import { InitialEntity } from "#/types/entity";
 
 export const getGenerateEntityNamePrompt = (
   config: WorldConfig,

@@ -1,6 +1,4 @@
-import { WorldConfig } from "#/types/core";
-import { StyleGuideVector } from "#/types/ai_vector";
-import { getSettings } from "#/services/settingsService";
+
 import { GENRE_TAGGING_SYSTEMS } from "./genreTagging";
 
 export const getResponseLengthDirective = (

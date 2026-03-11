@@ -1,7 +1,4 @@
 import { Type } from "@google/genai";
-import { WorldConfig } from "../types/core";
-import { CharacterMilestone } from "#/types/character";
-import { CharacterStat } from "#/types/character";
 
 export const getGenerateCharacterBioPrompt = (config: WorldConfig): string => {
   const { storyContext, character } = config;

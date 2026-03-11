@@ -1,6 +1,4 @@
 import { Type } from "@google/genai";
-import { CORE_ENTITY_TYPES, ENTITY_TYPE_OPTIONS } from "../../constants";
-
 export const getSmartCodexPrompt = (command: string) => {
   // Schema đa hình để xử lý nhiều loại thực thể
   const schema = {
@@ -102,6 +100,7 @@ Nhiệm vụ: Phân tích yêu cầu người dùng để GÁN (Cập nhật) ho
 4. **Xác định Sở hữu (OwnerContext):**
    - Nếu câu lệnh có "cho tôi", "của tôi", "tôi muốn": set \`isPlayer = true\`.
    - Nếu câu lệnh có tên NPC (VD: "cho John", "của Lão Hạc"): set \`npcName = "Tên NPC"\`.
+   - Nếu cả 2 điều kiện (phải là cả 2 cùng lúc) nói trên đều không thể thực hiện thì mặc định set \`isPlayer = true\`
 
 5. **Output:** Trả về JSON theo đúng Schema.`;
 

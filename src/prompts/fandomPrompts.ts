@@ -1,5 +1,4 @@
 import { Type } from "@google/genai";
-import { AiPerformanceSettings } from "#/types/settings";
 import { getSettings } from "#/services/settingsService";
 import { DEFAULT_AI_PERFORMANCE_SETTINGS } from "#/constants";
 
