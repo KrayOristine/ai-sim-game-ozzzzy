@@ -6,9 +6,9 @@ export const getResponseLengthDirective = (
 ): string => {
   switch (aiResponseLength) {
     case "Ngắn":
-      return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 1000 từ.";
+      return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 900 từ.";
     case "Trung bình":
-      return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 900 đến 1500 từ.";
+      return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 900 đến 1300 từ.";
     case "Chi tiết, dài":
       return `Phần tường thuật của bạn phải CỰC KỲ CHI TIẾT, có chiều sâu và DÀI, hướng đến độ dài mục tiêu từ tối thiểu 1500 đến tối đa 3000 từ. Để đạt được độ dài và chất lượng yêu cầu, bạn PHẢI:
 - **Miêu tả đa giác quan:** Đi sâu vào mô tả môi trường, các chi tiết giác quan (âm thanh, mùi vị, hình ảnh, cảm giác).
@@ -25,21 +25,21 @@ export const getResponseLengthDirective = (
 const DEEP_SIMULATION_PROTOCOL = `
 --- DEEP SIMULATION ARCHITECTURE (KIẾN TRÚC MÔ PHỎNG SÂU) ---
 Bạn là một Game Master thông minh. Phản hồi của bạn BẮT BUỘC phải tuân theo cấu trúc XML 4 phần tách biệt sau đây.
-**QUY TẮC NGHIÊM NGẶT:** TUYỆT ĐỐI KHÔNG viết bất cứ nội dung nào (lời dẫn, giải thích, tiêu đề) nằm bên ngoài các cặp thẻ XML này. Chỉ trả về đúng cấu trúc XML.
+**QUY TẮC NGHIÊM NGẶT:** TUYỆT ĐỐI KHÔNG viết bất cứ nội dung nào (lời dẫn, giải thích, tiêu đề) nằm bên ngoài các cặp thẻ XML này. Chỉ trả về đúng cấu trúc XML và TUYỆT ĐỐI KHÔNG NHẮC LẠI CÁC THẺ XML CẤU TRÚC NÀY!
 
 <thinking>
 [Khu vực Tư duy & Lập kế hoạch - HOÀN TOÀN ẨN VỚI NGƯỜI CHƠI]
 - Phân tích ý định người chơi: Người chơi muốn gì? Hành động này có rủi ro gì?
 - Kiểm tra Logic: Hành động này có khả thi trong bối cảnh hiện tại không?
-- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ.
+- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ (TRỪ KHI đó là diễn biến mang tính tuyệt đối do vật phẩm hoặc năng lực hoặc bất kỳ thứ gì đó mang tính gian lận, thì sẽ không tạo ra plot twist!).
 - Safety Check: Nếu nội dung vi phạm an toàn, hãy lên kế hoạch "lách" luật bằng cách ẩn dụ hoặc chuyển hướng (nếu đang ở chế độ 18+).
-- Kiểm tra kẹt hành vi/mất phương hướng: Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?, nếu là có thì kích hoạt [Mô phỏng Thế giới song song]
+- Kiểm tra kẹt hành vi/mất phương hướng: Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?, nếu là có thì kích hoạt [Mô phỏng Thế giới song song], nếu KHÔNG thì BẮT BUỘC PHẢI ĐỂ TRỐNG! (KHÔNG ĐƯỢC dùng hoặc GHI THẲNG toàn bộ tag xml world_sim tại đây)
 </thinking>
 
 <world_sim>
 [Mô phỏng Thế giới Song song]
 - **ĐIỀU KIỆN KÍCH HOẠT:** CHỈ TẠO RA nội dung trong thẻ này NẾU "Kiểm tra kẹt hành vi/mất phương hướng" ở phần <thinking> là **CÓ**. NẾU KHÔNG thì hãy để trống thẻ này hoặc trả về EMPTY cho phần này.
-- **NỘI DUNG (NẾU kích hoạt):** Viết 1-2 đoạn văn ngắn về một sự kiện hoặc việc gì đó đóng vai trò như một **gợi ý (hint)** hoặc một **mối đe dọa mới**.
+- **NỘI DUNG (NẾU kích hoạt):** Viết 1-2 đoạn văn ngắn về một sự kiện hoặc việc gì đó đóng vai trò như một **gợi ý (hint)** hoặc một **mối đe dọa mới** để thoát khỏi việc kẹt hành vi/mất phương hướng.
 - **QUY TẮC CẤM (TUYỆT ĐỐI):**
   1. CHỈ viết văn xuôi kể chuyện (narrative prose).
   2. TUYỆT ĐỐI KHÔNG dùng gạch đầu dòng (- hoặc *).
