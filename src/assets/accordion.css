@@ -1,0 +1,15 @@
+@reference "tailwindcss";
+
+/* Accordion */
+.accord_main_div {
+  @apply bg-slate-800/60 backdrop-blur-sm rounded-lg mb-8 border-l-4;
+}
+.accord_child_div {
+  @apply transition-all duration-500 ease-in-out overflow-hidden;
+}
+.accord_btn {
+  @apply w-full flex justify-between items-center p-4;
+}
+.accord_svg {
+  @apply w-6 h-6 transform transition-transform duration-300 group-hover:scale-110;
+}

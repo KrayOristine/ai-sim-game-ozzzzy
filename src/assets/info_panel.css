@@ -1,0 +1,38 @@
+@reference "tailwindcss";
+
+
+.info_panel_main_div {
+  @apply bg-slate-800/60 border-l-4 rounded-r-lg overflow-hidden flex flex-col
+}
+
+.info_panel_btn {
+  @apply w-full shrink-0;
+}
+
+.info_panel_btn_div {
+  @apply flex items-center justify-between w-full p-3 group
+}
+
+.info_panel_btn_div_b {
+  @apply flex items-center min-w-0
+}
+
+.info_panel_btn_icon {
+  @apply w-5 h-5 mr-2 shrink-0
+}
+
+.info_panel_btn_title {
+  @apply text-sm font-bold text-left truncate
+}
+
+.info_panel_btn_arrow {
+  @apply w-4 h-4 text-slate-400 shrink-0 group-hover:scale-110 transition-transform
+}
+
+.info_panel_children_inner_div {
+  @apply px-3 pb-3 overflow-y-auto max-h-36
+}
+
+.info_panel_children_outer_div {
+  @apply transition-all duration-500 ease-in-out overflow-hidden
+}

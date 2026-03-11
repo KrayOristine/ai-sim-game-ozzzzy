@@ -1,4 +1,4 @@
-import { NARRATIVE_ARCHETYPES } from './narrative_styles';
+import { NARRATIVE_ARCHETYPES } from "./narrative_styles";
 
 export const TIME_RULES: Record<string, string> = {
   [NARRATIVE_ARCHETYPES.MODERN]: `

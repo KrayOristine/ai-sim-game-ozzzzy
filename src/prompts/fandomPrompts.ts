@@ -1,11 +1,14 @@
 import { Type } from "@google/genai";
-import { AiPerformanceSettings } from "#/types";
+import { AiPerformanceSettings } from "#/types/settings";
 import { getSettings } from "#/services/settingsService";
-import { DEFAULT_AI_PERFORMANCE_SETTINGS } from "#/const";
+import { DEFAULT_AI_PERFORMANCE_SETTINGS } from "#/constants";
 
-export const getGenerateFandomSummaryPrompt = (workName: string, authorName?: string): { prompt: string, systemInstruction: string } => {
-    const authorInfo = authorName ? ` (tác giả: ${authorName})` : '';
-    const prompt = `Bạn là một chuyên gia phân tích văn học. Nhiệm vụ của bạn là viết một bản tóm tắt CỰC KỲ CHI TIẾT và TOÀN DIỆN về tác phẩm "${workName}"${authorInfo}.
+export const getGenerateFandomSummaryPrompt = (
+  workName: string,
+  authorName?: string,
+): { prompt: string; systemInstruction: string } => {
+  const authorInfo = authorName ? ` (tác giả: ${authorName})` : "";
+  const prompt = `Bạn là một chuyên gia phân tích văn học. Nhiệm vụ của bạn là viết một bản tóm tắt CỰC KỲ CHI TIẾT và TOÀN DIỆN về tác phẩm "${workName}"${authorInfo}.
     Bản tóm tắt phải bao gồm các phần chính, mỗi phần được mô tả kỹ lưỡng:
     1.  **Tổng quan Cốt truyện:** Tóm tắt toàn bộ diễn biến chính từ đầu đến cuối.
     2.  **DANH SÁCH CÁC ARC/SAGA (BẮT BUỘC):** Liệt kê ĐẦY ĐỦ TẤT CẢ các phần truyện (Arc/Saga) chính của tác phẩm theo thứ tự thời gian. Đây là yêu cầu BẮT BUỘC và cực kỳ quan trọng để đảm bảo không bỏ sót bất kỳ phần nào.
@@ -16,38 +19,45 @@ export const getGenerateFandomSummaryPrompt = (workName: string, authorName?: st
 
     Hãy trả lời bằng một bài văn bản thuần túy, có cấu trúc rõ ràng. Nếu không tìm thấy thông tin, hãy trả về chuỗi "WORK_NOT_FOUND".`;
 
-    const systemInstruction = "Bạn là một chuyên gia phân tích văn học.";
-    return { prompt, systemInstruction };
+  const systemInstruction = "Bạn là một chuyên gia phân tích văn học.";
+  return { prompt, systemInstruction };
 };
 
 export const getExtractArcListFromSummaryPrompt = (summaryContent: string) => {
-    const schema = {
-        type: Type.OBJECT,
-        properties: {
-            arcs: {
-                type: Type.ARRAY,
-                description: "Một danh sách các chuỗi (string) chứa tên của tất cả các phần truyện (Arc/Saga) chính có trong bản tóm tắt.",
-                items: { type: Type.STRING }
-            }
-        },
-        required: ['arcs']
-    };
+  const schema = {
+    type: Type.OBJECT,
+    properties: {
+      arcs: {
+        type: Type.ARRAY,
+        description:
+          "Một danh sách các chuỗi (string) chứa tên của tất cả các phần truyện (Arc/Saga) chính có trong bản tóm tắt.",
+        items: { type: Type.STRING },
+      },
+    },
+    required: ["arcs"],
+  };
 
-    const prompt = `Từ bản tóm tắt tác phẩm sau đây, hãy xác định và trích xuất tên của TẤT CẢ các phần truyện (Arc hoặc Saga) chính. Trả về một đối tượng JSON chỉ chứa một mảng chuỗi có tên là "arcs".
+  const prompt = `Từ bản tóm tắt tác phẩm sau đây, hãy xác định và trích xuất tên của TẤT CẢ các phần truyện (Arc hoặc Saga) chính. Trả về một đối tượng JSON chỉ chứa một mảng chuỗi có tên là "arcs".
 
 --- BẢN TÓM TẮT ---
 ${summaryContent}
 --- KẾT THÚC BẢN TÓM TẮT ---`;
 
-    return { prompt, schema };
+  return { prompt, schema };
 };
 
-export const getGenerateFandomGenesisPrompt = (summaryContent: string, arcName: string, workName: string, authorName?: string) => {
-    const authorInfo = authorName ? ` (tác giả: ${authorName})` : '';
+export const getGenerateFandomGenesisPrompt = (
+  summaryContent: string,
+  arcName: string,
+  workName: string,
+  authorName?: string,
+) => {
+  const authorInfo = authorName ? ` (tác giả: ${authorName})` : "";
 
-    const systemInstruction = "Bạn là một nhà biên niên sử AI và chuyên gia phân tích văn học. Nhiệm vụ của bạn là ghi chép lại một cách CỰC KỲ CHI TIẾT và TOÀN DIỆN một phần của tác phẩm, đảm bảo không bỏ sót bất kỳ chi tiết nào.";
+  const systemInstruction =
+    "Bạn là một nhà biên niên sử AI và chuyên gia phân tích văn học. Nhiệm vụ của bạn là ghi chép lại một cách CỰC KỲ CHI TIẾT và TOÀN DIỆN một phần của tác phẩm, đảm bảo không bỏ sót bất kỳ chi tiết nào.";
 
-    const prompt = `Bạn là một nhà biên niên sử chuyên nghiệp. Dưới đây là TÓM TẮT TỔNG QUAN về tác phẩm "${workName}"${authorInfo}.
+  const prompt = `Bạn là một nhà biên niên sử chuyên nghiệp. Dưới đây là TÓM TẮT TỔNG QUAN về tác phẩm "${workName}"${authorInfo}.
 
 --- TÓM TẮT TỔNG QUAN ---
 ${summaryContent}
@@ -90,13 +100,15 @@ ${summaryContent}
 5.  **KHÔNG TÌM THẤY:** Nếu Arc "${arcName}" không được đề cập trong bản tóm tắt, hãy trả về một chuỗi duy nhất: "ARC_NOT_FOUND".
 `;
 
-    const { aiPerformanceSettings } = getSettings();
-    const perfSettings = aiPerformanceSettings || DEFAULT_AI_PERFORMANCE_SETTINGS;
-    const creativeCallConfig: Partial<AiPerformanceSettings> = {
-        maxOutputTokens: perfSettings.maxOutputTokens + (perfSettings.jsonBuffer || 0),
-        thinkingBudget: perfSettings.thinkingBudget + (perfSettings.jsonBuffer || 0),
-        thinkingLevel: perfSettings.thinkingLevel
-    };
+  const { aiPerformanceSettings } = getSettings();
+  const perfSettings = aiPerformanceSettings || DEFAULT_AI_PERFORMANCE_SETTINGS;
+  const creativeCallConfig: Partial<AiPerformanceSettings> = {
+    maxOutputTokens:
+      perfSettings.maxOutputTokens + (perfSettings.jsonBuffer || 0),
+    thinkingBudget:
+      perfSettings.thinkingBudget + (perfSettings.jsonBuffer || 0),
+    thinkingLevel: perfSettings.thinkingLevel,
+  };
 
-    return { prompt, systemInstruction, creativeCallConfig };
+  return { prompt, systemInstruction, creativeCallConfig };
 };

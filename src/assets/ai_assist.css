@@ -1,0 +1,6 @@
+@reference "tailwindcss";
+
+/* AI Assist Button */
+.ai_assist_btn {
+  @apply transition-all duration-300 rounded-md text-sm font-semibold flex items-center justify-center bg-fuchsia-600 hover:bg-fuchsia-700 text-white shadow-md hover:shadow-lg shadow-fuchsia-500/30;
+}

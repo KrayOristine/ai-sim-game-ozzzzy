@@ -63,13 +63,23 @@ const SCI_FI_SYSTEM = `
         *   **Ví dụ:** Họ hạ cánh xuống <entity>Xylos-7</entity>. Bên trong <entity>Trạm không gian Omega</entity>.
 `;
 
-export const GENRE_TAGGING_SYSTEMS: { [key: string]: { system: string; commonKeywords: string[] } } = {
-  'tu_tien': {
+export const GENRE_TAGGING_SYSTEMS: {
+  [key: string]: { system: string; commonKeywords: string[] };
+} = {
+  tu_tien: {
     system: TU_TIEN_SYSTEM,
-    commonKeywords: ['Ma Đạo', 'Thiên Đạo', 'Chính Đạo', 'Đạo', 'Cảnh giới', 'Tu vi', 'Linh khí'],
+    commonKeywords: [
+      "Ma Đạo",
+      "Thiên Đạo",
+      "Chính Đạo",
+      "Đạo",
+      "Cảnh giới",
+      "Tu vi",
+      "Linh khí",
+    ],
   },
-  'sci_fi': {
+  sci_fi: {
     system: SCI_FI_SYSTEM,
-    commonKeywords: ['Công nghệ', 'Không gian', 'Thời gian', 'Robot', 'AI'],
+    commonKeywords: ["Công nghệ", "Không gian", "Thời gian", "Robot", "AI"],
   },
 };

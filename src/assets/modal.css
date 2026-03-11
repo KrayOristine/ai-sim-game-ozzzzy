@@ -1,0 +1,9 @@
+@reference "tailwindcss";
+
+/* General Modal Classes */
+.modal-overlay {
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4;
+}
+.modal-content {
+  @apply bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6 w-full max-w-2xl relative flex flex-col animate-fade-in-up;
+}

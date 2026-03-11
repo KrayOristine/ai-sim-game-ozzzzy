@@ -1,63 +1,82 @@
-
 import { Type } from "@google/genai";
 import { CORE_ENTITY_TYPES, ENTITY_TYPE_OPTIONS } from "../../constants";
 
 export const getSmartCodexPrompt = (command: string) => {
-    // Schema đa hình để xử lý nhiều loại thực thể
-    const schema = {
+  // Schema đa hình để xử lý nhiều loại thực thể
+  const schema = {
+    type: Type.OBJECT,
+    properties: {
+      operation: {
+        type: Type.STRING,
+        enum: ["create", "update"],
+        description:
+          "Xác định xem người dùng muốn TẠO MỚI (create) hay CẬP NHẬT/GÁN (update) cho một thực thể đã tồn tại.",
+      },
+      targetName: {
+        type: Type.STRING,
+        description:
+          "Tên chính xác của thực thể cần cập nhật (nếu operation là 'update'). Để trống nếu tạo mới.",
+      },
+      type: {
+        type: Type.STRING,
+        enum: ["Item", "Skill", "Faction", "NPC"],
+        description: "Loại thực thể được xác định từ yêu cầu.",
+      },
+      data: {
+        type: Type.OBJECT,
+        description: "Dữ liệu chi tiết của thực thể.",
+        properties: {
+          name: { type: Type.STRING },
+          description: {
+            type: Type.STRING,
+            description: "Mô tả chi tiết, văn học.",
+          },
+          // Item fields
+          quantity: {
+            type: Type.NUMBER,
+            description: "Số lượng (nếu là Item).",
+          },
+          details: {
+            type: Type.OBJECT,
+            properties: {
+              rarity: { type: Type.STRING },
+              stats: {
+                type: Type.STRING,
+                description: "Các chỉ số (VD: +10 Sát thương).",
+              },
+              effects: { type: Type.STRING, description: "Hiệu ứng đặc biệt." },
+              subType: {
+                type: Type.STRING,
+                description: "Loại phụ (VD: Kiếm, Áo giáp).",
+              },
+            },
+          },
+          // NPC/Faction fields
+          personality: { type: Type.STRING },
+          tags: { type: Type.ARRAY, items: { type: Type.STRING } },
+          customCategory: { type: Type.STRING },
+        },
+        required: ["name", "description"],
+      },
+      ownerContext: {
         type: Type.OBJECT,
         properties: {
-            operation: {
-                type: Type.STRING,
-                enum: ['create', 'update'],
-                description: "Xác định xem người dùng muốn TẠO MỚI (create) hay CẬP NHẬT/GÁN (update) cho một thực thể đã tồn tại."
-            },
-            targetName: {
-                type: Type.STRING,
-                description: "Tên chính xác của thực thể cần cập nhật (nếu operation là 'update'). Để trống nếu tạo mới."
-            },
-            type: {
-                type: Type.STRING,
-                enum: ['Item', 'Skill', 'Faction', 'NPC'],
-                description: "Loại thực thể được xác định từ yêu cầu."
-            },
-            data: {
-                type: Type.OBJECT,
-                description: "Dữ liệu chi tiết của thực thể.",
-                properties: {
-                    name: { type: Type.STRING },
-                    description: { type: Type.STRING, description: "Mô tả chi tiết, văn học." },
-                    // Item fields
-                    quantity: { type: Type.NUMBER, description: "Số lượng (nếu là Item)." },
-                    details: {
-                        type: Type.OBJECT,
-                        properties: {
-                            rarity: { type: Type.STRING },
-                            stats: { type: Type.STRING, description: "Các chỉ số (VD: +10 Sát thương)." },
-                            effects: { type: Type.STRING, description: "Hiệu ứng đặc biệt." },
-                            subType: { type: Type.STRING, description: "Loại phụ (VD: Kiếm, Áo giáp)." }
-                        }
-                    },
-                    // NPC/Faction fields
-                    personality: { type: Type.STRING },
-                    tags: { type: Type.ARRAY, items: { type: Type.STRING } },
-                    customCategory: { type: Type.STRING }
-                },
-                required: ['name', 'description']
-            },
-            ownerContext: {
-                type: Type.OBJECT,
-                properties: {
-                    isPlayer: { type: Type.BOOLEAN, description: "True nếu thuộc về người chơi." },
-                    npcName: { type: Type.STRING, description: "Tên NPC sở hữu (nếu có)." }
-                },
-                required: ['isPlayer']
-            }
+          isPlayer: {
+            type: Type.BOOLEAN,
+            description: "True nếu thuộc về người chơi.",
+          },
+          npcName: {
+            type: Type.STRING,
+            description: "Tên NPC sở hữu (nếu có).",
+          },
         },
-        required: ['operation', 'type', 'data', 'ownerContext']
-    };
+        required: ["isPlayer"],
+      },
+    },
+    required: ["operation", "type", "data", "ownerContext"],
+  };
 
-    const prompt = `Bạn là Trợ lý Kiến tạo RPG chuyên nghiệp.
+  const prompt = `Bạn là Trợ lý Kiến tạo RPG chuyên nghiệp.
 Nhiệm vụ: Phân tích yêu cầu người dùng để GÁN (Cập nhật) hoặc TẠO thực thể game.
 
 --- CÂU LỆNH CỦA NGƯỜI DÙNG ---
@@ -86,5 +105,5 @@ Nhiệm vụ: Phân tích yêu cầu người dùng để GÁN (Cập nhật) ho
 
 5. **Output:** Trả về JSON theo đúng Schema.`;
 
-    return { prompt, schema };
+  return { prompt, schema };
 };

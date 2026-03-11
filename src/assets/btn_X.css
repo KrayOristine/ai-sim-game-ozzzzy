@@ -1,0 +1,24 @@
+@reference "tailwindcss";
+
+.btn_X_base {
+  @apply w-full flex items-center justify-center text-lg font-bold py-3 px-6 rounded-lg shadow-lg transition-all duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 text-white;
+}
+
+.btn_X_variant_primary {
+  @apply bg-linear-to-r from-fuchsia-600 to-pink-600 hover:from-fuchsia-700 hover:to-pink-700 focus:ring-fuchsia-400/50;
+}
+.btn_X_variant_secondary {
+  @apply bg-linear-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 focus:ring-blue-400/50;
+}
+.btn_X_variant_success {
+  @apply bg-linear-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600 focus:ring-emerald-400/50;
+}
+.btn_X_variant_warning {
+  @apply bg-linear-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 focus:ring-amber-400/50;
+}
+.btn_X_variant_special {
+  @apply bg-linear-to-r from-violet-500 to-fuchsia-500 hover:from-violet-600 hover:to-fuchsia-600 focus:ring-violet-400/50;
+}
+.btn_X_variant_info {
+  @apply bg-linear-to-r from-sky-500 to-indigo-500 hover:from-sky-600 hover:to-indigo-600 focus:ring-sky-400/50;
+}

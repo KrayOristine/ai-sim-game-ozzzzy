@@ -1,46 +1,50 @@
+import React, { useState, useCallback } from "react";
+import HomeScreen from "./components/main/HomeScreen";
+import WorldCreationScreen from "./components/main/WorldCreationScreen";
+import SettingsScreen from "./components/main/SettingsScreen";
+import GameplayScreen from "./components/main/GameplayScreen";
+import FandomGenesisScreen from "./components/main/FandomGenesisScreen";
+import { DEFAULT_STATS } from "./constants";
+import { getSeason, generateWeather } from "./utils/timeUtils";
+import { resolveGenreArchetype } from "./utils/genreUtils";
 
-
-import React, { useState, useCallback } from 'react';
-import HomeScreen from './components/HomeScreen';
-import WorldCreationScreen from './components/WorldCreationScreen';
-import SettingsScreen from './components/SettingsScreen';
-import GameplayScreen from './components/GameplayScreen';
-import FandomGenesisScreen from './components/FandomGenesisScreen';
-import { WorldConfig, GameState, InitialEntity, NpcDossier, EncounteredNPC } from './types';
-import { DEFAULT_STATS } from './const';
-import { getSeason, generateWeather } from './utils/timeUtils';
-import { resolveGenreArchetype } from './utils/genreUtils';
-
-type Screen = 'home' | 'create' | 'settings' | 'gameplay' | 'fandomGenesis';
+type Screen = "home" | "create" | "settings" | "gameplay" | "fandomGenesis";
 
 const App: React.FC = () => {
-  const [currentScreen, setCurrentScreen] = useState<Screen>('home');
+  const [currentScreen, setCurrentScreen] = useState<Screen>("home");
   const [gameState, setGameState] = useState<GameState | null>(null);
   const [editingConfig, setEditingConfig] = useState<WorldConfig | null>(null);
 
   const handleStartNew = useCallback(() => {
     setEditingConfig(null);
-    setCurrentScreen('create');
+    setCurrentScreen("create");
   }, []);
 
   const handleLoadGame = useCallback((config: WorldConfig) => {
     setEditingConfig(config);
-    setCurrentScreen('create');
+    setCurrentScreen("create");
   }, []);
 
   const handleStartGame = useCallback((config: WorldConfig) => {
     const worldConfigWithLore = { ...config };
     if (worldConfigWithLore.storyContext.setting) {
-        const powerSystemEntity: InitialEntity = {
-            name: 'Tổng quan Hệ thống Sức mạnh',
-            type: 'Hệ thống sức mạnh / Lore',
-            description: worldConfigWithLore.storyContext.setting,
-            personality: ''
-        };
-        const existing = (worldConfigWithLore.initialEntities || []).find(e => e.name === powerSystemEntity.name && e.type === powerSystemEntity.type);
-        if (!existing) {
-            worldConfigWithLore.initialEntities = [...(worldConfigWithLore.initialEntities || []), powerSystemEntity];
-        }
+      const powerSystemEntity: InitialEntity = {
+        name: "Tổng quan Hệ thống Sức mạnh",
+        type: "Hệ thống sức mạnh / Lore",
+        description: worldConfigWithLore.storyContext.setting,
+        personality: "",
+      };
+      const existing = (worldConfigWithLore.initialEntities || []).find(
+        (e) =>
+          e.name === powerSystemEntity.name &&
+          e.type === powerSystemEntity.type,
+      );
+      if (!existing) {
+        worldConfigWithLore.initialEntities = [
+          ...(worldConfigWithLore.initialEntities || []),
+          powerSystemEntity,
+        ];
+      }
     }
 
     const archetype = resolveGenreArchetype(config.storyContext.genre);
@@ -50,26 +54,37 @@ const App: React.FC = () => {
 
     // BƯỚC 1: Di trú dữ liệu NPC từ kiến tạo ban đầu
     const initialNpcs = (worldConfigWithLore.initialEntities || [])
-      .filter(entity => entity.type === 'NPC')
-      .map((entity): EncounteredNPC => ({
-        name: entity.name,
-        description: entity.description,
-        personality: entity.personality || 'Chưa rõ',
-        thoughtsOnPlayer: 'Chưa có tương tác',
-        tags: entity.tags || [],
-        customCategory: entity.customCategory,
-        locationId: entity.locationId,
-        memoryFlags: {},
-        physicalState: '',
-      }));
+      .filter((entity) => entity.type === "NPC")
+      .map(
+        (entity): EncounteredNPC => ({
+          name: entity.name,
+          description: entity.description,
+          personality: entity.personality || "Chưa rõ",
+          thoughtsOnPlayer: "Chưa có tương tác",
+          tags: entity.tags || [],
+          customCategory: entity.customCategory,
+          locationId: entity.locationId,
+          memoryFlags: {},
+          physicalState: "",
+        }),
+      );
 
     setGameState({
-      worldId: crypto.randomUUID().replace('-',''), // Tạo ID duy nhất cho thế giới mới
+      worldId: crypto.randomUUID().replace("-", ""), // Tạo ID duy nhất cho thế giới mới
       worldConfig: worldConfigWithLore,
       character: {
         ...config.character,
-        stats: config.enableStatsSystem ? (config.character.stats && config.character.stats.length > 0 ? config.character.stats : DEFAULT_STATS) : [],
-        milestones: config.enableMilestoneSystem ? (config.character.milestones && config.character.milestones.length > 0 ? config.character.milestones : []) : [],
+        stats: config.enableStatsSystem
+          ? config.character.stats && config.character.stats.length > 0
+            ? config.character.stats
+            : DEFAULT_STATS
+          : [],
+        milestones: config.enableMilestoneSystem
+          ? config.character.milestones &&
+            config.character.milestones.length > 0
+            ? config.character.milestones
+            : []
+          : [],
       },
       history: [],
       memories: [],
@@ -83,20 +98,23 @@ const App: React.FC = () => {
       quests: [],
       suggestions: [],
       worldTime: initialTime,
-      reputation: { score: 0, tier: 'Vô Danh' },
+      reputation: { score: 0, tier: "Vô Danh" },
       reputationTiers: [],
       season: initialSeason,
       weather: initialWeather,
       npcDossiers: {}, // Khởi tạo hồ sơ NPC
       customCategories: [], // Khởi tạo danh sách category tùy chỉnh
     });
-    setCurrentScreen('gameplay');
+    setCurrentScreen("gameplay");
   }, []);
 
   const handleLoadSavedGame = useCallback((state: GameState) => {
     // LOG DEBUG: Load game không tốn request
-    console.groupCollapsed('📂 [INFO] Tải save');
-    console.log('%c✅ Không tốn request. (Dữ liệu được tải trực tiếp từ bộ nhớ)', 'color: #4ade80; font-weight: bold;');
+    console.groupCollapsed("📂 [INFO] Tải save");
+    console.log(
+      "%c✅ Không tốn request. (Dữ liệu được tải trực tiếp từ bộ nhớ)",
+      "color: #4ade80; font-weight: bold;",
+    );
     console.groupEnd();
 
     const statsEnabled = state.worldConfig.enableStatsSystem === true;
@@ -104,21 +122,34 @@ const App: React.FC = () => {
 
     const worldConfigWithLore = { ...state.worldConfig };
     if (worldConfigWithLore.storyContext.setting) {
-        const powerSystemEntity: InitialEntity = {
-            name: 'Tổng quan Hệ thống Sức mạnh',
-            type: 'Hệ thống sức mạnh / Lore',
-            description: worldConfigWithLore.storyContext.setting,
-            personality: ''
-        };
-        const allEntities = [...(worldConfigWithLore.initialEntities || []), ...(state.discoveredEntities || [])];
-        const existing = allEntities.find(e => e.name === powerSystemEntity.name && e.type === powerSystemEntity.type);
-        if (!existing) {
-            worldConfigWithLore.initialEntities = [...(worldConfigWithLore.initialEntities || []), powerSystemEntity];
-        }
+      const powerSystemEntity: InitialEntity = {
+        name: "Tổng quan Hệ thống Sức mạnh",
+        type: "Hệ thống sức mạnh / Lore",
+        description: worldConfigWithLore.storyContext.setting,
+        personality: "",
+      };
+      const allEntities = [
+        ...(worldConfigWithLore.initialEntities || []),
+        ...(state.discoveredEntities || []),
+      ];
+      const existing = allEntities.find(
+        (e) =>
+          e.name === powerSystemEntity.name &&
+          e.type === powerSystemEntity.type,
+      );
+      if (!existing) {
+        worldConfigWithLore.initialEntities = [
+          ...(worldConfigWithLore.initialEntities || []),
+          powerSystemEntity,
+        ];
+      }
     }
 
     const completeState: GameState = {
-      worldId: state.worldId || (state as any).saveId || crypto.randomUUID().replace('-',''), // Gán worldId nếu chưa có
+      worldId:
+        state.worldId ||
+        (state as any).saveId ||
+        crypto.randomUUID().replace("-", ""), // Gán worldId nếu chưa có
       memories: [],
       summaries: [],
       playerStatus: [],
@@ -130,22 +161,28 @@ const App: React.FC = () => {
       quests: [], // For old saves
       suggestions: [], // Fallback for old saves
       worldTime: { year: 1, month: 1, day: 1, hour: 8, minute: 0 }, // Fallback cho file lưu cũ
-      reputation: { score: 0, tier: 'Vô Danh' }, // Fallback cho file lưu cũ
+      reputation: { score: 0, tier: "Vô Danh" }, // Fallback cho file lưu cũ
       reputationTiers: [], // Fallback cho file lưu cũ
-      season: '', // Sẽ được tính toán bên dưới
-      weather: '', // Sẽ được tính toán bên dưới
+      season: "", // Sẽ được tính toán bên dưới
+      weather: "", // Sẽ được tính toán bên dưới
       npcDossiers: {}, // Fallback cho file lưu cũ
       customCategories: [], // Fallback cho file lưu cũ
       ...state,
       worldConfig: {
         ...worldConfigWithLore,
         // Fallback for old saves that don't have this property
-        enableMilestoneSystem: state.worldConfig.enableMilestoneSystem ?? (state.character.milestones && state.character.milestones.length > 0)
+        enableMilestoneSystem:
+          state.worldConfig.enableMilestoneSystem ??
+          (state.character.milestones && state.character.milestones.length > 0),
       },
       character: {
         ...(state.character || state.worldConfig.character), // Handle very old saves
-        stats: statsEnabled ? (state.character.stats && state.character.stats.length > 0 ? state.character.stats : DEFAULT_STATS) : [],
-        milestones: milestonesEnabled ? (state.character.milestones || []) : [],
+        stats: statsEnabled
+          ? state.character.stats && state.character.stats.length > 0
+            ? state.character.stats
+            : DEFAULT_STATS
+          : [],
+        milestones: milestonesEnabled ? state.character.milestones || [] : [],
       },
     };
 
@@ -154,61 +191,83 @@ const App: React.FC = () => {
 
     // Di chuyển npcDossiers nếu nó ở định dạng cũ
     if (completeState.npcDossiers) {
-        const firstDossierKey = Object.keys(completeState.npcDossiers)[0];
-        if (firstDossierKey && Array.isArray(completeState.npcDossiers[firstDossierKey])) {
-            const oldDossiers = completeState.npcDossiers as unknown as Record<string, number[]>;
-            const newDossiers: Record<string, NpcDossier> = {};
-            for (const npcName in oldDossiers) {
-                newDossiers[npcName] = {
-                    fresh: oldDossiers[npcName],
-                    archived: []
-                };
-            }
-            completeState.npcDossiers = newDossiers;
+      const firstDossierKey = Object.keys(completeState.npcDossiers)[0];
+      if (
+        firstDossierKey &&
+        Array.isArray(completeState.npcDossiers[firstDossierKey])
+      ) {
+        const oldDossiers = completeState.npcDossiers as unknown as Record<
+          string,
+          number[]
+        >;
+        const newDossiers: Record<string, NpcDossier> = {};
+        for (const npcName in oldDossiers) {
+          newDossiers[npcName] = {
+            fresh: oldDossiers[npcName],
+            archived: [],
+          };
         }
+        completeState.npcDossiers = newDossiers;
+      }
     }
 
     // Tính toán mùa/thời tiết nếu thiếu
     if (!completeState.season || !completeState.weather) {
-        const archetype = resolveGenreArchetype(completeState.worldConfig.storyContext.genre);
-        completeState.season = getSeason(completeState.worldTime.month, archetype);
-        completeState.weather = generateWeather(completeState.season, archetype);
+      const archetype = resolveGenreArchetype(
+        completeState.worldConfig.storyContext.genre,
+      );
+      completeState.season = getSeason(
+        completeState.worldTime.month,
+        archetype,
+      );
+      completeState.weather = generateWeather(completeState.season, archetype);
     }
 
     setGameState(completeState);
-    setCurrentScreen('gameplay');
+    setCurrentScreen("gameplay");
   }, []);
 
   const handleNavigateToSettings = useCallback(() => {
-    setCurrentScreen('settings');
+    setCurrentScreen("settings");
   }, []);
 
   const handleNavigateToFandomGenesis = useCallback(() => {
-    setCurrentScreen('fandomGenesis');
+    setCurrentScreen("fandomGenesis");
   }, []);
 
   const handleBackToHome = useCallback(() => {
     setGameState(null);
     setEditingConfig(null);
-    setCurrentScreen('home');
+    setCurrentScreen("home");
   }, []);
 
   const renderScreen = () => {
     switch (currentScreen) {
-      case 'create':
-        return <WorldCreationScreen onBack={handleBackToHome} initialConfig={editingConfig} onStartGame={handleStartGame} />;
-      case 'settings':
+      case "create":
+        return (
+          <WorldCreationScreen
+            onBack={handleBackToHome}
+            initialConfig={editingConfig}
+            onStartGame={handleStartGame}
+          />
+        );
+      case "settings":
         return <SettingsScreen onBack={handleBackToHome} />;
-      case 'fandomGenesis':
+      case "fandomGenesis":
         return <FandomGenesisScreen onBack={handleBackToHome} />;
-      case 'gameplay':
+      case "gameplay":
         if (gameState) {
-          return <GameplayScreen initialGameState={gameState} onBack={handleBackToHome} />;
+          return (
+            <GameplayScreen
+              initialGameState={gameState}
+              onBack={handleBackToHome}
+            />
+          );
         }
         // Fallback if no config
-        setCurrentScreen('home');
+        setCurrentScreen("home");
         return null;
-      case 'home':
+      case "home":
       default:
         return (
           <HomeScreen

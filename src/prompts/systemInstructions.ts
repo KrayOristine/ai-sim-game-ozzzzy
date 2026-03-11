@@ -1,26 +1,27 @@
+import { WorldConfig } from "#/types/core";
+import { StyleGuideVector } from "#/types/ai_vector";
+import { getSettings } from "#/services/settingsService";
+import { GENRE_TAGGING_SYSTEMS } from "./genreTagging";
 
-
-import { WorldConfig, StyleGuideVector } from '#/types';
-import { getSettings } from '#/services/settingsService';
-import { GENRE_TAGGING_SYSTEMS } from './genreTagging';
-
-export const getResponseLengthDirective = (aiResponseLength?: string): string => {
-    switch (aiResponseLength) {
-        case 'Ngắn':
-            return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 2000 từ.";
-        case 'Trung bình':
-            return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 1000 đến 4000 từ.";
-        case 'Chi tiết, dài':
-            return `Phần tường thuật của bạn phải CỰC KỲ CHI TIẾT, có chiều sâu và DÀI, hướng đến độ dài mục tiêu từ tối thiểu 2000 đến tối đa 7500 từ. Để đạt được độ dài và chất lượng yêu cầu, bạn PHẢI:
+export const getResponseLengthDirective = (
+  aiResponseLength?: string,
+): string => {
+  switch (aiResponseLength) {
+    case "Ngắn":
+      return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 1000 từ.";
+    case "Trung bình":
+      return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 900 đến 1500 từ.";
+    case "Chi tiết, dài":
+      return `Phần tường thuật của bạn phải CỰC KỲ CHI TIẾT, có chiều sâu và DÀI, hướng đến độ dài mục tiêu từ tối thiểu 1500 đến tối đa 3000 từ. Để đạt được độ dài và chất lượng yêu cầu, bạn PHẢI:
 - **Miêu tả đa giác quan:** Đi sâu vào mô tả môi trường, các chi tiết giác quan (âm thanh, mùi vị, hình ảnh, cảm giác).
 - **Khám phá nội tâm:** Dành thời gian mô tả chi tiết suy nghĩ, cảm xúc, và mâu thuẫn nội tâm của nhân vật chính và các NPC quan trọng.
 - **Hành động & Phản ứng của NPC:** Mô tả chi tiết hành động, cử chỉ, và phản ứng của các NPC, khiến họ trở nên sống động.
 - **Phát triển tình tiết:** Thay vì kết thúc cảnh sớm, hãy phát triển thêm các tình tiết phụ, các đoạn hội thoại, hoặc các mô tả chi tiết để làm giàu thêm cho diễn biến.
 - **CHỐNG LẶP LẠI (CỰC KỲ QUAN TRỌNG):** TUYỆT ĐỐI KHÔNG được lặp lại nội dung từ các lượt chơi trước chỉ để kéo dài độ dài. Mỗi câu chữ đều phải là nội dung mới, thúc đẩy câu chuyện tiến về phía trước hoặc làm sâu sắc thêm bối cảnh hiện tại.`;
-        case 'Mặc định':
-        default:
-            return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 750 đến 1600 từ.";
-    }
+    case "Mặc định":
+    default:
+      return "Phần tường thuật của bạn phải chi tiết và có chiều sâu, hướng đến độ dài mục tiêu từ 750 đến 1600 từ.";
+  }
 };
 
 const DEEP_SIMULATION_PROTOCOL = `
@@ -34,13 +35,13 @@ Bạn là một Game Master thông minh. Phản hồi của bạn BẮT BUỘC p
 - Kiểm tra Logic: Hành động này có khả thi trong bối cảnh hiện tại không?
 - Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ.
 - Safety Check: Nếu nội dung vi phạm an toàn, hãy lên kế hoạch "lách" luật bằng cách ẩn dụ hoặc chuyển hướng (nếu đang ở chế độ 18+).
-- **TỰ HỎI (QUAN TRỌNG):** "Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?"
+- Kiểm tra kẹt hành vi/mất phương hướng: Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?, nếu là có thì kích hoạt [Mô phỏng Thế giới song song]
 </thinking>
 
 <world_sim>
 [Mô phỏng Thế giới Song song]
-- **ĐIỀU KIỆN KÍCH HOẠT:** CHỈ sinh ra nội dung trong thẻ này NẾU câu trả lời cho câu hỏi "Kết thúc/Bị kẹt" ở phần <thinking> là **CÓ**. Nếu cảnh vẫn đang cao trào hoặc chưa kết thúc, hãy để trống thẻ này hoặc trả về EMPTY.
-- **NỘI DUNG (Nếu kích hoạt):** Viết 1-2 đoạn văn ngắn về một sự kiện hoặc tin đồn đóng vai trò như một **gợi ý (hint)** hoặc một **mối đe dọa mới**.
+- **ĐIỀU KIỆN KÍCH HOẠT:** CHỈ TẠO RA nội dung trong thẻ này NẾU "Kiểm tra kẹt hành vi/mất phương hướng" ở phần <thinking> là **CÓ**. NẾU KHÔNG thì hãy để trống thẻ này hoặc trả về EMPTY cho phần này.
+- **NỘI DUNG (NẾU kích hoạt):** Viết 1-2 đoạn văn ngắn về một sự kiện hoặc việc gì đó đóng vai trò như một **gợi ý (hint)** hoặc một **mối đe dọa mới**.
 - **QUY TẮC CẤM (TUYỆT ĐỐI):**
   1. CHỈ viết văn xuôi kể chuyện (narrative prose).
   2. TUYỆT ĐỐI KHÔNG dùng gạch đầu dòng (- hoặc *).
@@ -64,26 +65,36 @@ Bạn là một Game Master thông minh. Phản hồi của bạn BẮT BUỘC p
 </data_tags>
 `;
 
-export const getGameMasterSystemInstruction = (config: WorldConfig, styleGuide?: StyleGuideVector): string => {
+export const getGameMasterSystemInstruction = (
+  config: WorldConfig,
+  styleGuide?: StyleGuideVector,
+): string => {
   const genre = config.storyContext.genre;
   const normalizedGenre = genre.toLowerCase();
   let genreConfig = null;
 
-  let styleGuideInstruction = '';
+  let styleGuideInstruction = "";
   if (styleGuide) {
     styleGuideInstruction = `
 --- VECTOR HƯỚNG DẪN VĂN PHONG (ƯU TIÊN TUYỆT ĐỐI) ---
 BẠN BẮT BUỘC PHẢI tuân thủ các quy tắc văn phong sau đây, chúng sẽ GHI ĐÈ lên mọi quy tắc văn phong chung khác.
 - **Quy tắc Xưng hô:** ${styleGuide.pronoun_rules}
-- **Danh sách Loại trừ:** TUYỆT ĐỐI KHÔNG sử dụng các từ khóa sau: ${styleGuide.exclusion_list.join(', ')}.
+- **Danh sách Loại trừ:** TUYỆT ĐỐI KHÔNG sử dụng các từ khóa sau: ${styleGuide.exclusion_list.join(", ")}.
 --- KẾT THÚC VECTOR ---
 `;
   }
 
-  if (normalizedGenre.includes('tu tiên') || normalizedGenre.includes('tiên hiệp') || normalizedGenre.includes('huyền huyễn')) {
-    genreConfig = GENRE_TAGGING_SYSTEMS['tu_tien'];
-  } else if (normalizedGenre.includes('sci-fi') || normalizedGenre.includes('khoa học viễn tưởng')) {
-    genreConfig = GENRE_TAGGING_SYSTEMS['sci_fi'];
+  if (
+    normalizedGenre.includes("tu tiên") ||
+    normalizedGenre.includes("tiên hiệp") ||
+    normalizedGenre.includes("huyền huyễn")
+  ) {
+    genreConfig = GENRE_TAGGING_SYSTEMS["tu_tien"];
+  } else if (
+    normalizedGenre.includes("sci-fi") ||
+    normalizedGenre.includes("khoa học viễn tưởng")
+  ) {
+    genreConfig = GENRE_TAGGING_SYSTEMS["sci_fi"];
   }
 
   let instruction = `${styleGuideInstruction}
@@ -223,15 +234,19 @@ QUY TẮC BẮT BUỘC:
 ${DEEP_SIMULATION_PROTOCOL}`;
 
   if (genreConfig && !styleGuide) {
-      // Replace the old generic tagging rule (rule #8) with the new genre-specific one
-      const oldTaggingRuleRegex = /8\.\s+\*\*ĐỊNH DẠNG ĐẶC BIỆT \(QUAN TRỌNG\):.+?8\.5/s;
+    // Replace the old generic tagging rule (rule #8) with the new genre-specific one
+    const oldTaggingRuleRegex =
+      /8\.\s+\*\*ĐỊNH DẠNG ĐẶC BIỆT \(QUAN TRỌNG\):.+?8\.5/s;
 
-      const exclusionInstruction = `
-    g.  **QUAN TRỌNG - KHÔNG TAG TỪ KHÓA CHUNG:** TUYỆT ĐỐI KHÔNG được bọc các từ khóa chung và phổ biến sau đây trong bất kỳ thẻ nào. Hãy xem chúng là văn bản thông thường: ${genreConfig.commonKeywords.join(', ')}.
+    const exclusionInstruction = `
+    g.  **QUAN TRỌNG - KHÔNG TAG TỪ KHÓA CHUNG:** TUYỆT ĐỐI KHÔNG được bọc các từ khóa chung và phổ biến sau đây trong bất kỳ thẻ nào. Hãy xem chúng là văn bản thông thường: ${genreConfig.commonKeywords.join(", ")}.
       `;
 
-      const newTaggingSystem = genreConfig.system + exclusionInstruction;
-      instruction = instruction.replace(oldTaggingRuleRegex, `${newTaggingSystem}\n8.5`);
+    const newTaggingSystem = genreConfig.system + exclusionInstruction;
+    instruction = instruction.replace(
+      oldTaggingRuleRegex,
+      `${newTaggingSystem}\n8.5`,
+    );
   }
 
   return instruction;

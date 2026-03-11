@@ -1,4 +1,4 @@
-import { NARRATIVE_ARCHETYPES } from './narrative_styles';
+import { NARRATIVE_ARCHETYPES } from "./narrative_styles";
 
 export const MIXED_GENRE_INSTRUCTION = `
 --- GIAO THỨC XỬ LÝ THỂ LOẠI HỖN HỢP ---
