@@ -10,5 +10,5 @@ const whitelist = {
 export function filterSafetySettings(safetySettings: SafetySettingsConfig): SafetySetting[] {
   const arr = safetySettings.settings;
 
-  return arr.map(v=>whitelist[v.category])
+  return arr.map(v=>whitelist[v.category]===true ? v : null);
 }
