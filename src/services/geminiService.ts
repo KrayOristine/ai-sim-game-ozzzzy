@@ -9,6 +9,7 @@ import {
 import { getSettings } from "#/services/settingsService";
 import { DEFAULT_AI_PERFORMANCE_SETTINGS, AIModel } from "#/constants";
 import { processNarration } from "#/utils/textProcessing";
+import { filterSafetySettings } from '#/utils/filterSafetySettings';
 
 const DEBUG_MODE = true; // Bật/tắt chế độ debug chi tiết trong Console (F12)
 
@@ -71,19 +72,19 @@ let keyIndex = 0;
 const UNRESTRICTED_SAFETY_SETTINGS: SafetySetting[] = [
   {
     category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
+    threshold: HarmBlockThreshold.OFF,
   },
   {
     category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
+    threshold: HarmBlockThreshold.OFF,
   },
   {
     category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
+    threshold: HarmBlockThreshold.OFF,
   },
   {
     category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-    threshold: HarmBlockThreshold.BLOCK_NONE,
+    threshold: HarmBlockThreshold.OFF,
   },
 ];
 
@@ -246,7 +247,7 @@ export async function generate(
 ): Promise<string> {
   const { safetySettings, aiPerformanceSettings } = getSettings();
   const activeSafetySettings = safetySettings.enabled
-    ? safetySettings.settings
+    ? filterSafetySettings(safetySettings)
     : UNRESTRICTED_SAFETY_SETTINGS;
   const perfSettings: AiPerformanceSettings =
     aiPerformanceSettings || DEFAULT_AI_PERFORMANCE_SETTINGS;
@@ -411,7 +412,7 @@ export async function generateJson<T>(
 ): Promise<T> {
   const { safetySettings, aiPerformanceSettings } = getSettings();
   const activeSafetySettings = safetySettings.enabled
-    ? safetySettings.settings
+    ? filterSafetySettings(safetySettings)
     : UNRESTRICTED_SAFETY_SETTINGS;
   const perfSettings = aiPerformanceSettings || DEFAULT_AI_PERFORMANCE_SETTINGS;
 
@@ -492,7 +493,7 @@ export async function generateJson<T>(
         config: {
           responseMimeType: "application/json",
           responseSchema: schema,
-          safetySettings: activeSafetySettings as unknown as SafetySetting[],
+          safetySettings: activeSafetySettings,
           maxOutputTokens: effectiveMaxTokens,
           thinkingConfig: thinkConfig,
         },
