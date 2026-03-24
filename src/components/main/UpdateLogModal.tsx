@@ -1,7 +1,7 @@
-import React, { Suspense, use, useEffect, useState } from "react";
-import Icon from "#/components/helper/Icon";
-import Button from "#/components/helper/Button";
-import { Request } from "#/utils/axios";
+import React, { useEffect, useState } from "react";
+import Icon from "@component/helper/Icon";
+import Button from "@component/helper/Button";
+import { Request } from "@utils/axios";
 import "#/assets/update_modal.css";
 
 interface UpdateLogModalProps {

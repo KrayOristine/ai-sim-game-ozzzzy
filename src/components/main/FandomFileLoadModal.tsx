@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
-import * as fandomFileService from "#/services/fandomFileService";
+import * as fandomFileService from "@service/fandomFileService";
 import Button from "../helper/Button";
 import Icon from "../helper/Icon";
 

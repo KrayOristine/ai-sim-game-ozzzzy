@@ -1,4 +1,4 @@
-import { mergeAndDeduplicateByName } from "#/utils/arrayUtils";
+import { mergeAndDeduplicateByName } from "@utils/arrayUtils";
 
 /**
  * Xử lý logic thêm một trạng thái mới (buff/debuff) cho người chơi.

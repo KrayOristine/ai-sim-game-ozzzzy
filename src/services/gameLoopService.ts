@@ -7,16 +7,16 @@ import {
 } from "#/prompts/gameplayPrompts";
 import * as ragService from "./ragService";
 import { getSettings } from "./settingsService";
-import * as dbService from "./dbService";
+import * as dbService from "./db/service";
 import * as embeddingService from "./embeddingService";
 import * as backgroundService from "./backgroundService"; // Import background service
-import { cosineSimilarity } from "#/utils/vectorUtils";
+import { cosineSimilarity } from "@utils/vectorUtils";
 import {
   calculateKeywordScore,
   reciprocalRankFusion,
-} from "#/utils/searchUtils";
+} from "@utils/searchUtils";
 import { parseResponse } from "#/game/parser";
-import { selectRelevantContext } from "#/utils/ContextManager";
+import { selectRelevantContext } from "@utils/ContextManager";
 import {
   resetRequestStats,
   printRequestStats,

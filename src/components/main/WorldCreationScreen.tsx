@@ -1403,7 +1403,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     htmlFor="adult-content"
                     className={`text-sm font-medium ${isSafetyFilterEnabled ? "text-slate-500 cursor-not-allowed" : "text-slate-300"}`}
                   >
-                    Cho phép nội dung 18+
+                    Cho phép nội dung 18+ và chít
                   </label>
                 </div>
                 {config.allowAdultContent && !isSafetyFilterEnabled && (

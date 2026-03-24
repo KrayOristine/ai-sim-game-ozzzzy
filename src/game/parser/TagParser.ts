@@ -28,6 +28,85 @@ function parseKeyValue(content: string): Record<string, any> {
   return result;
 }
 
+function extractTagByOrder(rawText: string, tagList: string[]) {
+  const lines = rawText.split(/\r?\n/);
+  const tagsLower = tagList.map((t) => t.toLowerCase());
+  const results: string[] = Array(tagList.length).fill("");
+
+  const tagIndex: Record<string, number> = {};
+  for (let i = 0; i < tagsLower.length; i++) tagIndex[tagsLower[i]] = i;
+
+  // stack entries for open tags
+  type StackEntry = { tag: string; buffer: string[] };
+  const stack: StackEntry[] = [];
+
+  for (let li = 0; li < lines.length; li++) {
+    const rawLine = lines[li];
+    const lineLeft = rawLine.replace(/^[ \t]*/, "");
+    const lowerLeft = lineLeft.toLowerCase();
+
+    let matchedOpen: string | null = null;
+    let matchedClose: string | null = null;
+
+    if (lowerLeft.startsWith("<")) {
+      // parse tag token at start like "<tag>" or "</tag>" (allow only tag chars a-z0-9_-)
+      const tokenMatch = lowerLeft.match(/^<\/?\s*([a-z0-9_-]+)\s*>/);
+      if (tokenMatch) {
+        const foundTag = tokenMatch[1];
+        const isClose = lowerLeft.startsWith("</");
+        if (Object.prototype.hasOwnProperty.call(tagIndex, foundTag)) {
+          if (isClose) matchedClose = foundTag;
+          else matchedOpen = foundTag;
+        }
+      }
+    }
+
+    if (matchedOpen) {
+      // push a new entry for this opening tag
+      const idxOfOpen = rawLine.toLowerCase().indexOf(`<${matchedOpen}>`);
+      const after =
+        idxOfOpen >= 0 ? rawLine.slice(idxOfOpen + matchedOpen.length + 2) : "";
+      stack.push({ tag: matchedOpen, buffer: after ? [after] : [] });
+      continue;
+    }
+
+    if (matchedClose) {
+      // find topmost matching tag in the stack
+      for (let s = stack.length - 1; s >= 0; s--) {
+        if (stack[s].tag === matchedClose) {
+          const [entry] = stack.splice(s, 1);
+          const content = entry.buffer.join("\n");
+
+          // check if any same-tag remains on stack -> nested
+          const stillHasSame = stack.some((e) => e.tag === matchedClose);
+          if (!stillHasSame) {
+            const idx = tagIndex[matchedClose];
+            if (results[idx] === null) results[idx] = content;
+          } else {
+            // append closed content into the nearest same-tag above (as lines)
+            for (let t = stack.length - 1; t >= 0; t--) {
+              if (stack[t].tag === matchedClose) {
+                stack[t].buffer.push(content);
+                break;
+              }
+            }
+          }
+          break;
+        }
+      }
+      continue;
+    }
+
+    // normal line: append to top of stack if any
+    if (stack.length > 0) {
+      stack[stack.length - 1].buffer.push(rawLine);
+    }
+    // else ignore line
+  }
+
+  return results;
+}
+
 /**
  * Tách phản hồi thô của AI thành các phần: Tư duy, Mô phỏng Thế giới, Tường thuật và Danh sách thẻ lệnh.
  * Sử dụng chiến lược "Trích Xuất" (Extraction) nghiêm ngặt để loại bỏ rác văn bản ngoài thẻ.
@@ -50,42 +129,35 @@ export function parseResponse(rawText: string): {
   // Sử dụng Regex để bắt nội dung nằm TRONG thẻ. Mọi thứ bên ngoài thẻ sẽ tự động bị loại bỏ.
 
   // Regex đã được gia cố để bắt nội dung đa dòng ([\s\S]*?) và không tham lam
-  const narrationMatch = rawText.match(/<narration>([\s\S]*?)<\/narration>/i);
-  const dataTagsMatch = rawText.match(/<data_tags>([\s\S]*?)<\/data_tags>/i);
-  const thinkingMatch = rawText.match(/<thinking>([\s\S]*?)<\/thinking>/i);
-  const worldSimMatch = rawText.match(/<world_sim>([\s\S]*?)<\/world_sim>/i);
+  const extracted = extractTagByOrder(rawText, [
+    "narration",
+    "data_tags",
+    "thinking",
+    "world_sim",
+  ]);
+  const narrationMatch = /<narration>([\s\S]*?)<\/narration>/i.test(rawText);
 
   if (narrationMatch) {
     // 1. Trích xuất Narration
-    narration = narrationMatch[1].trim();
+    narration = extracted[0].trim();
 
     // 2. Trích xuất Thinking (Log only)
-    if (thinkingMatch) {
-      thinking = thinkingMatch[1].trim();
-    }
+    thinking = extracted[2].trim();
 
     // 3. Trích xuất và Vệ sinh World Sim
-    if (worldSimMatch) {
-      let content = worldSimMatch[1].trim();
+    let content = extracted[3].trim();
 
-      // Xóa các mẫu giải thích của AI (thường bắt đầu bằng "* **")
-      // Ví dụ: "* **Điều kiện kích hoạt:**..."
-      content = content.replace(/^\s*\*\s*\*\*.*?:.*/gm, "");
-      content = content.replace(/^\s*\*\s*Điều kiện kích hoạt.*/gim, "");
-      content = content.replace(/^\s*\*\s*Sự kiện.*/gim, "");
+    // Xóa các mẫu giải thích của AI (thường bắt đầu bằng "* **")
+    // Ví dụ: "* **Điều kiện kích hoạt:**..."
+    content = content.replace(/^\s*\*\s*(Điều kiện kích hoạt|Sự kiện|)\*\*.*?:.*/gm, "").trim();
 
-      content = content.trim();
-
-      // Kiểm tra nghiêm ngặt: Nếu là "EMPTY", "NONE", hoặc rỗng thì bỏ qua
-      if (content && !/^EMPTY\.?$/i.test(content) && content !== "NONE") {
-        worldSim = content;
-      }
+    // Kiểm tra nghiêm ngặt: Nếu là "EMPTY", "NONE", hoặc rỗng thì bỏ qua
+    if (!/^EMPTY\.?$/i.test(content) && content !== "NONE" && content.length !== 0) {
+      worldSim = content;
     }
 
     // 4. Trích xuất Data Tags
-    if (dataTagsMatch) {
-      tagsPart = dataTagsMatch[1].trim();
-    }
+    tagsPart = extracted[1].trim();
   } else {
     // --- PHASE 2: CHIẾN LƯỢC DỰ PHÒNG (Fallback Strategy) ---
     // Chỉ chạy khi AI quên viết thẻ <narration> (hiếm gặp nhưng cần xử lý để tránh crash)

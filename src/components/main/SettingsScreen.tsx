@@ -1,15 +1,15 @@
 import React, { useState, useEffect, useRef } from "react";
-import { getSettings, saveSettings } from "#/services/settingsService";
-import { testApiKeys, testSingleKey } from "#/services";
-import { loadKeysFromTxtFile } from "#/services/fileService";
+import { getSettings, saveSettings } from "@service/settingsService";
+import { testApiKeys, testSingleKey } from "@service/index";
+import { loadKeysFromTxtFile } from "@service/fileService";
 import {
   HARM_CATEGORIES,
   HARM_BLOCK_THRESHOLDS,
-} from "#/constants";
-import Icon from "@comps/helper/Icon";
-import Button from "@comps/helper/Button";
-import ToggleSwitch from "@comps/helper/ToggleSwitch";
-import Accordion from "@comps/helper/Accordion";
+} from "@const/index";
+import Icon from "@component/helper/Icon";
+import Button from "@component/helper/Button";
+import ToggleSwitch from "@component/helper/ToggleSwitch";
+import Accordion from "@component/helper/Accordion";
 import "#/assets/settings.css";
 import { HarmBlockThreshold, HarmCategory } from '@google/genai';
 

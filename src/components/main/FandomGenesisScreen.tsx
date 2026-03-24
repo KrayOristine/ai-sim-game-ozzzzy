@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
-import Button from "../helper/Button";
-import Icon from "../helper/Icon";
+import Button from "@component/helper/Button";
+import Icon from "@component/helper/Icon";
 import * as aiService from "#/services";
-import { saveTextToFile, saveJsonToFile } from "#/services/fileService";
-import * as fandomFileService from "#/services/fandomFileService";
-import NotificationModal from "../helper/NotificationModal";
-import FandomFileLoadModal from "./FandomFileLoadModal";
-import Accordion from "../helper/Accordion";
-import ConfirmationModal from "../helper/ConfirmationModal";
+import { saveTextToFile, saveJsonToFile } from "@service/fileService";
+import * as fandomFileService from "@service/fandomFileService";
+import NotificationModal from "@component/helper/NotificationModal";
+import FandomFileLoadModal from "@component/main/FandomFileLoadModal";
+import Accordion from "@component/helper/Accordion";
+import ConfirmationModal from "@component/helper/ConfirmationModal";
 
 interface FandomGenesisScreenProps {
   onBack: () => void;

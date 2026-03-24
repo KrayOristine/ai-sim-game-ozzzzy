@@ -70,7 +70,7 @@ const App: React.FC = () => {
       );
 
     setGameState({
-      worldId: crypto.randomUUID().replace("-", ""), // Tạo ID duy nhất cho thế giới mới
+      worldId: crypto.randomUUID().replace(/-/g, ""), // Tạo ID duy nhất cho thế giới mới
       worldConfig: worldConfigWithLore,
       character: {
         ...config.character,
@@ -149,7 +149,7 @@ const App: React.FC = () => {
       worldId:
         state.worldId ||
         (state as any).saveId ||
-        crypto.randomUUID().replace("-", ""), // Gán worldId nếu chưa có
+        crypto.randomUUID().replace(/-/g, ""), // Gán worldId nếu chưa có
       memories: [],
       summaries: [],
       playerStatus: [],

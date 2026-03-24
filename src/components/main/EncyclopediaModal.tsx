@@ -1,15 +1,13 @@
 import React, { useState, useMemo, useEffect, useRef } from "react";
 
-import Icon from "../helper/Icon";
-import Button from "../helper/Button";
-import Accordion from "../helper/Accordion"; // Import Accordion
-import * as aiService from "#/services";
-import * as fileService from "#/services/fileService";
-import * as embeddingService from "#/services/embeddingService"; // Import embedding service
-import NotificationModal from "../helper/NotificationModal";
-import ConfirmationModal from "../helper/ConfirmationModal";
+import Icon from "@component/helper/Icon";
+import Button from "@component/helper/Button";
+import * as aiService from "@service/index";
+import * as fileService from "@service/fileService";
+import NotificationModal from "@component/helper/NotificationModal";
+import ConfirmationModal from "@component/helper/ConfirmationModal";
 import { CORE_ENTITY_TYPES, ENTITY_TYPE_OPTIONS } from "#/constants";
-import { SmartCodexResult } from "#/services/smartCodexService";
+import { SmartCodexResult } from "@service/smartCodexService";
 
 interface EncyclopediaModalProps {
   isOpen: boolean;

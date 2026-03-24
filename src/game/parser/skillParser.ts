@@ -1,5 +1,5 @@
-import { mergeAndDeduplicateByName } from "#/utils/arrayUtils";
-import { sanitizeEntityName } from "#/utils/textProcessing";
+import { mergeAndDeduplicateByName } from "@utils/arrayUtils";
+import { sanitizeEntityName } from "@utils/textProcessing";
 
 /**
  * Xử lý logic thêm một kỹ năng mới cho nhân vật.

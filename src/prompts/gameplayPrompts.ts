@@ -8,7 +8,7 @@ import {
   buildPronounPayload,
   buildTimePayload,
   buildReputationPayload,
-} from "#/utils/promptBuilders";
+} from "@utils/promptBuilders";
 import { getSettings } from "../services/settingsService";
 import { obfuscateText } from "../utils/textProcessing";
 import {

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import Icon from "../helper/Icon";
+import Icon from "@component/helper/Icon";
 
 const FormattedNarration: React.FC<{ content: string }> = React.memo(
   ({ content }) => {

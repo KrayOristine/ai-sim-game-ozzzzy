@@ -6,7 +6,7 @@ import {
 import { PRONOUN_RULES } from "#/constants/pronoun_rules";
 import { REPUTATION_RULES_PROMPT } from "#/constants/reputation_rules";
 import { TIME_RULES } from "#/constants/time_rules";
-import { resolveGenreArchetype } from "#/utils/genreUtils";
+import { resolveGenreArchetype } from "@utils/genreUtils";
 
 export const buildNsfwPayload = (
   config: WorldConfig,

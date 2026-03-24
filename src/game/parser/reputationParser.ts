@@ -1,4 +1,4 @@
-import { getReputationTier } from "#/utils/reputationUtils";
+import { getReputationTier } from "@utils/reputationUtils";
 
 /**
  * Xử lý logic thay đổi điểm danh vọng của người chơi.

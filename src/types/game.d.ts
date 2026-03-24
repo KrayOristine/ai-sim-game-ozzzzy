@@ -182,6 +182,7 @@ declare global {
   // --- STORY GRAPH TYPES (GRAPH RAG) ---
 
   interface GraphNode {
+    hashId: string;
     id: string; // Tên thực thể (Unique ID)
     type: string; // NPC, Location, Item, Event, Concept
     label: string; // Tên hiển thị
@@ -189,6 +190,7 @@ declare global {
   }
 
   interface GraphEdge {
+    hashId: string;
     source: string; // ID node nguồn
     target: string; // ID node đích
     relation: string; // Mối quan hệ (VD: "ghét", "sở hữu", "ở tại")
@@ -197,6 +199,7 @@ declare global {
   }
 
   interface FandomFile {
+    hashId: string;
     id: number; // Date.now()
     name: string;
     content: string;

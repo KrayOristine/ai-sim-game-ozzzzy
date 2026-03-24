@@ -1,5 +1,5 @@
-import { mergeAndDeduplicateByName } from "#/utils/arrayUtils";
-import { getReputationTier } from "#/utils/reputationUtils";
+import { mergeAndDeduplicateByName } from "@utils/arrayUtils";
+import { getReputationTier } from "@utils/reputationUtils";
 
 /**
  * Xử lý logic khởi tạo một chỉ số cho nhân vật ở đầu game.

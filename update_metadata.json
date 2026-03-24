@@ -1,6 +1,13 @@
 {
   "updates": [
     {
+      "version": "2.0.1",
+      "notes": [
+        "**Thêm mode mới**: Thêm mode chít, dùng mode này để sử dụng các kĩ năng chít mà không lo bị AI chế ra mấy hiệu ứng debuff",
+        "**Ưu hóa lưu trữ**: Ưu hóa việc lưu trữ dữ liệu"
+      ]
+    },
+    {
       "version": "2.0.0",
       "notes": [
         "**Ưu hóa**: Tiếp tục tối ưu hóa code",

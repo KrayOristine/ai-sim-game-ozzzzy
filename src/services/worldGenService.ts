@@ -1,6 +1,6 @@
 import { AIModel } from "#/constants";
 
-import { generate, generateJson } from "#/services/geminiService";
+import { generate, generateJson } from "@service/geminiService";
 
 import {
   getGenerateGenrePrompt,
@@ -21,7 +21,7 @@ import {
 } from "#/prompts/fandomPrompts";
 import { retrieveRelevantKnowledgeChunks } from "./ragService";
 import * as embeddingService from "./embeddingService";
-import { detectEntityTypeAndCategory } from "#/utils/textProcessing";
+import { detectEntityTypeAndCategory } from "@utils/textProcessing";
 
 // --- World Creation Screen AI Helpers ---
 

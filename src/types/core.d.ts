@@ -16,6 +16,7 @@ declare global {
     aiResponseLength?: string;
     backgroundKnowledge?: { name: string; content: string }[];
     allowAdultContent: boolean;
+    allowCheatEffects: boolean;
     sexualContentStyle?: string;
     violenceLevel?: string;
     storyTone?: string;

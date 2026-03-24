@@ -1,7 +1,13 @@
 import pako from "pako";
 
+const tex = new TextEncoder();
+const dex = new TextDecoder();
+
 export function compress(data: string) {
-  const arr = new Uint8Array(Buffer.from(data, "utf-8"));
+
+  const arr = new Uint8Array(data.length*3);
+
+  tex.encodeInto(data, arr);
 
   const compressed = pako.deflate(arr, {
     level: 9,
@@ -9,7 +15,7 @@ export function compress(data: string) {
     windowBits: 15,
   });
 
-  return Buffer.from(compressed).toString("base64");
+  return compressed.toBase64();
 }
 
 /**
@@ -18,9 +24,9 @@ export function compress(data: string) {
  * @returns
  */
 export function decompress(data: string) {
-  const arr = new Uint8Array(Buffer.from(data, "base64"));
+  const arr = Uint8Array.fromBase64(data);
 
   const decompressed = pako.inflate(arr);
 
-  return Buffer.from(decompressed).toString("utf-8");
+  return decompressed.toString();
 }

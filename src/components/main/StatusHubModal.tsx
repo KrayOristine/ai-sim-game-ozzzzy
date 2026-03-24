@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Icon from "../helper/Icon";
+import Icon from "@component/helper/Icon";
 
 const StatusList: React.FC<{
   statuses: StatusEffect[];

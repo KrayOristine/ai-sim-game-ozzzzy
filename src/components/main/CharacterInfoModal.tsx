@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Icon from "#/components/helper/Icon";
+import Icon from "@component/helper/Icon";
 
 interface InformationModalProps {
   isOpen: boolean;

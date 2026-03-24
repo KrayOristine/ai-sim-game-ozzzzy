@@ -1,5 +1,5 @@
 import { Type } from "@google/genai";
-import { getSettings } from "#/services/settingsService";
+import { getSettings } from "@service/settingsService";
 import { DEFAULT_AI_PERFORMANCE_SETTINGS } from "#/constants";
 
 export const getGenerateFandomSummaryPrompt = (

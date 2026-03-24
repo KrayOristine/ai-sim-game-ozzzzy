@@ -1,4 +1,4 @@
-import * as dbService from "./dbService";
+import * as dbService from "./db/service";
 
 export const getAllFandomFiles = async (): Promise<FandomFile[]> => {
   try {

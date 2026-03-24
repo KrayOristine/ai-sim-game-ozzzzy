@@ -116,7 +116,7 @@ export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   difficulty: DIFFICULTY_OPTIONS[1],
   aiResponseLength: AI_RESPONSE_LENGTH_OPTIONS[0],
   backgroundKnowledge: [],
-  allowAdultContent: false,
+  allowAdultContent: true,
   sexualContentStyle: SEXUAL_CONTENT_STYLE_OPTIONS[0],
   violenceLevel: VIOLENCE_LEVEL_OPTIONS[0],
   storyTone: STORY_TONE_OPTIONS[1],
@@ -125,6 +125,7 @@ export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   coreRules: [],
   initialEntities: [],
   temporaryRules: [],
+  allowCheatEffects: true
 };
 
 // Safety Settings Constants

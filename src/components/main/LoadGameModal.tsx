@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
-import * as gameService from "#/services/gameService";
-import * as fileService from "#/services/fileService";
-import Button from "../helper/Button";
-import Icon from "../helper/Icon";
-import ConfirmationModal from "../helper/ConfirmationModal";
+import * as gameService from "@service/gameService";
+import * as fileService from "@service/fileService";
+import Button from "@component/helper/Button";
+import Icon from "@component/helper/Icon";
+import ConfirmationModal from "@component/helper/ConfirmationModal";
 
 interface LoadGameModalProps {
   isOpen: boolean;

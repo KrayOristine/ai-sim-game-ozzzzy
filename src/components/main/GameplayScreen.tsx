@@ -1,27 +1,27 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import * as aiService from "#/services";
-import * as fileService from "#/services/fileService";
-import * as gameService from "#/services/gameService";
+import * as aiService from "@service/index";
+import * as fileService from "@service/fileService";
+import * as gameService from "@service/gameService";
 import {
   getSeason,
   generateWeather,
   extractTimePassedFromText,
-} from "#/utils/timeUtils";
-import Button from "../helper/Button";
-import Icon from "../helper/Icon";
-import TemporaryRulesModal from "./TemporaryRulesModal";
-import MemoryModal from "./MemoryModal";
-import StoryLogModal from "./StoryLogModal";
-import InformationModal from "./CharacterInfoModal";
-import EntityInfoModal from "../helper/EntityInfoModal";
-import { EncyclopediaModal } from "./EncyclopediaModal";
-import StatusHubModal from "./StatusHubModal";
-import NotificationModal from "../helper/NotificationModal";
-import ConfirmationModal from "../helper/ConfirmationModal";
-import { getSettings } from "#/services/settingsService";
-import { resolveGenreArchetype } from "#/utils/genreUtils";
-import { dispatchTags } from "#/game/parser";
-import { processNarration } from "#/utils/textProcessing";
+} from "@utils/timeUtils";
+import Button from "@component/helper/Button";
+import Icon from "@component/helper/Icon";
+import TemporaryRulesModal from "@component/main/TemporaryRulesModal";
+import MemoryModal from "@component/main/MemoryModal";
+import StoryLogModal from "@component/main/StoryLogModal";
+import InformationModal from "@component/main/CharacterInfoModal";
+import EntityInfoModal from "@component/helper/EntityInfoModal";
+import { EncyclopediaModal } from "@component/main/EncyclopediaModal";
+import StatusHubModal from "@component/main/StatusHubModal";
+import NotificationModal from "@component/helper/NotificationModal";
+import ConfirmationModal from "@component/helper/ConfirmationModal";
+import { getSettings } from "@service/settingsService";
+import { resolveGenreArchetype } from "@utils/genreUtils";
+import { dispatchTags } from "@game/parser";
+import { processNarration } from "@utils/textProcessing";
 
 const useMediaQuery = (query: string) => {
   const [matches, setMatches] = useState(false);

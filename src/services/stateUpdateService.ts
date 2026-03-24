@@ -1,4 +1,4 @@
-import { generateJson, setDebugContext } from "#/services/geminiService";
+import { generateJson, setDebugContext } from "@service/geminiService";
 import {
   getDynamicStateUpdatePrompt,
   getEncyclopediaUpdatePrompt,

@@ -1,4 +1,4 @@
-import { generateJson } from "#/services/geminiService";
+import { generateJson } from "@service/geminiService";
 import { getSmartCodexPrompt } from "#/prompts/smartCodexPrompts";
 import { AIModel } from "#/constants";
 

@@ -1,11 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
-import Button from "../helper/Button";
-import Icon from "../helper/Icon";
-import { loadWorldConfigFromFile } from "#/services/fileService";
-import * as gameService from "#/services/gameService";
-import LoadGameModal from "./LoadGameModal";
-import NotificationModal from "../helper/NotificationModal";
-import UpdateLogModal from "./UpdateLogModal";
+import Button from "@component/helper/Button";
+import Icon from "@component/helper/Icon";
+import { loadWorldConfigFromFile } from "@service/fileService";
+import * as gameService from "@service/gameService";
+import LoadGameModal from "@component/main/LoadGameModal";
+import NotificationModal from "@component/helper/NotificationModal";
+import UpdateLogModal from "@component/main/UpdateLogModal";
 
 interface HomeScreenProps {
   onStartNew: () => void;

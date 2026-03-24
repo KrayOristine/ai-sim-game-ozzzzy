@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import Button from "../helper/Button";
-import Icon from "../helper/Icon";
-import ToggleSwitch from "../helper/ToggleSwitch";
+import Button from "@component/helper/Button";
+import Icon from "@component/helper/Icon";
+import ToggleSwitch from "@component/helper/ToggleSwitch";
 
 interface TemporaryRulesModalProps {
   isOpen: boolean;

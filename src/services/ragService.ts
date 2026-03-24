@@ -1,4 +1,4 @@
-import { generate, generateJson } from "#/services/geminiService";
+import { generate, generateJson } from "@service/geminiService";
 
 import {
   getRetrieveRelevantSummariesPrompt,
@@ -11,14 +11,14 @@ import { buildBackgroundKnowledgePrompt } from "#/prompts/worldCreationPrompts";
 import {
   isFandomDataset,
   extractCleanTextFromDataset,
-} from "#/utils/datasetUtils";
+} from "@utils/datasetUtils";
 import * as embeddingService from "./embeddingService";
-import * as fandomFileService from "#/services/fandomFileService";
-import { cosineSimilarity } from "#/utils/vectorUtils";
-import { buildNsfwPayload } from "#/utils/promptBuilders";
-import * as dbService from "#/services/dbService";
+import * as fandomFileService from "@service/fandomFileService";
+import { cosineSimilarity } from "@utils/vectorUtils";
+import { buildNsfwPayload } from "@utils/promptBuilders";
+import * as dbService from "#/services/db/service";
 import { AIModel } from "#/constants";
-import { getSettings } from "#/services/settingsService";
+import { getSettings } from "@service/settingsService";
 
 const DEBUG_MODE = true;
 const DOSSIER_FRESH_LIMIT = 20; // Số lượt tương tác gần nhất được giữ nguyên văn

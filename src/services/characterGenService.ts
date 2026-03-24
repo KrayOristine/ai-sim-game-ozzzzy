@@ -1,4 +1,4 @@
-import { generate, generateJson } from "#/services/geminiService";
+import { generate, generateJson } from "@service/geminiService";
 import {
   getGenerateCharacterBioPrompt,
   getGenerateCharacterSkillsPrompt,
