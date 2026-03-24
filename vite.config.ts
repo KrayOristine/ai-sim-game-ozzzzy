@@ -45,7 +45,7 @@ export default defineConfig(() => {
       sourcemap: false,
       rolldownOptions: {
         output: {
-          minify: false,
+          minify: true,
           sourcemap: false,
           comments: {
             legal: true,
