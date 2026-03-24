@@ -11,7 +11,7 @@ function parseKeyValue(content: string): Record<string, any> {
   let match;
   while ((match = regex.exec(content)) !== null) {
     const key = match[1];
-    // Lấy giá trị từ các nhómจับคู่ khác nhau của regex
+    // Lấy giá trị từ các nhóm khác nhau của regex
     let valueStr: string = (match[3] ?? match[4] ?? match[5] ?? "").trim();
     let value: string | number | boolean = valueStr;
 
@@ -26,85 +26,6 @@ function parseKeyValue(content: string): Record<string, any> {
     result[key] = value;
   }
   return result;
-}
-
-function extractTagByOrder(rawText: string, tagList: string[]) {
-  const lines = rawText.split(/\r?\n/);
-  const tagsLower = tagList.map((t) => t.toLowerCase());
-  const results: string[] = Array(tagList.length).fill("");
-
-  const tagIndex: Record<string, number> = {};
-  for (let i = 0; i < tagsLower.length; i++) tagIndex[tagsLower[i]] = i;
-
-  // stack entries for open tags
-  type StackEntry = { tag: string; buffer: string[] };
-  const stack: StackEntry[] = [];
-
-  for (let li = 0; li < lines.length; li++) {
-    const rawLine = lines[li];
-    const lineLeft = rawLine.replace(/^[ \t]*/, "");
-    const lowerLeft = lineLeft.toLowerCase();
-
-    let matchedOpen: string | null = null;
-    let matchedClose: string | null = null;
-
-    if (lowerLeft.startsWith("<")) {
-      // parse tag token at start like "<tag>" or "</tag>" (allow only tag chars a-z0-9_-)
-      const tokenMatch = lowerLeft.match(/^<\/?\s*([a-z0-9_-]+)\s*>/);
-      if (tokenMatch) {
-        const foundTag = tokenMatch[1];
-        const isClose = lowerLeft.startsWith("</");
-        if (Object.prototype.hasOwnProperty.call(tagIndex, foundTag)) {
-          if (isClose) matchedClose = foundTag;
-          else matchedOpen = foundTag;
-        }
-      }
-    }
-
-    if (matchedOpen) {
-      // push a new entry for this opening tag
-      const idxOfOpen = rawLine.toLowerCase().indexOf(`<${matchedOpen}>`);
-      const after =
-        idxOfOpen >= 0 ? rawLine.slice(idxOfOpen + matchedOpen.length + 2) : "";
-      stack.push({ tag: matchedOpen, buffer: after ? [after] : [] });
-      continue;
-    }
-
-    if (matchedClose) {
-      // find topmost matching tag in the stack
-      for (let s = stack.length - 1; s >= 0; s--) {
-        if (stack[s].tag === matchedClose) {
-          const [entry] = stack.splice(s, 1);
-          const content = entry.buffer.join("\n");
-
-          // check if any same-tag remains on stack -> nested
-          const stillHasSame = stack.some((e) => e.tag === matchedClose);
-          if (!stillHasSame) {
-            const idx = tagIndex[matchedClose];
-            if (results[idx] === null) results[idx] = content;
-          } else {
-            // append closed content into the nearest same-tag above (as lines)
-            for (let t = stack.length - 1; t >= 0; t--) {
-              if (stack[t].tag === matchedClose) {
-                stack[t].buffer.push(content);
-                break;
-              }
-            }
-          }
-          break;
-        }
-      }
-      continue;
-    }
-
-    // normal line: append to top of stack if any
-    if (stack.length > 0) {
-      stack[stack.length - 1].buffer.push(rawLine);
-    }
-    // else ignore line
-  }
-
-  return results;
 }
 
 /**
@@ -129,23 +50,20 @@ export function parseResponse(rawText: string): {
   // Sử dụng Regex để bắt nội dung nằm TRONG thẻ. Mọi thứ bên ngoài thẻ sẽ tự động bị loại bỏ.
 
   // Regex đã được gia cố để bắt nội dung đa dòng ([\s\S]*?) và không tham lam
-  const extracted = extractTagByOrder(rawText, [
-    "narration",
-    "data_tags",
-    "thinking",
-    "world_sim",
-  ]);
-  const narrationMatch = /<narration>([\s\S]*?)<\/narration>/i.test(rawText);
+  const narrationMatch = rawText.match(/^[ \t]*<narration>\s*([\s\S]*?)\s*^[ \t]*<\/narration>/im);
+  const dataTagsMatch = rawText.match(/^[ \t]*<data_tags>\s*([\s\S]*?)\s*^[ \t]*<\/data_tags>/im);
+  const thinkingMatch = rawText.match(/^[ \t]*<thinking>\s*([\s\S]*?)\s*^[ \t]*<\/thinking>/im);
+  const worldSimMatch = rawText.match(/^[ \t]*<world_sim>\s*([\s\S]*?)\s*^[ \t]*<\/world_sim>/im);
 
   if (narrationMatch) {
     // 1. Trích xuất Narration
-    narration = extracted[0].trim();
+    narration = narrationMatch[1].trim();
 
     // 2. Trích xuất Thinking (Log only)
-    thinking = extracted[2].trim();
+    thinking = thinkingMatch ? thinkingMatch[1].trim() : '';
 
     // 3. Trích xuất và Vệ sinh World Sim
-    let content = extracted[3].trim();
+    let content = worldSimMatch ? worldSimMatch[1].trim() : '';
 
     // Xóa các mẫu giải thích của AI (thường bắt đầu bằng "* **")
     // Ví dụ: "* **Điều kiện kích hoạt:**..."
@@ -157,7 +75,7 @@ export function parseResponse(rawText: string): {
     }
 
     // 4. Trích xuất Data Tags
-    tagsPart = extracted[1].trim();
+    tagsPart = dataTagsMatch ? dataTagsMatch[1].trim() : '';
   } else {
     // --- PHASE 2: CHIẾN LƯỢC DỰ PHÒNG (Fallback Strategy) ---
     // Chỉ chạy khi AI quên viết thẻ <narration> (hiếm gặp nhưng cần xử lý để tránh crash)
