@@ -2,9 +2,7 @@ import path from "path";
 import { defineConfig } from "vite";
 import react, {reactCompilerPreset} from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import legacy from "@vitejs/plugin-legacy";
 import babel from "@rolldown/plugin-babel";
-
 
 export default defineConfig(() => {
   return {
@@ -17,11 +15,10 @@ export default defineConfig(() => {
       tailwindcss({
         optimize: true
       }),
-      legacy(),
       react(),
       babel({
         presets: [reactCompilerPreset({
-          compilationMode: "all"
+          compilationMode: "annotation"
         })]
       })
     ],
@@ -40,37 +37,33 @@ export default defineConfig(() => {
       postcss: "./postcss.config.js",
     },
     build: {
+      target: 'esnext',
       assetsDir: "./assets",
       outDir: "../dist",
       emptyOutDir: true,
       cssMinify: false,
-      sourcemap: true,
+      sourcemap: false,
       rolldownOptions: {
-        experimental: {
-          nativeMagicString: true,
-          lazyBarrel: true,
-        },
         output: {
-          minify: true,
+          minify: false,
+          sourcemap: false,
           comments: {
             legal: true,
             annotation: false,
             jsdoc: false,
           },
           codeSplitting: {
-            maxSize: 1024 * 1024 * 3,
+            maxSize: 1024 * 1024 * 5,
             groups: [
               {
                 test: /node_modules[\\/].*(react|scheduler)/i,
                 name: 'react',
                 priority: 10000,
-                entriesAware: true
               },
               {
                 test: /node_modules[\\/].*google/i,
                 name: 'google',
-                priority: 10000,
-                entriesAware: true,
+                priority: 9999,
               },
               {
                 test: /node_modules[\\/]/i,
@@ -78,21 +71,19 @@ export default defineConfig(() => {
                 entriesAware: true,
               },
               {
-                test: /services/i,
+                test: /[\\/]services[\\/]/i,
                 name: 'core',
                 entriesAware: true
               },
               {
-                test: /(utils|constants|const\.ts)/i,
+                test: /[\\/](utils|constants|const\.ts)/i,
                 name: 'utility',
                 entriesAware: true,
-                entriesAwareMergeThreshold: 1024 * 10,
               },
               {
                 test: /components[\\/]helper/i,
                 name: 'component',
                 entriesAware: true,
-                entriesAwareMergeThreshold: 1024 * 20,
               },
               {
                 test: /components[\\/]main/i,
