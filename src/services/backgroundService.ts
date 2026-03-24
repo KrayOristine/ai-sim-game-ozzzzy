@@ -4,7 +4,7 @@ import {
   printRequestStats,
 } from "./geminiService";
 import { getPiggybackAnalysisPrompt } from "#/prompts/analysisPrompts";
-import * as dbService from "./db/service";
+import * as dbService from "./dbService";
 import { AIModel } from "#/constants";
 
 // Cấu hình Flash cho tác vụ nền - Ưu tiên tốc độ và chi phí thấp

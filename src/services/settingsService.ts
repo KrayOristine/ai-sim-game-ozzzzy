@@ -14,7 +14,7 @@ const DEFAULT_SETTINGS: AppSettings = {
   aiPerformanceSettings: DEFAULT_AI_PERFORMANCE_SETTINGS,
 };
 
-const settings_cache = [];
+const settings_cache: AppSettings[] = [];
 
 export const getSettings = (): AppSettings => {
   try {

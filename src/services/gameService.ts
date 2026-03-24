@@ -1,4 +1,12 @@
-import * as dbService from "./db/service";
+import * as dbService from "./dbService";
+import * as embeddingService from "./embeddingService";
+import * as ragService from "./ragService";
+import { getSettings } from "./settingsService";
+import {
+  setDebugContext,
+  resetRequestStats,
+  printRequestStats,
+} from "./geminiService";
 
 const LEGACY_SAVES_STORAGE_KEY = "ai_rpg_all_saves";
 const MAX_MANUAL_SAVES = 5;
@@ -136,7 +144,7 @@ export const saveGame = async (
 
     const newSave: SaveSlot = {
       ...gameState,
-      worldId: gameState.worldId || crypto.randomUUID().replace(/-/g, ""), // Đảm bảo worldId luôn tồn tại khi lưu
+      worldId: gameState.worldId || crypto.randomUUID().replace("-", ""), // Đảm bảo worldId luôn tồn tại khi lưu
       worldName:
         gameState.worldConfig.storyContext.worldName ||
         "Cuộc phiêu lưu không tên",
@@ -148,7 +156,7 @@ export const saveGame = async (
 
     // Gán worldId cho các save cũ chưa có
     if (!newSave.worldId) {
-      newSave.worldId = crypto.randomUUID().replace(/-/g, "");
+      newSave.worldId = crypto.randomUUID().replace("-", "");
     }
 
     await dbService.addSave(newSave);

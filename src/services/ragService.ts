@@ -16,7 +16,7 @@ import * as embeddingService from "./embeddingService";
 import * as fandomFileService from "@service/fandomFileService";
 import { cosineSimilarity } from "@utils/vectorUtils";
 import { buildNsfwPayload } from "@utils/promptBuilders";
-import * as dbService from "#/services/db/service";
+import * as dbService from "#/services/dbService";
 import { AIModel } from "#/constants";
 import { getSettings } from "@service/settingsService";
 

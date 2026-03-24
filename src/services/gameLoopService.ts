@@ -1,5 +1,4 @@
 import { generate, generateJson } from "./geminiService";
-import { ParsedTag } from "#/game/parser";
 import {
   getStartGamePrompt,
   getNextTurnPrompt,
@@ -7,7 +6,7 @@ import {
 } from "#/prompts/gameplayPrompts";
 import * as ragService from "./ragService";
 import { getSettings } from "./settingsService";
-import * as dbService from "./db/service";
+import * as dbService from "./dbService";
 import * as embeddingService from "./embeddingService";
 import * as backgroundService from "./backgroundService"; // Import background service
 import { cosineSimilarity } from "@utils/vectorUtils";
