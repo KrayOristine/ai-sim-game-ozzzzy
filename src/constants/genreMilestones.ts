@@ -100,8 +100,7 @@ export const GENERIC_DEFAULT_MILESTONES: CharacterMilestone[] = [
   {
     name: "Thể Chất",
     value: "Bình thường",
-    description:
-      "Tình trạng thể chất hoặc các đặc tính bẩm sinh của cơ thể nhân vật.",
+    description: "Tình trạng thể chất hoặc các đặc tính bẩm sinh của cơ thể nhân vật.",
     category: "Thân Thể",
   },
 ];
@@ -127,9 +126,7 @@ export const EMPTY_GENERIC_MILESTONES: CharacterMilestone[] = [
  * @param genreString Chuỗi thể loại do người dùng nhập.
  * @returns Một mảng các CharacterMilestone.
  */
-export const resolveMilestonesByGenre = (
-  genreString: string,
-): CharacterMilestone[] => {
+export const resolveMilestonesByGenre = (genreString: string): CharacterMilestone[] => {
   const lowerGenre = genreString.toLowerCase();
 
   if (lowerGenre.includes("tu tiên") || lowerGenre.includes("tu chân")) {

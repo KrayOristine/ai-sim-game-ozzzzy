@@ -33,9 +33,7 @@ export interface SmartCodexResult {
   };
 }
 
-export const createCodexFromCommand = async (
-  command: string,
-): Promise<SmartCodexResult> => {
+export const createCodexFromCommand = async (command: string): Promise<SmartCodexResult> => {
   const { prompt, schema } = getSmartCodexPrompt(command);
 
   try {

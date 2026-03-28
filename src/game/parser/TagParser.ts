@@ -60,10 +60,10 @@ export function parseResponse(rawText: string): {
     narration = narrationMatch[1].trim();
 
     // 2. Trích xuất Thinking (Log only)
-    thinking = thinkingMatch ? thinkingMatch[1].trim() : '';
+    thinking = thinkingMatch ? thinkingMatch[1].trim() : "";
 
     // 3. Trích xuất và Vệ sinh World Sim
-    let content = worldSimMatch ? worldSimMatch[1].trim() : '';
+    let content = worldSimMatch ? worldSimMatch[1].trim() : "";
 
     // Xóa các mẫu giải thích của AI (thường bắt đầu bằng "* **")
     // Ví dụ: "* **Điều kiện kích hoạt:**..."
@@ -75,7 +75,7 @@ export function parseResponse(rawText: string): {
     }
 
     // 4. Trích xuất Data Tags
-    tagsPart = dataTagsMatch ? dataTagsMatch[1].trim() : '';
+    tagsPart = dataTagsMatch ? dataTagsMatch[1].trim() : "";
   } else {
     // --- PHASE 2: CHIẾN LƯỢC DỰ PHÒNG (Fallback Strategy) ---
     // Chỉ chạy khi AI quên viết thẻ <narration> (hiếm gặp nhưng cần xử lý để tránh crash)
@@ -87,46 +87,26 @@ export function parseResponse(rawText: string): {
     if (separatorMatch && typeof separatorMatch.index === "number") {
       let tempNarration = rawText.substring(0, separatorMatch.index).trim();
       // Xóa thủ công các thẻ khác nếu chúng tồn tại trong văn bản thô
-      tempNarration = tempNarration.replace(
-        /<thinking>[\s\S]*?<\/thinking>/gi,
-        "",
-      );
-      tempNarration = tempNarration.replace(
-        /<world_sim>[\s\S]*?<\/world_sim>/gi,
-        "",
-      );
+      tempNarration = tempNarration.replace(/<thinking>[\s\S]*?<\/thinking>/gi, "");
+      tempNarration = tempNarration.replace(/<world_sim>[\s\S]*?<\/world_sim>/gi, "");
       narration = tempNarration.trim();
 
-      tagsPart = rawText
-        .substring(separatorMatch.index + separatorMatch[0].length)
-        .trim();
+      tagsPart = rawText.substring(separatorMatch.index + separatorMatch[0].length).trim();
     } else {
       // Dự phòng cuối cùng: Tìm thẻ lệnh đầu tiên để cắt
       const firstTagMatch = rawText.match(/\n\s*\[\w+:/);
       if (firstTagMatch && typeof firstTagMatch.index === "number") {
         let tempNarration = rawText.substring(0, firstTagMatch.index).trim();
-        tempNarration = tempNarration.replace(
-          /<thinking>[\s\S]*?<\/thinking>/gi,
-          "",
-        );
-        tempNarration = tempNarration.replace(
-          /<world_sim>[\s\S]*?<\/world_sim>/gi,
-          "",
-        );
+        tempNarration = tempNarration.replace(/<thinking>[\s\S]*?<\/thinking>/gi, "");
+        tempNarration = tempNarration.replace(/<world_sim>[\s\S]*?<\/world_sim>/gi, "");
         narration = tempNarration.trim();
 
         tagsPart = rawText.substring(firstTagMatch.index).trim();
       } else {
         // Toàn bộ là narration
         let tempNarration = rawText.trim();
-        tempNarration = tempNarration.replace(
-          /<thinking>[\s\S]*?<\/thinking>/gi,
-          "",
-        );
-        tempNarration = tempNarration.replace(
-          /<world_sim>[\s\S]*?<\/world_sim>/gi,
-          "",
-        );
+        tempNarration = tempNarration.replace(/<thinking>[\s\S]*?<\/thinking>/gi, "");
+        tempNarration = tempNarration.replace(/<world_sim>[\s\S]*?<\/world_sim>/gi, "");
         narration = tempNarration.trim();
         tagsPart = "";
       }
@@ -143,11 +123,7 @@ export function parseResponse(rawText: string): {
       const params = parseKeyValue(content);
       tags.push({ tagName, params });
     } catch (e) {
-      console.error(
-        `Không thể phân tích nội dung cho thẻ [${tagName}]:`,
-        content,
-        e,
-      );
+      console.error(`Không thể phân tích nội dung cho thẻ [${tagName}]:`, content, e);
     }
   }
 

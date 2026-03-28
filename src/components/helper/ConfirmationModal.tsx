@@ -62,10 +62,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 
   return (
     <div className="confirm_modal_main_div" onClick={onClose}>
-      <div
-        className="confirm_modal_second_div"
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className="confirm_modal_second_div" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start mb-4">
           <div className={`shrink-0 mr-3 ${config.color}`}>
             <Icon name={config.icon} className="w-8 h-8" />

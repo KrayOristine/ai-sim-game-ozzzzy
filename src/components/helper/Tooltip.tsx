@@ -52,10 +52,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
   // Xử lý đóng khi click ra ngoài (cho mobile)
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        triggerRef.current &&
-        !triggerRef.current.contains(event.target as Node)
-      ) {
+      if (triggerRef.current && !triggerRef.current.contains(event.target as Node)) {
         hideTooltip();
       }
     };
@@ -76,8 +73,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
             top: `${position.top}px`,
             left: `${position.left}px`,
             transform:
-              triggerRef.current &&
-              triggerRef.current.getBoundingClientRect().top < 100
+              triggerRef.current && triggerRef.current.getBoundingClientRect().top < 100
                 ? "translateY(0)"
                 : "translateY(-100%)",
           }}
@@ -104,11 +100,7 @@ const Tooltip: React.FC<TooltipProps> = ({ text, children }) => {
           isVisible ? hideTooltip() : showTooltip();
         }}
       >
-        <button
-          type="button"
-          className="tooltip_btn"
-          aria-label="Thông tin chi tiết"
-        >
+        <button type="button" className="tooltip_btn" aria-label="Thông tin chi tiết">
           <Icon name="info" className="w-4 h-4" />
         </button>
       </div>

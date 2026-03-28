@@ -8,15 +8,8 @@ interface MemoryModalProps {
   summaries: string[];
 }
 
-const MemoryModal: React.FC<MemoryModalProps> = ({
-  isOpen,
-  onClose,
-  memories,
-  summaries,
-}) => {
-  const [activeTab, setActiveTab] = useState<"memories" | "summaries">(
-    "memories",
-  );
+const MemoryModal: React.FC<MemoryModalProps> = ({ isOpen, onClose, memories, summaries }) => {
+  const [activeTab, setActiveTab] = useState<"memories" | "summaries">("memories");
 
   if (!isOpen) return null;
 
@@ -42,10 +35,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
             <Icon name="memory" className="w-6 h-6 mr-3" />
             Bộ Nhớ Của AI
           </h2>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white transition"
-          >
+          <button onClick={onClose} className="text-slate-400 hover:text-white transition">
             <Icon name="xCircle" className="w-7 h-7" />
           </button>
         </div>
@@ -76,9 +66,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
                 ))}
               </ul>
             ) : (
-              <p className="text-slate-500 text-center py-4">
-                Chưa có ký ức nào được ghi lại.
-              </p>
+              <p className="text-slate-500 text-center py-4">Chưa có ký ức nào được ghi lại.</p>
             ))}
           {activeTab === "summaries" &&
             (summaries.length > 0 ? (
@@ -93,9 +81,7 @@ const MemoryModal: React.FC<MemoryModalProps> = ({
                 ))}
               </div>
             ) : (
-              <p className="text-slate-500 text-center py-4">
-                Chưa có tóm tắt nào.
-              </p>
+              <p className="text-slate-500 text-center py-4">Chưa có tóm tắt nào.</p>
             ))}
         </div>
 

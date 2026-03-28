@@ -31,13 +31,11 @@ export function processQuestUpdate(
   let processedSubTasks: SubTask[] = [];
   if (params.subTasks) {
     if (typeof params.subTasks === "string") {
-      processedSubTasks = params.subTasks
-        .split("|")
-        .map((desc: string, index: number) => ({
-          id: `task_${Date.now()}_${index}`,
-          desc: desc.trim(),
-          isCompleted: false,
-        }));
+      processedSubTasks = params.subTasks.split("|").map((desc: string, index: number) => ({
+        id: `task_${Date.now()}_${index}`,
+        desc: desc.trim(),
+        isCompleted: false,
+      }));
     } else if (Array.isArray(params.subTasks)) {
       processedSubTasks = params.subTasks;
     }
@@ -71,16 +69,11 @@ export function processQuestUpdate(
       params.description ||
       "Thực hiện nhiệm vụ",
     logs: logs,
-    subTasks:
-      processedSubTasks.length > 0
-        ? processedSubTasks
-        : existingQuest?.subTasks || [],
+    subTasks: processedSubTasks.length > 0 ? processedSubTasks : existingQuest?.subTasks || [],
     parentQuestId: params.parentQuestId || existingQuest?.parentQuestId,
   };
 
-  const updatedQuests = mergeAndDeduplicateByName(currentState.quests || [], [
-    newQuestData,
-  ]);
+  const updatedQuests = mergeAndDeduplicateByName(currentState.quests || [], [newQuestData]);
 
   const vectorContent = `Nhiệm vụ: ${newQuestData.name}\nMô tả: ${newQuestData.description}\nTrạng thái: ${newQuestData.status}\nPhân loại: ${newQuestData.customCategory || "Chưa rõ"}\nMục tiêu: ${newQuestData.currentObjective}`;
   const vectorUpdate: VectorUpdate = {
@@ -113,14 +106,10 @@ export function processQuestLog(
 
   const sanitizedName = sanitizeEntityName(params.name);
   const quests = [...(currentState.quests || [])];
-  const questIndex = quests.findIndex(
-    (q) => q.name.toLowerCase() === sanitizedName.toLowerCase(),
-  );
+  const questIndex = quests.findIndex((q) => q.name.toLowerCase() === sanitizedName.toLowerCase());
 
   if (questIndex === -1) {
-    console.warn(
-      `Không tìm thấy nhiệm vụ "${sanitizedName}" để cập nhật nhật ký.`,
-    );
+    console.warn(`Không tìm thấy nhiệm vụ "${sanitizedName}" để cập nhật nhật ký.`);
     return { newState: currentState, vectorUpdates: [] };
   }
 
@@ -146,10 +135,7 @@ export function processQuestLog(
     const target = String(params.subTaskComplete).toLowerCase();
     const updatedSubTasks = quest.subTasks.map((task) => {
       // Check by ID or Description text
-      if (
-        !task.isCompleted &&
-        (task.id === target || task.desc.toLowerCase().includes(target))
-      ) {
+      if (!task.isCompleted && (task.id === target || task.desc.toLowerCase().includes(target))) {
         hasChange = true;
         return { ...task, isCompleted: true };
       }
@@ -160,9 +146,7 @@ export function processQuestLog(
     // Auto-log completion of subtask if not explicitly logged
     if (hasChange && !params.entry) {
       const completedTask = updatedSubTasks.find(
-        (t) =>
-          t.isCompleted &&
-          (t.id === target || t.desc.toLowerCase().includes(target)),
+        (t) => t.isCompleted && (t.id === target || t.desc.toLowerCase().includes(target)),
       );
       if (completedTask) {
         quest.logs = [
@@ -177,10 +161,7 @@ export function processQuestLog(
   if (params.status) {
     quest.status = params.status;
     if (quest.status === "hoàn thành") {
-      quest.logs = [
-        ...(quest.logs || []),
-        `${timeStr} - Nhiệm vụ đã hoàn thành.`,
-      ];
+      quest.logs = [...(quest.logs || []), `${timeStr} - Nhiệm vụ đã hoàn thành.`];
       quest.currentObjective = "Đã hoàn thành";
     }
     hasChange = true;

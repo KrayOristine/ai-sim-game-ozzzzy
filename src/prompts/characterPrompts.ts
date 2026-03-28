@@ -54,14 +54,7 @@ export const getGenerateCharacterStatsPrompt = (config: WorldConfig) => {
           "Đặt là 'true' cho các chỉ số có giới hạn (như Máu, Năng lượng). Đặt là 'false' cho các chỉ số thuộc tính có thể tăng vô hạn (như Sức mạnh, Trí tuệ).",
       },
     },
-    required: [
-      "name",
-      "value",
-      "maxValue",
-      "isPercentage",
-      "description",
-      "hasLimit",
-    ],
+    required: ["name", "value", "maxValue", "isPercentage", "description", "hasLimit"],
   };
 
   const schema = {
@@ -81,10 +74,7 @@ export const getGenerateCharacterStatsPrompt = (config: WorldConfig) => {
   return { prompt, schema };
 };
 
-export const getGenerateSingleStatPrompt = (
-  config: WorldConfig,
-  statName: string,
-) => {
+export const getGenerateSingleStatPrompt = (config: WorldConfig, statName: string) => {
   const { storyContext, character } = config;
 
   const schema = {
@@ -92,8 +82,7 @@ export const getGenerateSingleStatPrompt = (
     properties: {
       name: {
         type: Type.STRING,
-        description:
-          "Tên của chỉ số, phải là giá trị được cung cấp trong prompt.",
+        description: "Tên của chỉ số, phải là giá trị được cung cấp trong prompt.",
       },
       value: { type: Type.NUMBER },
       maxValue: { type: Type.NUMBER },
@@ -108,14 +97,7 @@ export const getGenerateSingleStatPrompt = (
           "Đặt là 'true' nếu là chỉ số có giới hạn (Máu, Năng lượng). Đặt là 'false' nếu là chỉ số thuộc tính (Sức mạnh, Trí tuệ).",
       },
     },
-    required: [
-      "name",
-      "value",
-      "maxValue",
-      "isPercentage",
-      "description",
-      "hasLimit",
-    ],
+    required: ["name", "value", "maxValue", "isPercentage", "description", "hasLimit"],
   };
 
   const prompt = `Một nhân vật có tiểu sử: "${character.bio}" trong thế giới thể loại "${storyContext.genre}".
@@ -130,10 +112,7 @@ export const getGenerateSingleStatPrompt = (
   return { prompt, schema };
 };
 
-export const getGenerateSingleSkillPrompt = (
-  config: WorldConfig,
-  existingName?: string,
-) => {
+export const getGenerateSingleSkillPrompt = (config: WorldConfig, existingName?: string) => {
   const { storyContext, character } = config;
 
   const schema = {
@@ -158,9 +137,7 @@ export const getGenerateSingleSkillPrompt = (
   return { prompt, schema };
 };
 
-export const getGenerateCharacterMotivationPrompt = (
-  config: WorldConfig,
-): string => {
+export const getGenerateCharacterMotivationPrompt = (config: WorldConfig): string => {
   const { storyContext, character } = config;
   const currentMotivation = character.motivation.trim();
   const skillsString =
@@ -184,8 +161,7 @@ export const getGenerateMilestonesPrompt = (config: WorldConfig) => {
       value: { type: Type.STRING },
       description: {
         type: Type.STRING,
-        description:
-          "Mô tả chi tiết ý nghĩa và hệ thống cấp bậc của cột mốc này cho AI.",
+        description: "Mô tả chi tiết ý nghĩa và hệ thống cấp bậc của cột mốc này cho AI.",
       },
       category: { type: Type.STRING, enum: ["Tu Luyện", "Thân Thể"] },
     },
@@ -193,8 +169,7 @@ export const getGenerateMilestonesPrompt = (config: WorldConfig) => {
   };
   const schema = {
     type: Type.ARRAY,
-    description:
-      "Một danh sách các cột mốc (chỉ số dạng chữ) phù hợp với thể loại.",
+    description: "Một danh sách các cột mốc (chỉ số dạng chữ) phù hợp với thể loại.",
     items: milestoneSchema,
   };
   const prompt = `Dựa trên bối cảnh thế giới (Thể loại: ${storyContext.genre}, Bối cảnh: ${storyContext.setting}) và nhân vật (Tiểu sử: ${character.bio}), hãy tạo ra một bộ Cột mốc (chỉ số dạng chữ) phù hợp.

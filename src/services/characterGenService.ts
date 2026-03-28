@@ -22,9 +22,7 @@ export const generateCharacterSkills = (
   return generateJson<{ name: string; description: string }[]>(prompt, schema);
 };
 
-export const generateCharacterStats = (
-  config: WorldConfig,
-): Promise<CharacterStat[]> => {
+export const generateCharacterStats = (config: WorldConfig): Promise<CharacterStat[]> => {
   const { prompt, schema } = getGenerateCharacterStatsPrompt(config);
   return generateJson<CharacterStat[]>(prompt, schema);
 };
@@ -45,18 +43,14 @@ export const generateSingleSkill = (
   return generateJson<{ name: string; description: string }>(prompt, schema);
 };
 
-export const generateCharacterMotivation = (
-  config: WorldConfig,
-): Promise<string> => {
+export const generateCharacterMotivation = (config: WorldConfig): Promise<string> => {
   const prompt = getGenerateCharacterMotivationPrompt(config);
   return generate(prompt);
 };
 
 // --- Milestone Generation Functions ---
 
-export const generateMilestones = (
-  config: WorldConfig,
-): Promise<CharacterMilestone[]> => {
+export const generateMilestones = (config: WorldConfig): Promise<CharacterMilestone[]> => {
   const { prompt, schema } = getGenerateMilestonesPrompt(config);
   return generateJson<CharacterMilestone[]>(prompt, schema);
 };
@@ -65,9 +59,6 @@ export const generateSingleMilestone = (
   config: WorldConfig,
   currentMilestone: Partial<CharacterMilestone>,
 ): Promise<CharacterMilestone> => {
-  const { prompt, schema } = getGenerateSingleMilestonePrompt(
-    config,
-    currentMilestone,
-  );
+  const { prompt, schema } = getGenerateSingleMilestonePrompt(config, currentMilestone);
   return generateJson<CharacterMilestone>(prompt, schema);
 };

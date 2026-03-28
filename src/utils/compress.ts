@@ -4,8 +4,7 @@ const tex = new TextEncoder();
 const dex = new TextDecoder();
 
 export function compress(data: string) {
-
-  const arr = new Uint8Array(data.length*3);
+  const arr = new Uint8Array(data.length * 3);
 
   tex.encodeInto(data, arr);
 

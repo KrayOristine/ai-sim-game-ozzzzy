@@ -79,32 +79,24 @@ const TemporaryRulesModal: React.FC<TemporaryRulesModalProps> = ({
           <p className="font-semibold text-slate-300">Lưu ý quan trọng:</p>
           <ul className="list-disc list-inside mt-1 space-y-1">
             <li>
-              Chỉ nên thêm các quy tắc tạm thời hoặc ghi chú tình huống mới phát
-              sinh tại đây (VD: "Trong hang động này, ma thuật lửa bị yếu đi",
-              "Nhân vật đang bị cảm lạnh").
+              Chỉ nên thêm các quy tắc tạm thời hoặc ghi chú tình huống mới phát sinh tại đây (VD:
+              "Trong hang động này, ma thuật lửa bị yếu đi", "Nhân vật đang bị cảm lạnh").
             </li>
             <li>
-              AI sẽ ghi nhớ và tuân thủ các luật đang{" "}
-              <span className="text-green-400">Bật</span>. Các thay đổi sẽ được
-              tự động lưu khi bạn đóng cửa sổ này.
+              AI sẽ ghi nhớ và tuân thủ các luật đang <span className="text-green-400">Bật</span>.
+              Các thay đổi sẽ được tự động lưu khi bạn đóng cửa sổ này.
             </li>
             <li>
-              Các luật lệ cốt lõi của thế giới nên được đặt ở màn hình "Kiến Tạo
-              Thế Giới" để AI hoạt động ổn định nhất.
+              Các luật lệ cốt lõi của thế giới nên được đặt ở màn hình "Kiến Tạo Thế Giới" để AI
+              hoạt động ổn định nhất.
             </li>
           </ul>
         </div>
 
         <div className="grow overflow-y-auto pr-2 space-y-3 min-h-0">
           {rules.map((rule, index) => (
-            <div
-              key={index}
-              className="flex items-center gap-3 bg-slate-900/50 p-2 rounded-lg"
-            >
-              <ToggleSwitch
-                enabled={rule.enabled}
-                setEnabled={() => handleToggleRule(index)}
-              />
+            <div key={index} className="flex items-center gap-3 bg-slate-900/50 p-2 rounded-lg">
+              <ToggleSwitch enabled={rule.enabled} setEnabled={() => handleToggleRule(index)} />
               <input
                 type="text"
                 placeholder={`Luật/ghi chú tạm thời ${index + 1}`}
@@ -121,9 +113,7 @@ const TemporaryRulesModal: React.FC<TemporaryRulesModalProps> = ({
             </div>
           ))}
           {rules.length === 0 && (
-            <p className="text-slate-500 text-center py-4">
-              Chưa có luật tạm thời nào.
-            </p>
+            <p className="text-slate-500 text-center py-4">Chưa có luật tạm thời nào.</p>
           )}
         </div>
 

@@ -10,30 +10,30 @@
 }
 
 .notification_modal_box {
-  @apply flex items-start
+  @apply flex items-start;
 }
 .notification_modal_box_icon_box {
-  @apply shrink-0
+  @apply shrink-0;
 }
 .notification_modal_box_icon {
   @apply w-8 h-8 text-amber-400;
 }
 
 .notification_modal_msg_container {
-  @apply ml-4 grow
+  @apply ml-4 grow;
 }
 .notification_modal_title {
-  @apply text-xl font-bold mb-2 text-amber-400
+  @apply text-xl font-bold mb-2 text-amber-400;
 }
 
 .notification_modal_message {
-  @apply text-sm text-slate-300 space-y-1
+  @apply text-sm text-slate-300 space-y-1;
 }
 
 .notification_modal_btn_box {
-  @apply flex justify-end mt-6
+  @apply flex justify-end mt-6;
 }
 
 .notification_modal_btn {
-  @apply w-auto! py-2! px-5! text-base!
+  @apply w-auto! py-2! px-5! text-base!;
 }

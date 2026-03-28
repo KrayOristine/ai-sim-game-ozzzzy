@@ -26,8 +26,7 @@ export async function prepareHasher() {
 export function Bigint2Hex(hashResult: bigint, removePrefix: boolean = true) {
   const str = hashResult.toString(16);
 
-  if (removePrefix)
-    str.replace(/^0x/i, "");
+  if (removePrefix) str.replace(/^0x/i, "");
 
   return str;
 }

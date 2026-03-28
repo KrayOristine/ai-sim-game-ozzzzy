@@ -26,7 +26,7 @@ declare global {
       description: string;
     }[];
     stats: CharacterStat[];
-    milestones: CharacterMilestone[]; // << THÊM TRƯỜNG MỚI NÀY
+    milestones: CharacterMilestone[];
     motivation: string;
   }
 }

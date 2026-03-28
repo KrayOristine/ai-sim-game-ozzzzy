@@ -3,15 +3,7 @@ import { NARRATIVE_ARCHETYPES } from "#/constants/narrative_styles";
 export const resolveGenreArchetype = (genreString: string): string => {
   const lowerGenre = genreString.toLowerCase();
 
-  const easternKeywords = [
-    "tiên",
-    "hiệp",
-    "huyền",
-    "cổ trang",
-    "kiếm",
-    "tu chân",
-    "murim",
-  ];
+  const easternKeywords = ["tiên", "hiệp", "huyền", "cổ trang", "kiếm", "tu chân", "murim"];
   if (easternKeywords.some((keyword) => lowerGenre.includes(keyword))) {
     return NARRATIVE_ARCHETYPES.EASTERN;
   }

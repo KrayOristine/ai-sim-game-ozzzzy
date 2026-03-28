@@ -13,18 +13,12 @@ export function processReputationChange(
   const scoreChange = Number(params.score);
 
   if (isNaN(scoreChange)) {
-    console.warn(
-      "Bỏ qua thẻ [REPUTATION_CHANGED] với giá trị score không hợp lệ:",
-      params,
-    );
+    console.warn("Bỏ qua thẻ [REPUTATION_CHANGED] với giá trị score không hợp lệ:", params);
     return { newState: currentState, vectorUpdates: [] };
   }
 
   // Đảm bảo có 5 cấp bậc danh vọng trước khi tính toán
-  if (
-    !currentState.reputationTiers ||
-    currentState.reputationTiers.length !== 5
-  ) {
+  if (!currentState.reputationTiers || currentState.reputationTiers.length !== 5) {
     console.warn(
       "Không thể cập nhật danh vọng vì reputationTiers chưa được thiết lập hoặc không hợp lệ.",
     );

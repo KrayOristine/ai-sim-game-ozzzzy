@@ -25,10 +25,7 @@ export function processPlayerStatsInit(
     hasLimit: params.hasLimit !== false, // Mặc định là true
   };
 
-  const updatedStats = mergeAndDeduplicateByName(
-    currentState.character.stats || [],
-    [newStat],
-  );
+  const updatedStats = mergeAndDeduplicateByName(currentState.character.stats || [], [newStat]);
 
   const newState = {
     ...currentState,

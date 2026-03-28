@@ -49,8 +49,7 @@ export async function testSingleKey(key: string): Promise<KeyValidationResult> {
       const errorJson = JSON.parse(rawMessage);
       if (
         errorJson.error &&
-        (errorJson.error.code === 429 ||
-          errorJson.error.status === "RESOURCE_EXHAUSTED")
+        (errorJson.error.code === 429 || errorJson.error.status === "RESOURCE_EXHAUSTED")
       ) {
         return "rate_limited";
       }

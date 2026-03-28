@@ -4,13 +4,7 @@ import "#/assets/btn_X.css";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   children: React.ReactNode;
   icon?: React.ReactNode;
-  variant?:
-    | "primary"
-    | "secondary"
-    | "success"
-    | "warning"
-    | "special"
-    | "info";
+  variant?: "primary" | "secondary" | "success" | "warning" | "special" | "info";
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -21,10 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   return (
-    <button
-      className={`btn_X_base ${"btn_X_variant_" + variant} ${className}`}
-      {...props}
-    >
+    <button className={`btn_X_base ${"btn_X_variant_" + variant} ${className}`} {...props}>
       {icon && <span className="mr-3">{icon}</span>}
       {children}
     </button>

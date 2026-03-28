@@ -68,15 +68,7 @@ export const GENRE_TAGGING_SYSTEMS: {
 } = {
   tu_tien: {
     system: TU_TIEN_SYSTEM,
-    commonKeywords: [
-      "Ma Đạo",
-      "Thiên Đạo",
-      "Chính Đạo",
-      "Đạo",
-      "Cảnh giới",
-      "Tu vi",
-      "Linh khí",
-    ],
+    commonKeywords: ["Ma Đạo", "Thiên Đạo", "Chính Đạo", "Đạo", "Cảnh giới", "Tu vi", "Linh khí"],
   },
   sci_fi: {
     system: SCI_FI_SYSTEM,

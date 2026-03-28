@@ -19,10 +19,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
   if (!isOpen) return null;
 
   return (
-    <div
-      className="notification_modal"
-      onClick={onClose}
-    >
+    <div className="notification_modal" onClick={onClose}>
       <div
         className="notification_modal_inner"
         onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside modal
@@ -42,11 +39,7 @@ const NotificationModal: React.FC<NotificationModalProps> = ({
         </div>
 
         <div className="notification_modal_btn_box">
-          <Button
-            onClick={onClose}
-            variant="warning"
-            className="notification_modal_btn"
-          >
+          <Button onClick={onClose} variant="warning" className="notification_modal_btn">
             Đã hiểu
           </Button>
         </div>

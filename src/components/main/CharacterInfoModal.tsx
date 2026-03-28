@@ -20,9 +20,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
 
   const { character, inventory } = gameState;
   const characterPersonality =
-    character.personality === "Tuỳ chỉnh"
-      ? character.customPersonality
-      : character.personality;
+    character.personality === "Tuỳ chỉnh" ? character.customPersonality : character.personality;
 
   const stripTags = (text: string | null): string => {
     if (!text) return "";
@@ -72,12 +70,10 @@ const InformationModal: React.FC<InformationModalProps> = ({
                   Chi Tiết
                 </h3>
                 <p>
-                  <strong className="text-slate-400">Tên:</strong>{" "}
-                  {stripTags(character.name)}
+                  <strong className="text-slate-400">Tên:</strong> {stripTags(character.name)}
                 </p>
                 <p>
-                  <strong className="text-slate-400">Giới tính:</strong>{" "}
-                  {character.gender}
+                  <strong className="text-slate-400">Giới tính:</strong> {character.gender}
                 </p>
                 <p>
                   <strong className="text-slate-400">Tính cách:</strong>{" "}
@@ -96,9 +92,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
                 <h3 className="text-lg font-semibold text-pink-300 border-b border-pink-500/30 pb-1 mb-2">
                   Động Lực
                 </h3>
-                <p className="text-sm text-slate-300 italic">
-                  {stripTags(character.motivation)}
-                </p>
+                <p className="text-sm text-slate-300 italic">{stripTags(character.motivation)}</p>
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-pink-300 border-b border-pink-500/30 pb-1 mb-2">
@@ -109,10 +103,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
                     {character.skills.map((skill, index) => {
                       const isExpanded = expandedSkills.has(index);
                       return (
-                        <li
-                          key={index}
-                          className="bg-slate-900/30 p-2 rounded-md"
-                        >
+                        <li key={index} className="bg-slate-900/30 p-2 rounded-md">
                           <div className="flex justify-between items-center">
                             <p className="font-bold text-yellow-400 flex-1 min-w-0">
                               {stripTags(skill.name)}
@@ -129,9 +120,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
                                 />
                               </button>
                               <button
-                                onClick={() =>
-                                  onDeleteEntity({ name: skill.name })
-                                }
+                                onClick={() => onDeleteEntity({ name: skill.name })}
                                 className="cursor-pointer p-1 text-slate-400 hover:text-red-400 transition"
                                 title="Xóa kỹ năng"
                               >
@@ -151,9 +140,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
                     })}
                   </ul>
                 ) : (
-                  <p className="text-slate-500 text-sm italic">
-                    Chưa học được kỹ năng nào.
-                  </p>
+                  <p className="text-slate-500 text-sm italic">Chưa học được kỹ năng nào.</p>
                 )}
               </div>
             </div>
@@ -165,10 +152,7 @@ const InformationModal: React.FC<InformationModalProps> = ({
               {inventory && inventory.length > 0 ? (
                 <ul className="space-y-3">
                   {inventory.map((item, index) => (
-                    <li
-                      key={index}
-                      className="bg-slate-900/50 p-3 rounded-md group"
-                    >
+                    <li key={index} className="bg-slate-900/50 p-3 rounded-md group">
                       <div className="flex justify-between items-start">
                         <p className="font-bold text-yellow-400 flex-1 min-w-0 wrap-break-word">
                           {stripTags(item.name)}
@@ -185,16 +169,12 @@ const InformationModal: React.FC<InformationModalProps> = ({
                           </button>
                         </div>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">
-                        {stripTags(item.description)}
-                      </p>
+                      <p className="text-xs text-slate-400 mt-1">{stripTags(item.description)}</p>
                     </li>
                   ))}
                 </ul>
               ) : (
-                <p className="text-slate-500 text-sm text-center py-4">
-                  Túi đồ trống.
-                </p>
+                <p className="text-slate-500 text-sm text-center py-4">Túi đồ trống.</p>
               )}
             </div>
           </div>

@@ -83,19 +83,13 @@ export const processNarration = (narration: string): string => {
 
   // Bước 2: Loại bỏ các thẻ bên trong thẻ <thought>
   // Tương tự, 'group1' là nội dung bên trong thẻ <thought>.
-  cleanedText = cleanedText.replace(
-    /<thought>(.*?)<\/thought>/gs,
-    (match, group1) => {
-      const cleanedGroup = group1.replace(/<[^>]*>/g, "");
-      return `<thought>${cleanedGroup}</thought>`; // Trả về thẻ <thought> với nội dung đã được làm sạch
-    },
-  );
+  cleanedText = cleanedText.replace(/<thought>(.*?)<\/thought>/gs, (match, group1) => {
+    const cleanedGroup = group1.replace(/<[^>]*>/g, "");
+    return `<thought>${cleanedGroup}</thought>`; // Trả về thẻ <thought> với nội dung đã được làm sạch
+  });
 
   // Bước 3: Dọn dẹp các lỗi định dạng phổ biến khác (ví dụ: khoảng trắng thừa trước thẻ đóng)
-  cleanedText = cleanedText.replace(
-    /\s+<\/(entity|important|status|exp|thought)>/g,
-    "</$1>",
-  );
+  cleanedText = cleanedText.replace(/\s+<\/(entity|important|status|exp|thought)>/g, "</$1>");
 
   // Bước 4: VỆ SINH THẺ LẠ (Whitelist Filter) - QUAN TRỌNG
   // Loại bỏ bất kỳ thẻ nào có dạng <...> hoặc </...> NẾU tên thẻ KHÔNG nằm trong danh sách cho phép.
@@ -142,9 +136,7 @@ export function detectEntityTypeAndCategory(name: string): {
     return { type: "Hệ thống sức mạnh / Lore", category: "Cảnh giới" };
   }
   // Vũ khí
-  if (
-    /\b(kiếm|đao|thương|cung|nỏ|trượng|búa|rìu|chùy|giáo)\b/.test(lowerName)
-  ) {
+  if (/\b(kiếm|đao|thương|cung|nỏ|trượng|búa|rìu|chùy|giáo)\b/.test(lowerName)) {
     return { type: "Vật phẩm", category: "Vũ khí" };
   }
   // Phòng cụ
@@ -171,11 +163,7 @@ export function detectEntityTypeAndCategory(name: string): {
     return { type: "Phe phái/Thế lực", category: "Thế lực" };
   }
   // Nền Tảng Số (Digital Platform)
-  if (
-    /\b(app|web|mạng|diễn đàn|facebook|onlyfans|tiktok|twitter|instagram)\b/.test(
-      lowerName,
-    )
-  ) {
+  if (/\b(app|web|mạng|diễn đàn|facebook|onlyfans|tiktok|twitter|instagram)\b/.test(lowerName)) {
     return { type: "Hệ thống sức mạnh / Lore", category: "Nền Tảng Số" };
   }
   // Địa điểm

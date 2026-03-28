@@ -1,8 +1,5 @@
 import { Type } from "@google/genai";
-import {
-  getGameMasterSystemInstruction,
-  getResponseLengthDirective,
-} from "./systemInstructions";
+import { getGameMasterSystemInstruction, getResponseLengthDirective } from "./systemInstructions";
 import {
   buildNsfwPayload,
   buildPronounPayload,
@@ -18,10 +15,7 @@ import {
 } from "../utils/datasetUtils";
 
 // Helper function to build NPC Memory Flag context
-const buildNpcMemoryFlagContext = (
-  gameState: GameState,
-  playerActionContent: string,
-): string => {
+const buildNpcMemoryFlagContext = (gameState: GameState, playerActionContent: string): string => {
   const { encounteredNPCs } = gameState;
   if (!encounteredNPCs || encounteredNPCs.length === 0) {
     return "";
@@ -37,9 +31,7 @@ const buildNpcMemoryFlagContext = (
         const flagsString = Object.entries(npc.memoryFlags)
           .map(([key, value]) => `${key}=${String(value)}`)
           .join(", ");
-        mentionedNpcFlags.push(
-          `- Thông tin về NPC "${npc.name}" - Dữ liệu cứng: ${flagsString}`,
-        );
+        mentionedNpcFlags.push(`- Thông tin về NPC "${npc.name}" - Dữ liệu cứng: ${flagsString}`);
       }
     }
   }
@@ -51,10 +43,7 @@ const buildNpcMemoryFlagContext = (
   return "";
 };
 
-const getTagInstructions = (
-  customCategories: string[] = [],
-  config: WorldConfig,
-) => {
+const getTagInstructions = (customCategories: string[] = [], config: WorldConfig) => {
   const customCatsString =
     customCategories.length > 0
       ? `\n**DANH MỤC NGƯỜI CHƠI ĐÃ TẠO (ƯU TIÊN DÙNG):** ${customCategories.join(", ")}`
@@ -194,9 +183,7 @@ export const getStartGamePrompt = (config: WorldConfig) => {
         // Nếu là file text thường (ví dụ tóm tắt), dùng nguyên bản
         // Tuy nhiên vẫn nên dùng hàm extractCleanText để an toàn nếu nó là format lạ
         contentToUse = extractCleanTextFromDataset(file.content);
-        backgroundKnowledgeString.push(
-          `\n### TÀI LIỆU: ${file.name} ###\n${contentToUse}`,
-        );
+        backgroundKnowledgeString.push(`\n### TÀI LIỆU: ${file.name} ###\n${contentToUse}`);
       }
     });
 
@@ -282,15 +269,11 @@ export const getNextTurnPrompt = async (
   const tagInstructions = getTagInstructions(customCategories, worldConfig); // Pass custom categories
   const pronounPayload = buildPronounPayload(worldConfig.storyContext.genre);
   const reputationPayload = buildReputationPayload();
-  const nsfwPayload = buildNsfwPayload(
-    worldConfig,
-    getSettings().safetySettings,
-  );
+  const nsfwPayload = buildNsfwPayload(worldConfig, getSettings().safetySettings);
   const lastPlayerAction = history[history.length - 1];
 
   const { safetySettings } = getSettings();
-  const isSafetyBypassMode =
-    !safetySettings.enabled && worldConfig.allowAdultContent;
+  const isSafetyBypassMode = !safetySettings.enabled && worldConfig.allowAdultContent;
 
   const recentHistoryTurns = history.slice(0, -1).slice(-4);
   const playerActionContent = lastPlayerAction.content;
@@ -314,9 +297,7 @@ export const getNextTurnPrompt = async (
       .join("\n\n");
   }
 
-  const lengthDirective = getResponseLengthDirective(
-    worldConfig.aiResponseLength,
-  );
+  const lengthDirective = getResponseLengthDirective(worldConfig.aiResponseLength);
 
   const worldStateContextParts: string[] = ["--- BỐI CẢNH TOÀN DIỆN ---"];
 
@@ -329,9 +310,7 @@ export const getNextTurnPrompt = async (
   ) {
     for (const npc of fullContext.encounteredNPCs) {
       if (npc.physicalState) {
-        physicalStateContext.push(
-          `*   GHI NHỚ VẬT LÝ VỀ ${npc.name}: ${npc.physicalState}`,
-        );
+        physicalStateContext.push(`*   GHI NHỚ VẬT LÝ VỀ ${npc.name}: ${npc.physicalState}`);
       }
       // Thêm cảm xúc nếu có
       if (npc.emotionalState) {
@@ -347,9 +326,7 @@ export const getNextTurnPrompt = async (
     );
   }
 
-  worldStateContextParts.push(
-    buildNpcMemoryFlagContext(gameState, playerActionContent),
-  ); // Dữ liệu cứng về Mối quan hệ
+  worldStateContextParts.push(buildNpcMemoryFlagContext(gameState, playerActionContent)); // Dữ liệu cứng về Mối quan hệ
   worldStateContextParts.push(relevantMemories); // Hồ sơ Tương tác hoặc Ký ức RAG
 
   // Lớp Graph RAG
@@ -379,17 +356,13 @@ export const getNextTurnPrompt = async (
       bio: character.bio,
       motivation: character.motivation,
       personality:
-        character.personality === "Tuỳ chỉnh"
-          ? character.customPersonality
-          : character.personality,
+        character.personality === "Tuỳ chỉnh" ? character.customPersonality : character.personality,
       stats: character.stats,
       milestones: character.milestones,
     },
     reputation: { ...reputation, reputationTiers },
   };
-  worldStateContextParts.push(
-    `*   Thông tin Cốt lõi:\n    ${JSON.stringify(coreInfo, null, 2)}`,
-  );
+  worldStateContextParts.push(`*   Thông tin Cốt lõi:\n    ${JSON.stringify(coreInfo, null, 2)}`);
   worldStateContextParts.push(
     `*   Bách Khoa Toàn Thư (Các thực thể liên quan khác):\n    ${Object.keys(fullContext).length > 0 ? JSON.stringify(fullContext, null, 2) : "Chưa gặp thực thể nào."}`,
   );
@@ -398,23 +371,18 @@ export const getNextTurnPrompt = async (
   worldStateContextParts.push(
     `*   Thời gian & Môi trường hiện tại: ${String(worldTime.hour).padStart(2, "0")}:${String(worldTime.minute).padStart(2, "0")} (Ngày ${worldTime.day}/${worldTime.month}/${worldTime.year}). Mùa: ${season}. Thời tiết: ${weather}.`,
   );
-  worldStateContextParts.push(
-    `*   Diễn biến gần đây nhất:\n    ${recentHistoryString}`,
-  );
+  worldStateContextParts.push(`*   Diễn biến gần đây nhất:\n    ${recentHistoryString}`);
 
-  const worldStateContext =
-    worldStateContextParts.join("\n\n") + "\n--- KẾT THÚC BỐI CẢNH ---";
+  const worldStateContext = worldStateContextParts.join("\n\n") + "\n--- KẾT THÚC BỐI CẢNH ---";
 
   let timeHint = "";
   if (codeExtractedTime && Object.keys(codeExtractedTime).length > 0) {
     const parts = [];
     if (codeExtractedTime.years) parts.push(`${codeExtractedTime.years} năm`);
-    if (codeExtractedTime.months)
-      parts.push(`${codeExtractedTime.months} tháng`);
+    if (codeExtractedTime.months) parts.push(`${codeExtractedTime.months} tháng`);
     if (codeExtractedTime.days) parts.push(`${codeExtractedTime.days} ngày`);
     if (codeExtractedTime.hours) parts.push(`${codeExtractedTime.hours} giờ`);
-    if (codeExtractedTime.minutes)
-      parts.push(`${Math.round(codeExtractedTime.minutes)} phút`);
+    if (codeExtractedTime.minutes) parts.push(`${Math.round(codeExtractedTime.minutes)} phút`);
 
     if (parts.length > 0) {
       const timeParams = Object.entries(codeExtractedTime)
@@ -481,8 +449,7 @@ export const getGenerateReputationTiersPrompt = (genre: string) => {
     properties: {
       tiers: {
         type: Type.ARRAY,
-        description:
-          "Một danh sách gồm ĐÚNG 5 chuỗi (string), là tên các cấp bậc danh vọng.",
+        description: "Một danh sách gồm ĐÚNG 5 chuỗi (string), là tên các cấp bậc danh vọng.",
         items: { type: Type.STRING },
       },
     },

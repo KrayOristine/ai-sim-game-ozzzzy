@@ -28,9 +28,7 @@ const SaveItem: React.FC<{
       <p className="text-xs text-slate-400 mt-1">
         Lưu lúc: {new Date(save.saveDate).toLocaleString("vi-VN")}
       </p>
-      <p className="text-sm text-slate-400 italic mt-1 truncate">
-        {save.previewText}
-      </p>
+      <p className="text-sm text-slate-400 italic mt-1 truncate">{save.previewText}</p>
     </div>
     <div className="flex items-center gap-2 shrink-0">
       <Button
@@ -58,11 +56,7 @@ const SaveItem: React.FC<{
   </div>
 );
 
-const LoadGameModal: React.FC<LoadGameModalProps> = ({
-  isOpen,
-  onClose,
-  onLoad,
-}) => {
+const LoadGameModal: React.FC<LoadGameModalProps> = ({ isOpen, onClose, onLoad }) => {
   const [manualSaves, setManualSaves] = useState<SaveSlot[]>([]);
   const [autoSaves, setAutoSaves] = useState<SaveSlot[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -132,13 +126,8 @@ const LoadGameModal: React.FC<LoadGameModalProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div className="flex justify-between items-center mb-4 shrink-0">
-            <h2 className="text-xl font-bold text-green-400">
-              Tải Game Đã Lưu
-            </h2>
-            <button
-              onClick={onClose}
-              className="text-slate-400 hover:text-white transition"
-            >
+            <h2 className="text-xl font-bold text-green-400">Tải Game Đã Lưu</h2>
+            <button onClick={onClose} className="text-slate-400 hover:text-white transition">
               <Icon name="xCircle" className="w-7 h-7" />
             </button>
           </div>

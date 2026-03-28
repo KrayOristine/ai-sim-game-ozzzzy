@@ -37,10 +37,7 @@ export function processNpcNewOrUpdate(
     physicalState: params.physicalState || "", // Thêm trạng thái vật lý
   };
 
-  const updatedNpcs = mergeAndDeduplicateByName(
-    currentState.encounteredNPCs || [],
-    [newNpcData],
-  );
+  const updatedNpcs = mergeAndDeduplicateByName(currentState.encounteredNPCs || [], [newNpcData]);
 
   // Khi tạo vector, sử dụng fallback an toàn để tránh in ra 'undefined'
   const vectorContent = `NPC: ${newNpcData.name}\nMô tả: ${newNpcData.description || "Chưa rõ"}\nPhân loại: ${newNpcData.customCategory || "Chưa rõ"}\nTính cách: ${newNpcData.personality || "Chưa rõ"}\nSuy nghĩ về người chơi: ${newNpcData.thoughtsOnPlayer}\nTrạng thái vật lý: ${newNpcData.physicalState || "Bình thường"}`;
@@ -82,9 +79,7 @@ export function processNpcThoughtsUpdate(
   let vectorUpdates: VectorUpdate[] = [];
 
   // Giai đoạn 1: Tìm trong "Hồ sơ sống" (encounteredNPCs)
-  const existingNpcIndex = updatedNpcs.findIndex(
-    (npc) => npc.name.toLowerCase() === npcNameLower,
-  );
+  const existingNpcIndex = updatedNpcs.findIndex((npc) => npc.name.toLowerCase() === npcNameLower);
 
   if (existingNpcIndex > -1) {
     // Trường hợp 1: NPC đã "sống", cập nhật nó.
@@ -100,12 +95,9 @@ export function processNpcThoughtsUpdate(
     finalNpcData = updatedNpc;
   } else {
     // Giai đoạn 2: Tìm trong "Khai báo ban đầu" (initialEntities)
-    const initialEntityNpc = (
-      currentState.worldConfig.initialEntities || []
-    ).find(
+    const initialEntityNpc = (currentState.worldConfig.initialEntities || []).find(
       (entity) =>
-        (entity.type === "NPC" || !entity.type) &&
-        entity.name.toLowerCase() === npcNameLower,
+        (entity.type === "NPC" || !entity.type) && entity.name.toLowerCase() === npcNameLower,
     );
 
     if (initialEntityNpc) {

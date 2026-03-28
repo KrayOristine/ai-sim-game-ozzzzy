@@ -1,6 +1,6 @@
 import path from "path";
 import { defineConfig } from "vite";
-import react, {reactCompilerPreset} from "@vitejs/plugin-react";
+import react, { reactCompilerPreset } from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import babel from "@rolldown/plugin-babel";
 
@@ -13,14 +13,16 @@ export default defineConfig(() => {
     },
     plugins: [
       tailwindcss({
-        optimize: true
+        optimize: true,
       }),
       react(),
       babel({
-        presets: [reactCompilerPreset({
-          compilationMode: "annotation"
-        })]
-      })
+        presets: [
+          reactCompilerPreset({
+            compilationMode: "annotation",
+          }),
+        ],
+      }),
     ],
     resolve: {
       alias: {
@@ -37,7 +39,7 @@ export default defineConfig(() => {
       postcss: "./postcss.config.js",
     },
     build: {
-      target: 'esnext',
+      target: "esnext",
       assetsDir: "./assets",
       outDir: "../dist",
       emptyOutDir: true,
@@ -57,41 +59,41 @@ export default defineConfig(() => {
             groups: [
               {
                 test: /node_modules[\\/].*(react|scheduler)/i,
-                name: 'react',
+                name: "react",
                 priority: 10000,
               },
               {
                 test: /node_modules[\\/].*google/i,
-                name: 'google',
+                name: "google",
                 priority: 9999,
               },
               {
                 test: /node_modules[\\/]/i,
-                name: 'vendor',
+                name: "vendor",
                 entriesAware: true,
               },
               {
                 test: /[\\/]services[\\/]/i,
-                name: 'core',
-                entriesAware: true
+                name: "core",
+                entriesAware: true,
               },
               {
                 test: /[\\/](utils|constants|const\.ts)/i,
-                name: 'utility',
+                name: "utility",
                 entriesAware: true,
               },
               {
                 test: /components[\\/]helper/i,
-                name: 'component',
+                name: "component",
                 entriesAware: true,
               },
               {
                 test: /components[\\/]main/i,
-                name: 'ui',
+                name: "ui",
                 entriesAware: true,
               },
-            ]
-          }
+            ],
+          },
         },
       },
     },

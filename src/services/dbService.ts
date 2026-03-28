@@ -44,54 +44,40 @@ function openDB(): Promise<IDBDatabase> {
           }
         case 2:
           if (!dbInstance.objectStoreNames.contains(TURN_VECTORS_STORE_NAME)) {
-            const store = dbInstance.createObjectStore(
-              TURN_VECTORS_STORE_NAME,
-              { keyPath: "turnId" },
-            );
+            const store = dbInstance.createObjectStore(TURN_VECTORS_STORE_NAME, {
+              keyPath: "turnId",
+            });
             store.createIndex("turnIndex", "turnIndex", { unique: false });
           }
-          if (
-            !dbInstance.objectStoreNames.contains(SUMMARY_VECTORS_STORE_NAME)
-          ) {
-            const store = dbInstance.createObjectStore(
-              SUMMARY_VECTORS_STORE_NAME,
-              { keyPath: "summaryId" },
-            );
+          if (!dbInstance.objectStoreNames.contains(SUMMARY_VECTORS_STORE_NAME)) {
+            const store = dbInstance.createObjectStore(SUMMARY_VECTORS_STORE_NAME, {
+              keyPath: "summaryId",
+            });
             store.createIndex("summaryIndex", "summaryIndex", {
               unique: false,
             });
           }
         case 3:
-          if (
-            !dbInstance.objectStoreNames.contains(ENTITY_VECTORS_STORE_NAME)
-          ) {
+          if (!dbInstance.objectStoreNames.contains(ENTITY_VECTORS_STORE_NAME)) {
             dbInstance.createObjectStore(ENTITY_VECTORS_STORE_NAME, {
               keyPath: "id",
             });
           }
         case 4:
           if (dbInstance.objectStoreNames.contains(TURN_VECTORS_STORE_NAME)) {
-            const store = request.transaction!.objectStore(
-              TURN_VECTORS_STORE_NAME,
-            );
+            const store = request.transaction!.objectStore(TURN_VECTORS_STORE_NAME);
             if (!store.indexNames.contains("worldId")) {
               store.createIndex("worldId", "worldId", { unique: false });
             }
           }
-          if (
-            dbInstance.objectStoreNames.contains(SUMMARY_VECTORS_STORE_NAME)
-          ) {
-            const store = request.transaction!.objectStore(
-              SUMMARY_VECTORS_STORE_NAME,
-            );
+          if (dbInstance.objectStoreNames.contains(SUMMARY_VECTORS_STORE_NAME)) {
+            const store = request.transaction!.objectStore(SUMMARY_VECTORS_STORE_NAME);
             if (!store.indexNames.contains("worldId")) {
               store.createIndex("worldId", "worldId", { unique: false });
             }
           }
           if (dbInstance.objectStoreNames.contains(ENTITY_VECTORS_STORE_NAME)) {
-            const store = request.transaction!.objectStore(
-              ENTITY_VECTORS_STORE_NAME,
-            );
+            const store = request.transaction!.objectStore(ENTITY_VECTORS_STORE_NAME);
             if (!store.indexNames.contains("worldId")) {
               store.createIndex("worldId", "worldId", { unique: false });
             }
@@ -193,10 +179,7 @@ export async function deleteSave(saveId: number): Promise<void> {
 
     transaction.oncomplete = () => resolve();
     transaction.onerror = () => {
-      console.error(
-        "Lỗi khi xóa save và các vector liên quan từ IndexedDB:",
-        transaction.error,
-      );
+      console.error("Lỗi khi xóa save và các vector liên quan từ IndexedDB:", transaction.error);
       reject("Không thể xóa file lưu và dữ liệu liên quan.");
     };
   });
@@ -263,9 +246,7 @@ export async function addTurnVector(vector: TurnVector): Promise<void> {
   });
 }
 
-export async function getAllTurnVectors(
-  worldId: string,
-): Promise<TurnVector[]> {
+export async function getAllTurnVectors(worldId: string): Promise<TurnVector[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(TURN_VECTORS_STORE_NAME, "readonly");
@@ -289,9 +270,7 @@ export async function addSummaryVector(vector: SummaryVector): Promise<void> {
   });
 }
 
-export async function getAllSummaryVectors(
-  worldId: string,
-): Promise<SummaryVector[]> {
+export async function getAllSummaryVectors(worldId: string): Promise<SummaryVector[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(SUMMARY_VECTORS_STORE_NAME, "readonly");
@@ -316,9 +295,7 @@ export async function addEntityVector(vector: EntityVector): Promise<void> {
   });
 }
 
-export async function getAllEntityVectors(
-  worldId: string,
-): Promise<EntityVector[]> {
+export async function getAllEntityVectors(worldId: string): Promise<EntityVector[]> {
   const db = await openDB();
   return new Promise((resolve, reject) => {
     const transaction = db.transaction(ENTITY_VECTORS_STORE_NAME, "readonly");
@@ -343,9 +320,7 @@ export async function deleteEntityVector(id: string): Promise<void> {
 
 // --- Graph Store Functions ---
 
-export async function addGraphNodes(
-  nodes: (GraphNode & { worldId: string })[],
-): Promise<void> {
+export async function addGraphNodes(nodes: (GraphNode & { worldId: string })[]): Promise<void> {
   if (nodes.length === 0) return;
   const db = await openDB();
   return new Promise((resolve, reject) => {
@@ -373,9 +348,7 @@ export async function addGraphNodes(
   });
 }
 
-export async function addGraphEdges(
-  edges: (GraphEdge & { worldId: string })[],
-): Promise<void> {
+export async function addGraphEdges(edges: (GraphEdge & { worldId: string })[]): Promise<void> {
   if (edges.length === 0) return;
   const db = await openDB();
   return new Promise((resolve, reject) => {
@@ -407,9 +380,9 @@ export async function getGraphEdgesBySource(
     const request = index.getAll(sourceId);
 
     request.onsuccess = () => {
-      const edges = (
-        request.result as (GraphEdge & { worldId: string })[]
-      ).filter((e) => e.worldId === worldId);
+      const edges = (request.result as (GraphEdge & { worldId: string })[]).filter(
+        (e) => e.worldId === worldId,
+      );
       resolve(edges);
     };
     request.onerror = () => reject("Error fetching graph edges");
@@ -428,9 +401,9 @@ export async function getGraphEdgesByTarget(
     const request = index.getAll(targetId);
 
     request.onsuccess = () => {
-      const edges = (
-        request.result as (GraphEdge & { worldId: string })[]
-      ).filter((e) => e.worldId === worldId);
+      const edges = (request.result as (GraphEdge & { worldId: string })[]).filter(
+        (e) => e.worldId === worldId,
+      );
       resolve(edges);
     };
     request.onerror = () => reject("Error fetching graph edges");

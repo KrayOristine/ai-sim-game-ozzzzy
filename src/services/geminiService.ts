@@ -9,7 +9,7 @@ import {
 import { getSettings } from "@service/settingsService";
 import { DEFAULT_AI_PERFORMANCE_SETTINGS, AIModel } from "#/constants";
 import { processNarration } from "@utils/textProcessing";
-import { filterSafetySettings } from '@utils/filterSafetySettings';
+import { filterSafetySettings } from "@utils/filterSafetySettings";
 
 const DEBUG_MODE = true; // Bật/tắt chế độ debug chi tiết trong Console (F12)
 
@@ -35,22 +35,13 @@ const incrementRequestCount = (model: string) => {
 
 export const printRequestStats = (actionName: string) => {
   if (!DEBUG_MODE) return;
-  const totalTurnRequests = Object.values(requestStats).reduce(
-    (a, b) => a + b,
-    0,
-  );
+  const totalTurnRequests = Object.values(requestStats).reduce((a, b) => a + b, 0);
   console.group(`📊 [DEBUG] Báo cáo tài nguyên cho: ${actionName}`);
 
   if (totalTurnRequests === 0) {
-    console.log(
-      "%c✅ Không tốn request nào.",
-      "color: #4ade80; font-weight: bold;",
-    );
+    console.log("%c✅ Không tốn request nào.", "color: #4ade80; font-weight: bold;");
   } else {
-    console.log(
-      "%cChi tiết Request theo Nguồn & Model:",
-      "color: #fbbf24; font-weight: bold;",
-    );
+    console.log("%cChi tiết Request theo Nguồn & Model:", "color: #fbbf24; font-weight: bold;");
     console.table(requestStats);
     console.log(
       `%cTổng request trong tác vụ này: ${totalTurnRequests}`,
@@ -93,9 +84,7 @@ function getAiInstance(): GoogleGenAI {
   const keys = apiKeyConfig.keys.filter(Boolean);
 
   if (keys.length === 0) {
-    throw new Error(
-      "Không tìm thấy API Key nào. Vui lòng thêm API Key trong phần Cài đặt.",
-    );
+    throw new Error("Không tìm thấy API Key nào. Vui lòng thêm API Key trong phần Cài đặt.");
   }
 
   if (keyIndex >= keys.length) {
@@ -114,10 +103,7 @@ function getAiInstance(): GoogleGenAI {
   return ai;
 }
 
-function handleApiError(
-  error: unknown,
-  safetySettings: SafetySettingsConfig,
-): Error {
+function handleApiError(error: unknown, safetySettings: SafetySettingsConfig): Error {
   const rawMessage = error instanceof Error ? error.message : String(error);
   console.error("Gemini API Error:", error);
 
@@ -125,8 +111,7 @@ function handleApiError(
     const errorJson = JSON.parse(rawMessage);
     if (
       errorJson.error &&
-      (errorJson.error.code === 429 ||
-        errorJson.error.status === "RESOURCE_EXHAUSTED")
+      (errorJson.error.code === 429 || errorJson.error.status === "RESOURCE_EXHAUSTED")
     ) {
       return new Error(
         "Bạn đã vượt quá hạn mức yêu cầu API (Lỗi 429/RESOURCE_EXHAUSTED). Vui lòng đợi một lát rồi thử lại.",
@@ -136,8 +121,7 @@ function handleApiError(
     // Not a JSON error message, proceed with other checks
   }
 
-  const isSafetyBlock =
-    /safety/i.test(rawMessage) || /blocked/i.test(rawMessage);
+  const isSafetyBlock = /safety/i.test(rawMessage) || /blocked/i.test(rawMessage);
   if (safetySettings.enabled && isSafetyBlock) {
     return new Error(
       "Nội dung của bạn có thể đã bị chặn bởi bộ lọc an toàn. Vui lòng thử lại với nội dung khác hoặc tắt bộ lọc an toàn trong mục Cài Đặt để tạo nội dung tự do hơn.",
@@ -175,10 +159,10 @@ function createDetailedErrorFromResponse(
 
   switch (finishReason) {
     case "SAFETY":
-      console.warn(
-        `Gemini API ${responseType} response blocked due to safety settings.`,
-        { finishReason, safetyRatings },
-      );
+      console.warn(`Gemini API ${responseType} response blocked due to safety settings.`, {
+        finishReason,
+        safetyRatings,
+      });
       let blockDetails = "Lý do: Bộ lọc an toàn.";
       if (safetyRatings && safetyRatings.length > 0) {
         const blockedCategories = safetyRatings
@@ -223,18 +207,13 @@ function createDetailedErrorFromResponse(
     default:
       // Xử lý rõ ràng trường hợp `finishReason` là `undefined`
       const reason = finishReason || "Không rõ lý do";
-      console.error(
-        `Gemini API returned no text. Finish reason: ${reason}`,
-        candidate,
-      );
+      console.error(`Gemini API returned no text. Finish reason: ${reason}`, candidate);
       if (!safetySettings.enabled) {
         return new Error(
           `Phản hồi ${responseType} từ AI trống. Lý do: ${reason}. Điều này có thể do bộ lọc an toàn nội bộ của mô hình. Nếu bạn đã bật nội dung 18+, hãy thử diễn đạt lại hành động của mình một cách "văn học" hơn để vượt qua bộ lọc.`,
         );
       } else {
-        return new Error(
-          `Phản hồi ${responseType} từ AI trống. Lý do kết thúc: ${reason}.`,
-        );
+        return new Error(`Phản hồi ${responseType} từ AI trống. Lý do kết thúc: ${reason}.`);
       }
   }
 }
@@ -255,9 +234,7 @@ export async function generate(
 
   // Ưu tiên sử dụng model từ tham số override, sau đó mới đến cài đặt
   let selectedModel =
-    modelOverride ||
-    perfSettings.selectedModel ||
-    "gemini-3.1-flash-lite-preview";
+    modelOverride || perfSettings.selectedModel || "gemini-3.1-flash-lite-preview";
 
   const isProModel = selectedModel.includes("pro");
   const isGemini3 = selectedModel.includes("gemini-3");
@@ -294,16 +271,12 @@ export async function generate(
   const maxAttempts = 1 + retryCount;
   let lastError: Error | null = null;
 
-  const finalContents = systemInstruction
-    ? `${systemInstruction}\n\n---\n\n${prompt}`
-    : prompt;
+  const finalContents = systemInstruction ? `${systemInstruction}\n\n---\n\n${prompt}` : prompt;
 
   incrementRequestCount(`${selectedModel} (Text)`); // TRACKING
 
   if (DEBUG_MODE) {
-    console.groupCollapsed(
-      `🚀 [DEBUG] Gemini Request (${currentDebugContext})`,
-    );
+    console.groupCollapsed(`🚀 [DEBUG] Gemini Request (${currentDebugContext})`);
     console.log("%c[PAYLOAD]", "color: cyan; font-weight: bold;", {
       model: selectedModel,
       isProOverride: isProModel || isGemini3,
@@ -341,31 +314,15 @@ export async function generate(
         console.groupCollapsed(
           `✅ [DEBUG] Gemini Response (${currentDebugContext}) - Attempt ${i + 1}`,
         );
-        console.log(
-          "%c[TOKEN USAGE]",
-          "color: yellow;",
-          response.usageMetadata,
-        );
-        console.log(
-          "%c[FINISH REASON]",
-          "color: yellow;",
-          candidate?.finishReason,
-        );
-        console.log(
-          "%c[SAFETY RATINGS]",
-          "color: orange;",
-          candidate?.safetyRatings,
-        );
+        console.log("%c[TOKEN USAGE]", "color: yellow;", response.usageMetadata);
+        console.log("%c[FINISH REASON]", "color: yellow;", candidate?.finishReason);
+        console.log("%c[SAFETY RATINGS]", "color: orange;", candidate?.safetyRatings);
         console.log("%c[RAW TEXT]", "color: lightgreen;", response.text);
         console.groupEnd();
       }
 
       if (!response.text) {
-        lastError = createDetailedErrorFromResponse(
-          candidate,
-          safetySettings,
-          false,
-        );
+        lastError = createDetailedErrorFromResponse(candidate, safetySettings, false);
         console.warn(`Gemini API returned no text on attempt ${i + 1}.`, {
           finishReason: candidate?.finishReason,
           safetyRatings: candidate?.safetyRatings,
@@ -382,14 +339,10 @@ export async function generate(
         const rawMessage = lastError.message.toLowerCase();
         if (/429|rate limit|resource_exhausted|503/.test(rawMessage)) {
           const delay = 1500 * Math.pow(2, i);
-          console.warn(
-            `Rate limit/server error on attempt ${i + 1}. Retrying in ${delay}ms...`,
-          );
+          console.warn(`Rate limit/server error on attempt ${i + 1}. Retrying in ${delay}ms...`);
           await new Promise((resolve) => setTimeout(resolve, delay));
         } else {
-          console.warn(
-            `Error on attempt ${i + 1}. Trying next key immediately...`,
-          );
+          console.warn(`Error on attempt ${i + 1}. Trying next key immediately...`);
         }
         continue;
       }
@@ -422,9 +375,7 @@ export async function generateJson<T>(
   const maxAttempts = 1 + retryCount;
   let lastError: Error | null = null;
 
-  const finalContents = systemInstruction
-    ? `${systemInstruction}\n\n---\n\n${prompt}`
-    : prompt;
+  const finalContents = systemInstruction ? `${systemInstruction}\n\n---\n\n${prompt}` : prompt;
 
   // Handle Model Selection for JSON
   let selectedModel = model;
@@ -433,10 +384,8 @@ export async function generateJson<T>(
   const isGemini3 = selectedModel.includes("gemini-3");
 
   // Override logic for Pro models
-  let effectiveMaxTokens =
-    overrideConfig?.maxOutputTokens ?? perfSettings.maxOutputTokens;
-  let effectiveThinkingBudget =
-    overrideConfig?.thinkingBudget ?? perfSettings.thinkingBudget;
+  let effectiveMaxTokens = overrideConfig?.maxOutputTokens ?? perfSettings.maxOutputTokens;
+  let effectiveThinkingBudget = overrideConfig?.thinkingBudget ?? perfSettings.thinkingBudget;
   let thinkLevel = overrideConfig?.thinkingLevel ?? perfSettings.thinkingLevel;
   const thinkConfig: ThinkingConfig = {};
 
@@ -464,9 +413,7 @@ export async function generateJson<T>(
   incrementRequestCount(`${selectedModel} (JSON)`); // TRACKING
 
   if (DEBUG_MODE) {
-    console.groupCollapsed(
-      `🚀 [DEBUG] Gemini Request (generateJson - ${currentDebugContext})`,
-    );
+    console.groupCollapsed(`🚀 [DEBUG] Gemini Request (generateJson - ${currentDebugContext})`);
     console.log("%c[PAYLOAD]", "color: cyan; font-weight: bold;", {
       model: selectedModel,
       isProOverride: isProModel || isGemini3,
@@ -508,31 +455,15 @@ export async function generateJson<T>(
         console.groupCollapsed(
           `✅ [DEBUG] Gemini Response (generateJson - ${currentDebugContext}) - Attempt ${i + 1}`,
         );
-        console.log(
-          "%c[TOKEN USAGE]",
-          "color: yellow;",
-          response.usageMetadata,
-        );
-        console.log(
-          "%c[FINISH REASON]",
-          "color: yellow;",
-          candidate?.finishReason,
-        );
-        console.log(
-          "%c[SAFETY RATINGS]",
-          "color: orange;",
-          candidate?.safetyRatings,
-        );
+        console.log("%c[TOKEN USAGE]", "color: yellow;", response.usageMetadata);
+        console.log("%c[FINISH REASON]", "color: yellow;", candidate?.finishReason);
+        console.log("%c[SAFETY RATINGS]", "color: orange;", candidate?.safetyRatings);
         console.log("%c[RAW JSON TEXT]", "color: lightgreen;", jsonString);
         console.groupEnd();
       }
 
       if (!jsonString) {
-        lastError = createDetailedErrorFromResponse(
-          candidate,
-          safetySettings,
-          true,
-        );
+        lastError = createDetailedErrorFromResponse(candidate, safetySettings, true);
         console.warn(`Gemini API returned no JSON text on attempt ${i + 1}.`, {
           finishReason: candidate?.finishReason,
           safetyRatings: candidate?.safetyRatings,
@@ -551,9 +482,7 @@ export async function generateJson<T>(
           "narration" in parsedJson &&
           typeof (parsedJson as any).narration === "string"
         ) {
-          (parsedJson as any).narration = processNarration(
-            (parsedJson as any).narration,
-          );
+          (parsedJson as any).narration = processNarration((parsedJson as any).narration);
         }
 
         return parsedJson;
@@ -576,14 +505,10 @@ export async function generateJson<T>(
         const rawMessage = lastError.message.toLowerCase();
         if (/429|rate limit|resource_exhausted|503/.test(rawMessage)) {
           const delay = 1500 * Math.pow(2, i);
-          console.warn(
-            `Rate limit/server error on attempt ${i + 1}. Retrying in ${delay}ms...`,
-          );
+          console.warn(`Rate limit/server error on attempt ${i + 1}. Retrying in ${delay}ms...`);
           await new Promise((resolve) => setTimeout(resolve, delay));
         } else {
-          console.warn(
-            `Error on attempt ${i + 1}. Trying next key immediately...`,
-          );
+          console.warn(`Error on attempt ${i + 1}. Trying next key immediately...`);
         }
         continue;
       }
@@ -598,9 +523,7 @@ export async function generateJson<T>(
   );
 }
 
-export async function generateEmbeddingsBatch(
-  texts: string[],
-): Promise<number[][]> {
+export async function generateEmbeddingsBatch(texts: string[]): Promise<number[][]> {
   const { apiKeyConfig } = getSettings();
   const keys = apiKeyConfig.keys.filter(Boolean);
   if (keys.length === 0) {
@@ -619,11 +542,7 @@ export async function generateEmbeddingsBatch(
         contents: texts,
       });
       const embeddings = result.embeddings!;
-      if (
-        embeddings &&
-        embeddings.length === texts.length &&
-        embeddings.every((e) => e.values)
-      ) {
+      if (embeddings && embeddings.length === texts.length && embeddings.every((e) => e.values)) {
         if (DEBUG_MODE) {
           console.log(
             `✅ [DEBUG] Successfully generated ${embeddings.length} embeddings (${currentDebugContext}).`,
@@ -633,10 +552,7 @@ export async function generateEmbeddingsBatch(
       }
       throw new Error("API không trả về embeddings hợp lệ cho batch.");
     } catch (error) {
-      console.error(
-        `Error in generateEmbeddingsBatch attempt ${i + 1}:`,
-        error,
-      );
+      console.error(`Error in generateEmbeddingsBatch attempt ${i + 1}:`, error);
       lastError = handleApiError(error, getSettings().safetySettings);
 
       if (i < MAX_RETRIES - 1) {
@@ -654,8 +570,5 @@ export async function generateEmbeddingsBatch(
       }
     }
   }
-  throw (
-    lastError ||
-    new Error("Không thể tạo embeddings cho batch sau nhiều lần thử.")
-  );
+  throw lastError || new Error("Không thể tạo embeddings cho batch sau nhiều lần thử.");
 }

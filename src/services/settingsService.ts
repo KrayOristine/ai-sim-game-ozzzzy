@@ -30,9 +30,9 @@ export const getSettings = (): AppSettings => {
         ...DEFAULT_SETTINGS,
         ...parsed,
         apiKeyConfig: parsed.apiKeyConfig || DEFAULT_SETTINGS.apiKeyConfig,
-        safetySettings:{
+        safetySettings: {
           ...DEFAULT_SETTINGS.safetySettings,
-          ...(parsed.safetySettings || {})
+          ...(parsed.safetySettings || {}),
         },
         ragSettings: {
           ...DEFAULT_SETTINGS.ragSettings,

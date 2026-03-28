@@ -33,9 +33,7 @@ export function processItemAdd(
   const sanitizedName = sanitizeEntityName(params.name);
   const newInventory = [...(currentState.inventory || [])];
   const key = sanitizedName.toLowerCase();
-  const existingItemIndex = newInventory.findIndex(
-    (item) => item.name.toLowerCase() === key,
-  );
+  const existingItemIndex = newInventory.findIndex((item) => item.name.toLowerCase() === key);
 
   let vectorUpdates: VectorUpdate[] = [];
 
@@ -118,9 +116,7 @@ export function processItemRemove(
   const sanitizedName = sanitizeEntityName(params.name);
   const newInventory = [...(currentState.inventory || [])];
   const key = sanitizedName.toLowerCase();
-  const existingItemIndex = newInventory.findIndex(
-    (item) => item.name.toLowerCase() === key,
-  );
+  const existingItemIndex = newInventory.findIndex((item) => item.name.toLowerCase() === key);
 
   if (existingItemIndex > -1) {
     // Trừ số lượng vật phẩm
@@ -137,9 +133,7 @@ export function processItemRemove(
     }
   } else {
     // Nếu xóa vật phẩm không có trong túi đồ, bỏ qua và ghi log cảnh báo.
-    console.warn(
-      `Cố gắng xóa vật phẩm không có trong túi đồ: "${sanitizedName}"`,
-    );
+    console.warn(`Cố gắng xóa vật phẩm không có trong túi đồ: "${sanitizedName}"`);
   }
 
   return {

@@ -68,9 +68,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
   setGameState,
   onDeleteEntity,
 }) => {
-  const [mainView, setMainView] = useState<"browse" | "analyze" | "manage">(
-    "browse",
-  );
+  const [mainView, setMainView] = useState<"browse" | "analyze" | "manage">("browse");
   const [activeTab, setActiveTab] = useState<string>("characters");
   const [searchTerm, setSearchTerm] = useState("");
   const [activeItem, setActiveItem] = useState<AllEntities | null>(null);
@@ -95,16 +93,12 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
   // --- Smart Codex States ---
   const [codexCommand, setCodexCommand] = useState("");
   const [isGeneratingCodex, setIsGeneratingCodex] = useState(false);
-  const [codexPreview, setCodexPreview] = useState<SmartCodexResult | null>(
-    null,
-  );
+  const [codexPreview, setCodexPreview] = useState<SmartCodexResult | null>(null);
 
   const { processedData, dynamicCategories } = useMemo(() => {
     if (!isOpen) return { processedData: {}, dynamicCategories: [] };
 
-    const allEntitiesFromState = (
-      state: GameState,
-    ): (AllEntities & { type?: string })[] => {
+    const allEntitiesFromState = (state: GameState): (AllEntities & { type?: string })[] => {
       const all = [
         ...(state.encounteredNPCs || []).map((e) => ({ ...e, type: "NPC" })),
         ...(state.companions || []).map((e) => ({ ...e, type: "NPC" })), // Coi companion là NPC cho mục đích duyệt
@@ -145,41 +139,29 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
       quests: allEntities.filter((e) => (e as Quest).status),
       concepts: allEntities.filter(
         (e) =>
-          ![
-            "NPC",
-            "Vật phẩm",
-            "Phe phái/Thế lực",
-            "Địa điểm",
-            "Công pháp / Kỹ năng",
-          ].includes(e.type || "") && !(e as Quest).status,
+          !["NPC", "Vật phẩm", "Phe phái/Thế lực", "Địa điểm", "Công pháp / Kỹ năng"].includes(
+            e.type || "",
+          ) && !(e as Quest).status,
       ),
       knowledge: gameState.worldConfig.backgroundKnowledge || [],
     };
 
     // Kết hợp danh mục tùy chỉnh do người chơi tạo và danh mục từ thực thể
     const entitiesCategories = [
-      ...new Set(
-        allEntities.map((e) => (e as any).customCategory).filter(Boolean),
-      ),
+      ...new Set(allEntities.map((e) => (e as any).customCategory).filter(Boolean)),
     ];
     const userCategories = gameState.customCategories || [];
-    const dynamicCats = [
-      ...new Set([...entitiesCategories, ...userCategories]),
-    ].sort();
+    const dynamicCats = [...new Set([...entitiesCategories, ...userCategories])].sort();
 
     const finalData: Record<string, AllEntities[]> = { ...baseData };
 
     dynamicCats.forEach((cat) => {
-      finalData[cat] = allEntities.filter(
-        (e) => (e as any).customCategory === cat,
-      );
+      finalData[cat] = allEntities.filter((e) => (e as any).customCategory === cat);
     });
 
     fixedTabsConfig.forEach((tab) => {
       if (tab.key !== "knowledge" && finalData[tab.key]) {
-        finalData[tab.key] = finalData[tab.key].filter(
-          (e) => !(e as any).customCategory,
-        );
+        finalData[tab.key] = finalData[tab.key].filter((e) => !(e as any).customCategory);
       }
     });
 
@@ -216,9 +198,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
     }
 
     if (!searchTerm) return list;
-    return list.filter((item) =>
-      item.name.toLowerCase().includes(searchTerm.toLowerCase()),
-    );
+    return list.filter((item) => item.name.toLowerCase().includes(searchTerm.toLowerCase()));
   }, [processedData, activeTab, searchTerm]);
 
   const handleSelectItem = (item: AllEntities) => {
@@ -280,9 +260,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
       let sourceIndex = -1;
 
       for (const [key, list] of Object.entries(listsMap)) {
-        const idx = list.findIndex(
-          (item: any) => item.name === activeItem.name,
-        );
+        const idx = list.findIndex((item: any) => item.name === activeItem.name);
         if (idx > -1) {
           sourceListName = key;
           sourceIndex = idx;
@@ -339,10 +317,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           delete newItem.status;
           delete newItem.personality;
           delete newItem.thoughtsOnPlayer;
-        } else if (
-          targetListName === "encounteredNPCs" ||
-          targetListName === "companions"
-        ) {
+        } else if (targetListName === "encounteredNPCs" || targetListName === "companions") {
           // Đích là NPC/Đồng hành:
           // - BẮT BUỘC XÓA status và quantity
           delete newItem.status;
@@ -396,10 +371,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
       initialEntities: gameState.worldConfig.initialEntities,
       customCategories: gameState.customCategories,
     };
-    fileService.saveJsonToFile(
-      encyclopediaExportData,
-      "bach_khoa_toan_thu_full.json",
-    );
+    fileService.saveJsonToFile(encyclopediaExportData, "bach_khoa_toan_thu_full.json");
   };
 
   const handleImportClick = () => {
@@ -411,8 +383,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
     if (!file) return;
 
     try {
-      const importedData =
-        await fileService.loadJsonFromFile<Partial<EncyclopediaData>>(file);
+      const importedData = await fileService.loadJsonFromFile<Partial<EncyclopediaData>>(file);
 
       setGameState((prev) => {
         const mergeAndDeduplicate = <T extends { name: string }>(
@@ -429,18 +400,12 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
         };
 
         const mergedCustomCategories = Array.from(
-          new Set([
-            ...(prev.customCategories || []),
-            ...(importedData.customCategories || []),
-          ]),
+          new Set([...(prev.customCategories || []), ...(importedData.customCategories || [])]),
         );
 
         return {
           ...prev,
-          encounteredNPCs: mergeAndDeduplicate(
-            prev.encounteredNPCs,
-            importedData.encounteredNPCs,
-          ),
+          encounteredNPCs: mergeAndDeduplicate(prev.encounteredNPCs, importedData.encounteredNPCs),
           encounteredFactions: mergeAndDeduplicate(
             prev.encounteredFactions,
             importedData.encounteredFactions,
@@ -449,21 +414,12 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
             prev.discoveredEntities,
             importedData.discoveredEntities,
           ),
-          inventory: mergeAndDeduplicate(
-            prev.inventory,
-            importedData.inventory,
-          ),
-          companions: mergeAndDeduplicate(
-            prev.companions,
-            importedData.companions,
-          ),
+          inventory: mergeAndDeduplicate(prev.inventory, importedData.inventory),
+          companions: mergeAndDeduplicate(prev.companions, importedData.companions),
           quests: mergeAndDeduplicate(prev.quests, importedData.quests),
           character: {
             ...prev.character,
-            skills: mergeAndDeduplicate(
-              prev.character.skills,
-              importedData.skills,
-            ),
+            skills: mergeAndDeduplicate(prev.character.skills, importedData.skills),
           },
           worldConfig: {
             ...prev.worldConfig,
@@ -555,8 +511,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
         name: string;
         customCategory?: string;
       }[];
-      const normalizationMappings =
-        await aiService.normalizeCategoriesWithAI(allEntitiesForCat);
+      const normalizationMappings = await aiService.normalizeCategoriesWithAI(allEntitiesForCat);
 
       let stateAfterPhase1 = gameState;
 
@@ -599,9 +554,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           newState.quests = applyMap(newState.quests);
           newState.encounteredFactions = applyMap(newState.encounteredFactions);
           newState.discoveredEntities = applyMap(newState.discoveredEntities);
-          newState.worldConfig.initialEntities = applyMap(
-            newState.worldConfig.initialEntities,
-          );
+          newState.worldConfig.initialEntities = applyMap(newState.worldConfig.initialEntities);
 
           stateAfterPhase1 = newState; // Capture the updated state
           return newState;
@@ -623,9 +576,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
       setNotification({
         isOpen: true,
         title: "Đang xử lý...",
-        messages: [
-          "Bước 2/2: Đang gộp các mục trùng lặp... (có thể mất một lúc)",
-        ],
+        messages: ["Bước 2/2: Đang gộp các mục trùng lặp... (có thể mất một lúc)"],
       });
 
       const getAllEntitiesFromState = (state: GameState): AllEntities[] => {
@@ -643,9 +594,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           const seen = new Set<string>();
           return arr.filter(
             (item) =>
-              item.name &&
-              !seen.has(item.name.toLowerCase()) &&
-              seen.add(item.name.toLowerCase()),
+              item.name && !seen.has(item.name.toLowerCase()) && seen.add(item.name.toLowerCase()),
           );
         };
         return uniqueByName(all);
@@ -669,9 +618,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
         }));
         if (entitiesToDedupe.length > 1) {
           const groupDeduplicationPairs =
-            await aiService.deduplicateEntitiesInCategoryWithAI(
-              entitiesToDedupe,
-            );
+            await aiService.deduplicateEntitiesInCategoryWithAI(entitiesToDedupe);
           for (const pair of groupDeduplicationPairs) {
             finalDeduplicationMap[pair.idToDelete] = pair.idToKeep;
           }
@@ -682,9 +629,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
         setNotification({
           isOpen: true,
           title: "Hoàn Tất",
-          messages: [
-            "Quá trình chuẩn hóa hoàn tất. Không tìm thấy mục nào cần gộp.",
-          ],
+          messages: ["Quá trình chuẩn hóa hoàn tất. Không tìm thấy mục nào cần gộp."],
         });
       } else {
         // Apply deduplication
@@ -705,9 +650,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
 
           for (const nameToDelete in finalDeduplicationMap) {
             const nameToKeep = finalDeduplicationMap[nameToDelete];
-            const itemToDelete = allEntities.find(
-              (i) => i.name === nameToDelete,
-            );
+            const itemToDelete = allEntities.find((i) => i.name === nameToDelete);
             const itemToKeep = itemsToKeep.get(nameToKeep);
 
             if (itemToDelete && itemToKeep) {
@@ -732,9 +675,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
             let newList = list.filter((item) => !itemsToDelete.has(item.name));
             newList = newList.map((item) => itemsToKeep.get(item.name) || item);
             const uniqueMap = new Map();
-            newList.forEach((item) =>
-              uniqueMap.set(item.name.toLowerCase(), item),
-            );
+            newList.forEach((item) => uniqueMap.set(item.name.toLowerCase(), item));
             return Array.from(uniqueMap.values());
           };
 
@@ -742,14 +683,10 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           newState.companions = updateList(newState.companions);
           newState.inventory = updateList(newState.inventory);
           newState.character.skills = updateList(newState.character.skills);
-          newState.encounteredFactions = updateList(
-            newState.encounteredFactions,
-          );
+          newState.encounteredFactions = updateList(newState.encounteredFactions);
           newState.quests = updateList(newState.quests);
           newState.discoveredEntities = updateList(newState.discoveredEntities);
-          newState.worldConfig.initialEntities = updateList(
-            newState.worldConfig.initialEntities,
-          );
+          newState.worldConfig.initialEntities = updateList(newState.worldConfig.initialEntities);
 
           return newState;
         });
@@ -833,18 +770,14 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
 
           // Only update fields that have content in the new data
           if (newItem.description) merged.description = newItem.description;
-          if (newItem.customCategory)
-            merged.customCategory = newItem.customCategory;
+          if (newItem.customCategory) merged.customCategory = newItem.customCategory;
           if (newItem.personality) merged.personality = newItem.personality;
-          if (newItem.quantity && existing.quantity)
-            merged.quantity = newItem.quantity; // Replace or add? Let's replace for now.
+          if (newItem.quantity && existing.quantity) merged.quantity = newItem.quantity; // Replace or add? Let's replace for now.
           if (newItem.details) {
             merged.details = { ...existing.details, ...newItem.details };
           }
           if (newItem.tags) {
-            merged.tags = Array.from(
-              new Set([...(existing.tags || []), ...(newItem.tags || [])]),
-            );
+            merged.tags = Array.from(new Set([...(existing.tags || []), ...(newItem.tags || [])]));
           }
 
           list[index] = merged;
@@ -883,15 +816,11 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
             tags: [...newItem.tags, `owner:${owner.npcName}`],
           };
 
-          newState.discoveredEntities = mergeIfUpdate(
-            newState.discoveredEntities,
-            loreItem,
-          );
+          newState.discoveredEntities = mergeIfUpdate(newState.discoveredEntities, loreItem);
 
           // Update NPC description/tags if NPC exists
-          const npcIndex = (newState.encounteredNPCs || []).findIndex(
-            (n: EncounteredNPC) =>
-              n.name.toLowerCase().includes(owner.npcName!.toLowerCase()),
+          const npcIndex = (newState.encounteredNPCs || []).findIndex((n: EncounteredNPC) =>
+            n.name.toLowerCase().includes(owner.npcName!.toLowerCase()),
           );
           if (npcIndex > -1) {
             const npc = newState.encounteredNPCs[npcIndex];
@@ -905,10 +834,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
             type: "Vật phẩm",
             customCategory: data.customCategory || "Vật phẩm",
           };
-          newState.discoveredEntities = mergeIfUpdate(
-            newState.discoveredEntities,
-            entityItem,
-          );
+          newState.discoveredEntities = mergeIfUpdate(newState.discoveredEntities, entityItem);
         }
       } else if (type === "Skill") {
         const newSkill = {
@@ -944,10 +870,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
             customCategory: data.customCategory || "Kỹ năng",
             tags: data.tags,
           };
-          newState.discoveredEntities = mergeIfUpdate(
-            newState.discoveredEntities,
-            skillEntity,
-          );
+          newState.discoveredEntities = mergeIfUpdate(newState.discoveredEntities, skillEntity);
         }
       } else if (type === "Faction") {
         if (!newState.encounteredFactions) newState.encounteredFactions = [];
@@ -957,10 +880,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           tags: data.tags,
           customCategory: data.customCategory || "Thế Lực",
         };
-        newState.encounteredFactions = mergeIfUpdate(
-          newState.encounteredFactions,
-          newFaction,
-        );
+        newState.encounteredFactions = mergeIfUpdate(newState.encounteredFactions, newFaction);
       } else if (type === "NPC") {
         if (!newState.encounteredNPCs) newState.encounteredNPCs = [];
         const newNPC = {
@@ -971,20 +891,14 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           customCategory: data.customCategory || "Nhân Vật",
           tags: data.tags,
         };
-        newState.encounteredNPCs = mergeIfUpdate(
-          newState.encounteredNPCs,
-          newNPC,
-        );
+        newState.encounteredNPCs = mergeIfUpdate(newState.encounteredNPCs, newNPC);
       }
 
       // 2. Update Custom Categories List
       if (data.customCategory) {
         const currentCats = newState.customCategories || [];
         if (!currentCats.includes(data.customCategory)) {
-          newState.customCategories = [
-            ...currentCats,
-            data.customCategory,
-          ].sort();
+          newState.customCategories = [...currentCats, data.customCategory].sort();
         }
       }
       // Auto add "Trang Phục NPC" category if needed
@@ -1016,9 +930,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
     setNotification({
       isOpen: true,
       title: "Thành công",
-      messages: [
-        "Đã thực thi Codex. Đang chờ đồng bộ vào trí nhớ trong lượt chơi tiếp theo...",
-      ],
+      messages: ["Đã thực thi Codex. Đang chờ đồng bộ vào trí nhớ trong lượt chơi tiếp theo..."],
     });
   };
 
@@ -1054,22 +966,16 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
     const totalItems = allItems.length;
 
     const totalDescLength = allItems.reduce((acc, item) => {
-      const desc = isKnowledgeItem(item)
-        ? item.content
-        : (item as any).description;
+      const desc = isKnowledgeItem(item) ? item.content : (item as any).description;
       return acc + (desc ? desc.length : 0);
     }, 0);
-    const avgDescLength =
-      totalItems > 0 ? Math.round(totalDescLength / totalItems) : 0;
+    const avgDescLength = totalItems > 0 ? Math.round(totalDescLength / totalItems) : 0;
 
     const allTags = allItems.flatMap((item) => (item as any).tags || []);
-    const tagCounts: Record<string, number> = allTags.reduce(
-      (acc: Record<string, number>, tag) => {
-        acc[tag] = (acc[tag] || 0) + 1;
-        return acc;
-      },
-      {},
-    );
+    const tagCounts: Record<string, number> = allTags.reduce((acc: Record<string, number>, tag) => {
+      acc[tag] = (acc[tag] || 0) + 1;
+      return acc;
+    }, {});
 
     const popularTags = Object.entries(tagCounts)
       .sort(([, a], [, b]) => b - a)
@@ -1097,20 +1003,14 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
         isOpen={confirmState.isOpen}
         onClose={handleCloseConfirm}
         onConfirm={handleConfirmAction}
-        title={
-          confirmState.type === "delete_category"
-            ? "Xóa Danh Mục?"
-            : "Chuẩn Hóa Thông Minh?"
-        }
+        title={confirmState.type === "delete_category" ? "Xóa Danh Mục?" : "Chuẩn Hóa Thông Minh?"}
         message={
           confirmState.type === "delete_category"
             ? `Bạn có chắc chắn muốn xóa danh mục "${confirmState.data}" không? Các thực thể trong danh mục này sẽ không bị xóa mà chỉ mất đi nhãn phân loại.`
             : "Hành động này sẽ thực hiện 2 bước:\n1. Chuẩn hóa các danh mục tùy chỉnh.\n2. Gộp các mục bị trùng lặp trong từng danh mục.\nQuá trình sẽ sử dụng AI và cập nhật dữ liệu Bách khoa. Bạn có muốn tiếp tục?"
         }
         confirmLabel={
-          confirmState.type === "delete_category"
-            ? "Xóa Danh Mục"
-            : "Bắt Đầu Chuẩn Hóa"
+          confirmState.type === "delete_category" ? "Xóa Danh Mục" : "Bắt Đầu Chuẩn Hóa"
         }
         variant={confirmState.type === "delete_category" ? "danger" : "info"}
       />
@@ -1159,9 +1059,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
           <div className="grow flex overflow-hidden">
             {/* Left Pane: Navigation */}
             <div className="w-1/4 xl:w-1/5 bg-slate-800/50 p-3 shrink-0 flex flex-col">
-              <h3 className="text-lg font-semibold text-slate-300 mb-3 px-1">
-                Mục lục
-              </h3>
+              <h3 className="text-lg font-semibold text-slate-300 mb-3 px-1">Mục lục</h3>
               <div className="grow overflow-y-auto pr-2">
                 <div className="space-y-2">
                   {fixedTabsConfig.map(
@@ -1178,9 +1076,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                         </TabButton>
                       ),
                   )}
-                  {dynamicCategories.length > 0 && (
-                    <hr className="border-slate-700 my-3" />
-                  )}
+                  {dynamicCategories.length > 0 && <hr className="border-slate-700 my-3" />}
                   {dynamicCategories.map((cat) => (
                     <TabButton
                       key={cat}
@@ -1220,35 +1116,29 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                             >
                               {item.name}
                             </p>
-                            {activeTab === "quests" &&
-                              (item as Quest).status && (
-                                <span
-                                  className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${
-                                    (item as Quest).status === "hoàn thành"
-                                      ? "bg-green-500/20 text-green-400"
-                                      : "bg-yellow-500/20 text-yellow-400"
-                                  }`}
-                                >
-                                  {(item as Quest).status === "hoàn thành"
-                                    ? "Hoàn thành"
-                                    : "Đang làm"}
-                                </span>
-                              )}
-                          </div>
-                          {"quantity" in item &&
-                            typeof item.quantity === "number" && (
-                              <p className="text-xs text-slate-400">
-                                Số lượng: {item.quantity}
-                              </p>
+                            {activeTab === "quests" && (item as Quest).status && (
+                              <span
+                                className={`text-xs px-2 py-0.5 rounded-full shrink-0 ${
+                                  (item as Quest).status === "hoàn thành"
+                                    ? "bg-green-500/20 text-green-400"
+                                    : "bg-yellow-500/20 text-yellow-400"
+                                }`}
+                              >
+                                {(item as Quest).status === "hoàn thành"
+                                  ? "Hoàn thành"
+                                  : "Đang làm"}
+                              </span>
                             )}
+                          </div>
+                          {"quantity" in item && typeof item.quantity === "number" && (
+                            <p className="text-xs text-slate-400">Số lượng: {item.quantity}</p>
+                          )}
                         </button>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-slate-500 text-center p-4">
-                    Không có mục nào.
-                  </p>
+                  <p className="text-slate-500 text-center p-4">Không có mục nào.</p>
                 )}
               </div>
             </div>
@@ -1257,9 +1147,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
               {activeItem && !isEditing ? (
                 <div>
                   <div className="flex justify-between items-start">
-                    <h3 className="text-2xl font-bold text-purple-300 mb-2">
-                      {activeItem.name}
-                    </h3>
+                    <h3 className="text-2xl font-bold text-purple-300 mb-2">{activeItem.name}</h3>
                     {activeTab !== "knowledge" && (
                       <div className="flex gap-2">
                         <Button
@@ -1283,16 +1171,13 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                   </div>
 
                   {"type" in activeItem && activeItem.type && (
-                    <p className="text-sm text-slate-400 mb-2">
-                      Loại: {activeItem.type}
+                    <p className="text-sm text-slate-400 mb-2">Loại: {activeItem.type}</p>
+                  )}
+                  {"customCategory" in activeItem && (activeItem as any).customCategory && (
+                    <p className="text-sm text-sky-400 mb-2">
+                      Phân loại: {(activeItem as any).customCategory}
                     </p>
                   )}
-                  {"customCategory" in activeItem &&
-                    (activeItem as any).customCategory && (
-                      <p className="text-sm text-sky-400 mb-2">
-                        Phân loại: {(activeItem as any).customCategory}
-                      </p>
-                    )}
 
                   {activeTab === "quests" && (activeItem as Quest).status && (
                     <span
@@ -1317,25 +1202,16 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                   </div>
                   {"personality" in activeItem && activeItem.personality && (
                     <div className="mb-4">
-                      <strong className="text-slate-400 block mb-1">
-                        Tính cách:
-                      </strong>
-                      <p className="text-slate-300 italic">
-                        "{activeItem.personality}"
-                      </p>
+                      <strong className="text-slate-400 block mb-1">Tính cách:</strong>
+                      <p className="text-slate-300 italic">"{activeItem.personality}"</p>
                     </div>
                   )}
-                  {"thoughtsOnPlayer" in activeItem &&
-                    activeItem.thoughtsOnPlayer && (
-                      <div className="mb-4">
-                        <strong className="text-slate-400 block mb-1">
-                          Suy nghĩ về người chơi:
-                        </strong>
-                        <p className="text-amber-300 italic">
-                          "{activeItem.thoughtsOnPlayer}"
-                        </p>
-                      </div>
-                    )}
+                  {"thoughtsOnPlayer" in activeItem && activeItem.thoughtsOnPlayer && (
+                    <div className="mb-4">
+                      <strong className="text-slate-400 block mb-1">Suy nghĩ về người chơi:</strong>
+                      <p className="text-amber-300 italic">"{activeItem.thoughtsOnPlayer}"</p>
+                    </div>
+                  )}
 
                   {"tags" in activeItem &&
                     activeItem.tags &&
@@ -1355,9 +1231,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
 
                       return (
                         <div className="mt-4">
-                          <strong className="text-slate-400 block mb-2">
-                            Tags:
-                          </strong>
+                          <strong className="text-slate-400 block mb-2">Tags:</strong>
                           <div className="flex flex-wrap gap-2">
                             {tagsToDisplay.map((tag, i) => (
                               <span
@@ -1379,27 +1253,19 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                   </h3>
                   <div className="space-y-4 max-h-[60vh] overflow-y-auto pr-2">
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1">
-                        Tên
-                      </label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1">Tên</label>
                       <input
                         type="text"
                         value={editFormData.name}
-                        onChange={(e) =>
-                          handleFormChange("name", e.target.value)
-                        }
+                        onChange={(e) => handleFormChange("name", e.target.value)}
                         className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-slate-300 mb-1">
-                        Mô tả
-                      </label>
+                      <label className="block text-sm font-medium text-slate-300 mb-1">Mô tả</label>
                       <textarea
                         value={editFormData.description}
-                        onChange={(e) =>
-                          handleFormChange("description", e.target.value)
-                        }
+                        onChange={(e) => handleFormChange("description", e.target.value)}
                         rows={5}
                         className="w-full bg-slate-900 border border-slate-600 rounded-md p-2 resize-y"
                       />
@@ -1412,9 +1278,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                         <input
                           type="text"
                           value={editFormData.personality}
-                          onChange={(e) =>
-                            handleFormChange("personality", e.target.value)
-                          }
+                          onChange={(e) => handleFormChange("personality", e.target.value)}
                           className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                         />
                       </div>
@@ -1426,9 +1290,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                         </label>
                         <select
                           value={editFormData.status}
-                          onChange={(e) =>
-                            handleFormChange("status", e.target.value)
-                          }
+                          onChange={(e) => handleFormChange("status", e.target.value)}
                           className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                         >
                           <option value="đang tiến hành">Đang tiến hành</option>
@@ -1444,9 +1306,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                         <input
                           type="text"
                           value={editFormData.tags}
-                          onChange={(e) =>
-                            handleFormChange("tags", e.target.value)
-                          }
+                          onChange={(e) => handleFormChange("tags", e.target.value)}
                           className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                         />
                       </div>
@@ -1496,26 +1356,19 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                               // Gán customCategory = tên danh mục
                               handleFormChange("customCategory", targetList);
                               // Target list thực tế sẽ là discoveredEntities (nơi chứa các custom entity)
-                              handleFormChange(
-                                "_targetList",
-                                "discoveredEntities",
-                              );
+                              handleFormChange("_targetList", "discoveredEntities");
                             }
                           }}
                           value=""
                         >
                           <option value="">-- Chọn đích đến --</option>
                           <optgroup label="Danh sách Chính">
-                            <option value="encounteredNPCs">
-                              Nhân vật (NPC)
-                            </option>
+                            <option value="encounteredNPCs">Nhân vật (NPC)</option>
                             <option value="companions">Đồng hành</option>
                             <option value="inventory">Vật phẩm</option>
                             <option value="quests">Nhiệm vụ</option>
                             <option value="encounteredFactions">Thế lực</option>
-                            <option value="discoveredEntities">
-                              Lore / Địa điểm
-                            </option>
+                            <option value="discoveredEntities">Lore / Địa điểm</option>
                           </optgroup>
                           <optgroup label="Danh mục Động (AI tạo)">
                             {dynamicCategories.map((cat) => (
@@ -1526,8 +1379,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                           </optgroup>
                         </select>
                         <p className="text-xs text-slate-500 mt-1">
-                          Chọn tab đích để di chuyển thực thể. Dữ liệu sẽ tự
-                          động được chuẩn hóa (thêm/bớt thuộc tính) cho phù hợp.
+                          Chọn tab đích để di chuyển thực thể. Dữ liệu sẽ tự động được chuẩn hóa
+                          (thêm/bớt thuộc tính) cho phù hợp.
                         </p>
                       </div>
 
@@ -1539,9 +1392,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                             </label>
                             <select
                               value={editFormData.type}
-                              onChange={(e) =>
-                                handleFormChange("type", e.target.value)
-                              }
+                              onChange={(e) => handleFormChange("type", e.target.value)}
                               className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                             >
                               {CORE_ENTITY_TYPES.map((opt) => (
@@ -1562,12 +1413,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                               type="text"
                               list="category-suggestions"
                               value={editFormData.customCategory || ""}
-                              onChange={(e) =>
-                                handleFormChange(
-                                  "customCategory",
-                                  e.target.value,
-                                )
-                              }
+                              onChange={(e) => handleFormChange("customCategory", e.target.value)}
                               className="w-full bg-slate-900 border border-slate-600 rounded-md p-2"
                               placeholder="Nhập tên mới..."
                             />
@@ -1612,9 +1458,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-slate-900/50 p-4 rounded-lg text-center">
                   <p className="text-sm text-slate-400 mb-1">Tổng mục</p>
-                  <p className="text-3xl font-bold text-blue-400">
-                    {analysisStats.totalItems}
-                  </p>
+                  <p className="text-3xl font-bold text-blue-400">{analysisStats.totalItems}</p>
                 </div>
                 <div className="bg-slate-900/50 p-4 rounded-lg text-center">
                   <p className="text-sm text-slate-400 mb-1">Mục mới</p>
@@ -1642,19 +1486,14 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 <ul className="space-y-3 text-slate-300 text-sm">
                   <li className="flex justify-between">
                     <span>Tổng số mục Bách Khoa:</span>{" "}
-                    <span className="font-semibold">
-                      {analysisStats.totalItems}
-                    </span>
+                    <span className="font-semibold">{analysisStats.totalItems}</span>
                   </li>
                   <li className="flex justify-between">
-                    <span>Mục mới (chưa xem):</span>{" "}
-                    <span className="font-semibold">0</span>
+                    <span>Mục mới (chưa xem):</span> <span className="font-semibold">0</span>
                   </li>
                   <li className="flex justify-between">
                     <span>Độ dài mô tả trung bình:</span>{" "}
-                    <span className="font-semibold">
-                      {analysisStats.avgDescLength} ký tự
-                    </span>
+                    <span className="font-semibold">{analysisStats.avgDescLength} ký tự</span>
                   </li>
                   <li>
                     <span>Tag hàng đầu:</span>{" "}
@@ -1681,8 +1520,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 Quản lý Danh mục Tùy chỉnh
               </h3>
               <p className="text-sm text-slate-400 mb-4">
-                Tạo các danh mục riêng (VD: "Cảnh Giới", "Pháp Bảo"). AI sẽ tự
-                động ưu tiên phân loại thực thể mới vào các nhóm này.
+                Tạo các danh mục riêng (VD: "Cảnh Giới", "Pháp Bảo"). AI sẽ tự động ưu tiên phân
+                loại thực thể mới vào các nhóm này.
               </p>
 
               <div className="flex gap-2 mb-4">
@@ -1703,8 +1542,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 </Button>
               </div>
 
-              {gameState.customCategories &&
-              gameState.customCategories.length > 0 ? (
+              {gameState.customCategories && gameState.customCategories.length > 0 ? (
                 <div className="flex flex-wrap gap-2">
                   {gameState.customCategories.map((cat, idx) => (
                     <div
@@ -1722,9 +1560,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-slate-500 italic">
-                  Chưa có danh mục tùy chỉnh nào.
-                </p>
+                <p className="text-sm text-slate-500 italic">Chưa có danh mục tùy chỉnh nào.</p>
               )}
             </div>
 
@@ -1738,33 +1574,22 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
               </div>
               <div className="p-2 space-y-4">
                 <div className="text-sm text-slate-300 bg-slate-800 p-3 rounded-md mb-2">
-                  <p className="font-semibold mb-1 text-fuchsia-300">
-                    Hướng dẫn sử dụng:
-                  </p>
+                  <p className="font-semibold mb-1 text-fuchsia-300">Hướng dẫn sử dụng:</p>
                   <ul className="list-disc list-inside space-y-1 text-slate-400">
                     <li>
-                      <strong>Chức năng:</strong> Dùng để TẠO MỚI thực thể hoặc
-                      CẬP NHẬT/GÁN thông tin cho thực thể đã có.
+                      <strong>Chức năng:</strong> Dùng để TẠO MỚI thực thể hoặc CẬP NHẬT/GÁN thông
+                      tin cho thực thể đã có.
                     </li>
                     <li>
-                      <strong>Gán chủ sở hữu:</strong> Dùng "cho tôi", "của tôi"
-                      (Vào túi đồ) hoặc "cho [Tên NPC]" (Vào hồ sơ NPC).
+                      <strong>Gán chủ sở hữu:</strong> Dùng "cho tôi", "của tôi" (Vào túi đồ) hoặc
+                      "cho [Tên NPC]" (Vào hồ sơ NPC).
                     </li>
                     <li>
                       <strong>Ví dụ cụ thể:</strong>
                       <ul className="list-[square] list-inside ml-4 mt-1 italic text-slate-500">
-                        <li>
-                          "Tạo một thanh Huyết Long Kiếm cấp Thần Thoại cho
-                          tôi." (Tạo mới)
-                        </li>
-                        <li>
-                          "Sửa mô tả của Huyết Long Kiếm thành kiếm đã gỉ sét."
-                          (Cập nhật)
-                        </li>
-                        <li>
-                          "Thêm hiệu ứng Băng giá cho kỹ năng Hỏa Cầu Thuật."
-                          (Cập nhật)
-                        </li>
+                        <li>"Tạo một thanh Huyết Long Kiếm cấp Thần Thoại cho tôi." (Tạo mới)</li>
+                        <li>"Sửa mô tả của Huyết Long Kiếm thành kiếm đã gỉ sét." (Cập nhật)</li>
+                        <li>"Thêm hiệu ứng Băng giá cho kỹ năng Hỏa Cầu Thuật." (Cập nhật)</li>
                       </ul>
                     </li>
                   </ul>
@@ -1791,9 +1616,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 {/* Preview Area */}
                 {codexPreview && (
                   <div className="bg-slate-900/50 p-4 rounded-lg border border-slate-700 animate-fade-in mt-4">
-                    <h4 className="text-sm font-bold text-green-400 mb-2">
-                      Xem Trước & Xác Nhận
-                    </h4>
+                    <h4 className="text-sm font-bold text-green-400 mb-2">Xem Trước & Xác Nhận</h4>
                     <div className="space-y-2 text-sm mb-4">
                       <p>
                         <strong className="text-slate-400">Hành động:</strong>{" "}
@@ -1811,21 +1634,15 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                       </p>
                       <p>
                         <strong className="text-slate-400">Tên Mới:</strong>{" "}
-                        <span className="text-slate-200">
-                          {codexPreview.data.name}
-                        </span>
+                        <span className="text-slate-200">{codexPreview.data.name}</span>
                       </p>
                       <p>
                         <strong className="text-slate-400">Loại:</strong>{" "}
-                        <span className="text-slate-200">
-                          {codexPreview.type}
-                        </span>
+                        <span className="text-slate-200">{codexPreview.type}</span>
                       </p>
                       <p>
                         <strong className="text-slate-400">Phân loại:</strong>{" "}
-                        <span className="text-slate-200">
-                          {codexPreview.data.customCategory}
-                        </span>
+                        <span className="text-slate-200">{codexPreview.data.customCategory}</span>
                       </p>
                       <p>
                         <strong className="text-slate-400">Sở hữu:</strong>{" "}
@@ -1836,9 +1653,7 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                         </span>
                       </p>
                       <div className="bg-slate-800 p-2 rounded">
-                        <p className="text-slate-300 italic">
-                          "{codexPreview.data.description}"
-                        </p>
+                        <p className="text-slate-300 italic">"{codexPreview.data.description}"</p>
                       </div>
                       {codexPreview.data.details && (
                         <div className="text-xs text-slate-400 mt-2 p-2 bg-slate-900 rounded">
@@ -1879,8 +1694,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 Nhập / Xuất Dữ liệu Đầy đủ
               </h3>
               <p className="text-sm text-slate-400 mb-4">
-                Lưu trữ toàn bộ dữ liệu Bách khoa (bao gồm cả thực thể ban đầu,
-                danh mục, v.v.) ra tệp .json hoặc nhập lại.
+                Lưu trữ toàn bộ dữ liệu Bách khoa (bao gồm cả thực thể ban đầu, danh mục, v.v.) ra
+                tệp .json hoặc nhập lại.
               </p>
               <div className="flex gap-4">
                 <Button
@@ -1908,9 +1723,8 @@ export const EncyclopediaModal: React.FC<EncyclopediaModalProps> = ({
                 Chuẩn Hóa Thông Minh
               </h3>
               <p className="text-sm text-slate-400 mb-4">
-                Yêu cầu AI phân tích và gộp các "Phân loại tùy chỉnh" lộn xộn
-                thành các danh mục lớn, có tổ chức hơn, sau đó gộp các thực thể
-                trùng lặp trong từng danh mục.
+                Yêu cầu AI phân tích và gộp các "Phân loại tùy chỉnh" lộn xộn thành các danh mục
+                lớn, có tổ chức hơn, sau đó gộp các thực thể trùng lặp trong từng danh mục.
               </p>
               <Button
                 onClick={initiateAiOptimize}

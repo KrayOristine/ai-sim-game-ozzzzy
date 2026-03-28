@@ -23,9 +23,7 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
   fileTypeFilter,
 }) => {
   const [files, setFiles] = useState<FandomFile[]>([]);
-  const [selectedFileIds, setSelectedFileIds] = useState<Set<number>>(
-    new Set(),
-  );
+  const [selectedFileIds, setSelectedFileIds] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     if (isOpen) {
@@ -70,9 +68,7 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
 
   const handleConfirm = () => {
     if (onConfirm) {
-      const selectedFiles = files.filter((file) =>
-        selectedFileIds.has(file.id),
-      );
+      const selectedFiles = files.filter((file) => selectedFileIds.has(file.id));
       onConfirm(selectedFiles);
     }
   };
@@ -111,17 +107,13 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
                   <div className="flex items-center gap-4 grow min-w-0">
                     <input
                       type={mode === "single" ? "radio" : "checkbox"}
-                      name={
-                        mode === "single" ? "fandom-file-selection" : undefined
-                      }
+                      name={mode === "single" ? "fandom-file-selection" : undefined}
                       checked={selectedFileIds.has(file.id)}
                       onChange={() => handleToggleSelection(file.id)}
                       className="h-5 w-5 rounded-full border-gray-300 text-purple-600 focus:ring-purple-500 bg-slate-700"
                     />
                     <div className="grow min-w-0">
-                      <p className="font-bold text-slate-200 truncate">
-                        {file.name}
-                      </p>
+                      <p className="font-bold text-slate-200 truncate">{file.name}</p>
                       <p className="text-xs text-slate-400 mt-1">
                         Tạo lúc: {new Date(file.date).toLocaleString("vi-VN")}
                       </p>
@@ -132,12 +124,9 @@ const FandomFileLoadModal: React.FC<FandomFileLoadModalProps> = ({
             </div>
           ) : (
             <div className="text-center py-10">
-              <p className="text-slate-400">
-                Không có tệp nguyên tác nào phù hợp được lưu.
-              </p>
+              <p className="text-slate-400">Không có tệp nguyên tác nào phù hợp được lưu.</p>
               <p className="text-sm text-slate-500 mt-2">
-                Bạn có thể tạo tệp mới từ mục "Kiến tạo từ Nguyên tác" ở màn
-                hình chính.
+                Bạn có thể tạo tệp mới từ mục "Kiến tạo từ Nguyên tác" ở màn hình chính.
               </p>
             </div>
           )}

@@ -1,9 +1,6 @@
-
 import { GENRE_TAGGING_SYSTEMS } from "./genreTagging";
 
-export const getResponseLengthDirective = (
-  aiResponseLength?: string,
-): string => {
+export const getResponseLengthDirective = (aiResponseLength?: string): string => {
   switch (aiResponseLength) {
     case "Ngắn":
       return "Phần tường thuật của bạn nên ngắn gọn nhưng vẫn có chiều sâu, hướng đến độ dài mục tiêu từ 500 đến 900 từ.";
@@ -196,7 +193,7 @@ Bạn là một Game Master thông minh. Phản hồi của bạn BẮT BUỘC p
 [Khu vực Tư duy & Lập kế hoạch - HOÀN TOÀN ẨN VỚI NGƯỜI CHƠI]
 - Phân tích ý định người chơi: Người chơi muốn gì? Hành động này có rủi ro gì?
 - Kiểm tra Logic: Hành động này có khả thi trong bối cảnh hiện tại không?
-${config.allowCheatEffects === false ? '- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ' : ''}
+${config.allowCheatEffects === false ? "- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ" : ""}
 - Safety Check: Nếu nội dung vi phạm an toàn, hãy lên kế hoạch "lách" luật bằng cách ẩn dụ hoặc chuyển hướng (nếu đang ở chế độ 18+).
 - Kiểm tra kẹt hành vi/mất phương hướng: Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?, nếu là có thì kích hoạt [Mô phỏng Thế giới song song], nếu KHÔNG thì BẮT BUỘC PHẢI ĐỂ TRỐNG!
 </thinking>
@@ -229,18 +226,14 @@ ${config.allowCheatEffects === false ? '- Kiểm tra Anti-cliché: Diễn biến
 
   if (genreConfig && !styleGuide) {
     // Replace the old generic tagging rule (rule #8) with the new genre-specific one
-    const oldTaggingRuleRegex =
-      /8\.\s+\*\*ĐỊNH DẠNG ĐẶC BIỆT \(QUAN TRỌNG\):.+?8\.5/s;
+    const oldTaggingRuleRegex = /8\.\s+\*\*ĐỊNH DẠNG ĐẶC BIỆT \(QUAN TRỌNG\):.+?8\.5/s;
 
     const exclusionInstruction = `
     g.  **QUAN TRỌNG - KHÔNG TAG TỪ KHÓA CHUNG:** TUYỆT ĐỐI KHÔNG được bọc các từ khóa chung và phổ biến sau đây trong bất kỳ thẻ nào. Hãy xem chúng là văn bản thông thường: ${genreConfig.commonKeywords.join(", ")}.
       `;
 
     const newTaggingSystem = genreConfig.system + exclusionInstruction;
-    instruction = instruction.replace(
-      oldTaggingRuleRegex,
-      `${newTaggingSystem}\n8.5`,
-    );
+    instruction = instruction.replace(oldTaggingRuleRegex, `${newTaggingSystem}\n8.5`);
   }
 
   return instruction;

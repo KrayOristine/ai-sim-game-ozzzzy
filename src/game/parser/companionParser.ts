@@ -30,10 +30,9 @@ export function processCompanionNew(
     customCategory: params.category, // Capture custom category
   };
 
-  const updatedCompanions = mergeAndDeduplicateByName(
-    currentState.companions || [],
-    [newCompanion],
-  );
+  const updatedCompanions = mergeAndDeduplicateByName(currentState.companions || [], [
+    newCompanion,
+  ]);
 
   const vectorContent = `Đồng hành: ${newCompanion.name}\nMô tả: ${newCompanion.description}\nPhân loại: ${newCompanion.customCategory || "Chưa rõ"}\nTính cách: ${newCompanion.personality}`;
   const vectorUpdate: VectorUpdate = {

@@ -8,12 +8,7 @@ export const NARRATIVE_ARCHETYPES = {
 // Using a Record for better type safety
 export const NARRATIVE_STYLES: Record<
   string,
-  Partial<
-    Record<
-      "sexualContentStyle" | "violenceLevel" | "storyTone",
-      Record<string, string>
-    >
-  >
+  Partial<Record<"sexualContentStyle" | "violenceLevel" | "storyTone", Record<string, string>>>
 > = {
   [NARRATIVE_ARCHETYPES.DEFAULT]: {
     sexualContentStyle: {

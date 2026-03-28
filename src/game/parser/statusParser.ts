@@ -18,16 +18,10 @@ export function processStatusAcquired(
   const newStatus: StatusEffect = {
     name: params.name,
     description: params.description || "",
-    type:
-      params.type === "buff" || params.type === "debuff"
-        ? params.type
-        : "debuff",
+    type: params.type === "buff" || params.type === "debuff" ? params.type : "debuff",
   };
 
-  const updatedStatus = mergeAndDeduplicateByName(
-    currentState.playerStatus || [],
-    [newStatus],
-  );
+  const updatedStatus = mergeAndDeduplicateByName(currentState.playerStatus || [], [newStatus]);
 
   const newState = {
     ...currentState,

@@ -9,11 +9,7 @@ interface ApiKeyModalProps {
   onCancel: () => void;
 }
 
-const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
-  isOpen,
-  onSave,
-  onCancel,
-}) => {
+const ApiKeyModal: React.FC<ApiKeyModalProps> = ({ isOpen, onSave, onCancel }) => {
   const [apiKey, setApiKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -68,19 +64,14 @@ const ApiKeyModal: React.FC<ApiKeyModalProps> = ({
           </svg>
         </button>
 
-        <h2 className="text-xl font-bold mb-2 text-cyan-400">
-          Yêu Cầu API Key
-        </h2>
+        <h2 className="text-xl font-bold mb-2 text-cyan-400">Yêu Cầu API Key</h2>
         <p className="text-sm text-slate-400 mb-4">
-          Để sử dụng tính năng AI, bạn cần cung cấp một Gemini API Key. Key của
-          bạn sẽ được lưu an toàn trong trình duyệt.
+          Để sử dụng tính năng AI, bạn cần cung cấp một Gemini API Key. Key của bạn sẽ được lưu an
+          toàn trong trình duyệt.
         </p>
 
         <div className="space-y-2">
-          <label
-            htmlFor="api-key-input"
-            className="block text-sm font-medium text-slate-300"
-          >
+          <label htmlFor="api-key-input" className="block text-sm font-medium text-slate-300">
             Gemini API Key
           </label>
           <input

@@ -131,13 +131,7 @@ const icon_list: { [key in IconName]: React.ReactNode } = {
       d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
     />
   ),
-  plus: (
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M12 4.5v15m7.5-7.5h-15"
-    />
-  ),
+  plus: <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />,
   trash: (
     <path
       strokeLinecap="round"
@@ -222,20 +216,8 @@ const icon_list: { [key in IconName]: React.ReactNode } = {
       d="M16.023 9.348h4.992v-.001a10.5 10.5 0 00-9.348-9.348c-5.786 0-10.5 4.714-10.5 10.5 0 5.786 4.714 10.5 10.5 10.5 5.786 0 10.5-4.714 10.5-10.5v-4.992"
     />
   ),
-  arrowUp: (
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="m4.5 15.75 7.5-7.5 7.5 7.5"
-    />
-  ),
-  arrowDown: (
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="m19.5 8.25-7.5 7.5-7.5-7.5"
-    />
-  ),
+  arrowUp: <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />,
+  arrowDown: <path strokeLinecap="round" strokeLinejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />,
   ellipsisVertical: (
     <path
       strokeLinecap="round"
@@ -308,12 +290,7 @@ const icon_list: { [key in IconName]: React.ReactNode } = {
   ),
 };
 
-const Icon: React.FC<IconProps> = ({
-  name,
-  className = "w-6 h-6",
-  title,
-  ...props
-}) => {
+const Icon: React.FC<IconProps> = ({ name, className = "w-6 h-6", title, ...props }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

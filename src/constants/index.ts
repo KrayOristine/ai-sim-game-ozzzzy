@@ -1,14 +1,9 @@
-import { HarmBlockThreshold, HarmCategory } from '@google/genai';
+import { HarmBlockThreshold, HarmCategory } from "@google/genai";
 import { EMPTY_GENERIC_MILESTONES } from "./genreMilestones";
 import { GENRES } from "./genres";
 export { AIModel } from "./model";
 
-export const GENDER_OPTIONS = [
-  "Không xác định (Để AI quyết định)",
-  "Nam",
-  "Nữ",
-  "Khác",
-];
+export const GENDER_OPTIONS = ["Không xác định (Để AI quyết định)", "Nam", "Nữ", "Khác"];
 export const PERSONALITY_OPTIONS = [
   "Tuỳ chỉnh",
   "Dũng Cảm, Bộc Trực",
@@ -39,18 +34,8 @@ export const DIFFICULTY_OPTIONS = [
 
 export const SEXUAL_CONTENT_STYLE_OPTIONS = ["Hoa mỹ", "Trần tục", "Gợi cảm"];
 export const VIOLENCE_LEVEL_OPTIONS = ["Nhẹ nhàng", "Thực tế", "Cực đoan"];
-export const STORY_TONE_OPTIONS = [
-  "Tích cực",
-  "Trung tính",
-  "Đen tối",
-  "Dâm dục",
-];
-export const AI_RESPONSE_LENGTH_OPTIONS = [
-  "Mặc định",
-  "Ngắn",
-  "Trung bình",
-  "Chi tiết, dài",
-];
+export const STORY_TONE_OPTIONS = ["Tích cực", "Trung tính", "Đen tối", "Dâm dục"];
+export const AI_RESPONSE_LENGTH_OPTIONS = ["Mặc định", "Ngắn", "Trung bình", "Chi tiết, dài"];
 
 export const ENTITY_TYPE_OPTIONS = [
   "NPC",
@@ -76,8 +61,7 @@ export const DEFAULT_STATS: CharacterStat[] = [
     value: 100,
     maxValue: 100,
     isPercentage: true,
-    description:
-      "Đại diện cho sức sống. Bị trừ khi bị thương. Về 0 sẽ chết/gục.",
+    description: "Đại diện cho sức sống. Bị trừ khi bị thương. Về 0 sẽ chết/gục.",
     hasLimit: true,
   },
   {
@@ -85,16 +69,14 @@ export const DEFAULT_STATS: CharacterStat[] = [
     value: 100,
     maxValue: 100,
     isPercentage: true,
-    description:
-      "Đại diện cho sức bền. Bị trừ khi vận động mạnh. Hồi phục khi nghỉ.",
+    description: "Đại diện cho sức bền. Bị trừ khi vận động mạnh. Hồi phục khi nghỉ.",
     hasLimit: true,
   },
 ];
 
 export const MILESTONE_CATEGORY_OPTIONS = ["Tu Luyện", "Thân Thể"];
 
-export const DEFAULT_MILESTONES: CharacterMilestone[] =
-  EMPTY_GENERIC_MILESTONES;
+export const DEFAULT_MILESTONES: CharacterMilestone[] = EMPTY_GENERIC_MILESTONES;
 
 export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   storyContext: {
@@ -135,11 +117,16 @@ export const HARM_CATEGORIES: { [key in HarmCategory]: string } = {
   [HarmCategory.HARM_CATEGORY_HATE_SPEECH]: "Lời nói hận thù",
   [HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT]: "Nội dung khiêu dâm",
   [HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT]: "Nội dung nguy hiểm",
-  [HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY]: "Tính toàn vẹn dân sự (Không dùng - đã gộp vào hate speech)",
-  [HarmCategory.HARM_CATEGORY_IMAGE_HARASSMENT]: "Hình ảnh quấy rối (Không dùng - dành riêng cho tạo ảnh của gemini)",
-  [HarmCategory.HARM_CATEGORY_IMAGE_HATE]: "Hình ảnh hận thù (Không dùng - dành riêng cho tạo ảnh của gemini)",
-  [HarmCategory.HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT]: "Hình ảnh nội dung nguy hiểm (Không dùng - dành riêng cho tạo ảnh của gemini)",
-  [HarmCategory.HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT]: "Hình ảnh khiêu dâm (Không dùng - dành riêng cho tạo ảnh của gemini)",
+  [HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY]:
+    "Tính toàn vẹn dân sự (Không dùng - đã gộp vào hate speech)",
+  [HarmCategory.HARM_CATEGORY_IMAGE_HARASSMENT]:
+    "Hình ảnh quấy rối (Không dùng - dành riêng cho tạo ảnh của gemini)",
+  [HarmCategory.HARM_CATEGORY_IMAGE_HATE]:
+    "Hình ảnh hận thù (Không dùng - dành riêng cho tạo ảnh của gemini)",
+  [HarmCategory.HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT]:
+    "Hình ảnh nội dung nguy hiểm (Không dùng - dành riêng cho tạo ảnh của gemini)",
+  [HarmCategory.HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT]:
+    "Hình ảnh khiêu dâm (Không dùng - dành riêng cho tạo ảnh của gemini)",
   [HarmCategory.HARM_CATEGORY_JAILBREAK]: "Jailbreak (Không dùng - gemini chưa hỗ trợ)",
 };
 
@@ -148,44 +135,29 @@ export const HARM_BLOCK_THRESHOLDS: { [key in HarmBlockThreshold]: string } = {
   [HarmBlockThreshold.BLOCK_NONE]: "Không chặn",
   [HarmBlockThreshold.BLOCK_ONLY_HIGH]: "Chỉ chặn mức cao",
   [HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE]: "Chặn mức trung bình trở lên",
-  [HarmBlockThreshold.BLOCK_LOW_AND_ABOVE]:
-    "Chặn mức thấp trở lên",
+  [HarmBlockThreshold.BLOCK_LOW_AND_ABOVE]: "Chặn mức thấp trở lên",
   [HarmBlockThreshold.OFF]: "Tắt",
 };
 
 export const DEFAULT_SAFETY_SETTINGS: SafetySettingsConfig = {
   enabled: false,
   settings: [
-    { category: HarmCategory.HARM_CATEGORY_HARASSMENT,
+    { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_IMAGE_HARASSMENT, threshold: HarmBlockThreshold.OFF },
+    { category: HarmCategory.HARM_CATEGORY_IMAGE_HATE, threshold: HarmBlockThreshold.OFF },
+    {
+      category: HarmCategory.HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT,
       threshold: HarmBlockThreshold.OFF,
     },
-    { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH,
+    {
+      category: HarmCategory.HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT,
       threshold: HarmBlockThreshold.OFF,
     },
-    { category: HarmCategory.HARM_CATEGORY_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_CIVIC_INTEGRITY,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_IMAGE_HARASSMENT,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_IMAGE_HATE,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_IMAGE_DANGEROUS_CONTENT,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_IMAGE_SEXUALLY_EXPLICIT,
-      threshold: HarmBlockThreshold.OFF,
-    },
-    { category: HarmCategory.HARM_CATEGORY_JAILBREAK,
-      threshold: HarmBlockThreshold.OFF,
-    }
+    { category: HarmCategory.HARM_CATEGORY_JAILBREAK, threshold: HarmBlockThreshold.OFF },
   ],
 };
 

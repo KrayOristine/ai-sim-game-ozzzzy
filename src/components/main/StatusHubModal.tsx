@@ -7,11 +7,7 @@ const StatusList: React.FC<{
   onSelect: (statusName: string) => void;
 }> = ({ statuses, onDelete, onSelect }) => {
   if (!statuses || statuses.length === 0) {
-    return (
-      <p className="text-sm text-slate-400 text-center py-4">
-        Không có trạng thái nào.
-      </p>
-    );
+    return <p className="text-sm text-slate-400 text-center py-4">Không có trạng thái nào.</p>;
   }
 
   return (
@@ -21,16 +17,9 @@ const StatusList: React.FC<{
           key={index}
           className="flex items-center justify-between gap-2 p-2 rounded hover:bg-slate-700/50 bg-slate-900/50"
         >
-          <button
-            onClick={() => onSelect(status.name)}
-            className="text-left grow min-w-0"
-          >
+          <button onClick={() => onSelect(status.name)} className="text-left grow min-w-0">
             <p className="truncate">
-              <strong
-                className={
-                  status.type === "buff" ? "text-green-400" : "text-red-400"
-                }
-              >
+              <strong className={status.type === "buff" ? "text-green-400" : "text-red-400"}>
                 {status.name}
               </strong>
             </p>
@@ -53,20 +42,13 @@ const CompanionList: React.FC<{
   onSelect: (c: Companion) => void;
 }> = ({ companions, onSelect }) => {
   if (!companions || companions.length === 0) {
-    return (
-      <p className="text-sm text-slate-400 text-center py-4">
-        Chưa có đồng hành nào.
-      </p>
-    );
+    return <p className="text-sm text-slate-400 text-center py-4">Chưa có đồng hành nào.</p>;
   }
   return (
     <ul className="space-y-2 text-sm">
       {companions.map((companion, index) => (
         <li key={index} className="bg-slate-900/50 p-2 rounded">
-          <button
-            onClick={() => onSelect(companion)}
-            className="text-left w-full transition"
-          >
+          <button onClick={() => onSelect(companion)} className="text-left w-full transition">
             <strong className="text-green-300">{companion.name}</strong>
           </button>
         </li>
@@ -80,9 +62,7 @@ const QuestList: React.FC<{
   onSelect: (q: Quest) => void;
   onDelete: (name: string) => void;
 }> = ({ quests, onSelect, onDelete }) => {
-  const activeQuests = (quests || []).filter(
-    (q) => !q.status || q.status === "đang tiến hành",
-  );
+  const activeQuests = (quests || []).filter((q) => !q.status || q.status === "đang tiến hành");
 
   if (activeQuests.length === 0) {
     return (
@@ -99,13 +79,8 @@ const QuestList: React.FC<{
           key={index}
           className="group flex items-center justify-between gap-2 p-2 rounded hover:bg-slate-700/50 bg-slate-900/50"
         >
-          <button
-            onClick={() => onSelect(quest)}
-            className="text-left grow min-w-0"
-          >
-            <strong className="text-cyan-300 truncate block">
-              {quest.name}
-            </strong>
+          <button onClick={() => onSelect(quest)} className="text-left grow min-w-0">
+            <strong className="text-cyan-300 truncate block">{quest.name}</strong>
           </button>
           <button
             onClick={() => onDelete(quest.name)}
@@ -176,10 +151,7 @@ const StatusHubModal: React.FC<StatusHubModalProps> = ({
             <Icon name="hub" className="w-6 h-6 mr-3 text-cyan-400" />
             Thông Tin Tổng Hợp
           </h2>
-          <button
-            onClick={onClose}
-            className="text-slate-400 hover:text-white transition"
-          >
+          <button onClick={onClose} className="text-slate-400 hover:text-white transition">
             <Icon name="xCircle" className="w-7 h-7" />
           </button>
         </div>
@@ -209,24 +181,13 @@ const StatusHubModal: React.FC<StatusHubModalProps> = ({
 
         <div className="grow overflow-y-auto pr-2 space-y-3">
           {activeTab === "status" && (
-            <StatusList
-              statuses={statuses}
-              onSelect={onSelectStatus}
-              onDelete={onDeleteStatus}
-            />
+            <StatusList statuses={statuses} onSelect={onSelectStatus} onDelete={onDeleteStatus} />
           )}
           {activeTab === "companions" && (
-            <CompanionList
-              companions={companions}
-              onSelect={onSelectCompanion}
-            />
+            <CompanionList companions={companions} onSelect={onSelectCompanion} />
           )}
           {activeTab === "quests" && (
-            <QuestList
-              quests={quests}
-              onSelect={onSelectQuest}
-              onDelete={onDeleteQuest}
-            />
+            <QuestList quests={quests} onSelect={onSelectQuest} onDelete={onDeleteQuest} />
           )}
         </div>
 

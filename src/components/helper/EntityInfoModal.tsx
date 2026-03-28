@@ -41,19 +41,11 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
   const isQuest = type === "Nhiệm Vụ" || type === "Quest";
 
   return (
-    <div
-      className="entity_modal_main_div"
-      onClick={onClose}
-    >
-      <div
-        className="entity_modal_second_div"
-        onClick={(e) => e.stopPropagation()}
-      >
+    <div className="entity_modal_main_div" onClick={onClose}>
+      <div className="entity_modal_second_div" onClick={(e) => e.stopPropagation()}>
         <div className="entity_modal_header">
           <div className="entity_modal_title_container">
-            <h2 className="entity_modal_title">
-              {stripTags(title)}
-            </h2>
+            <h2 className="entity_modal_title">{stripTags(title)}</h2>
             {type && !isQuest && (
               <p className="entity_modal_type">
                 {type}
@@ -106,10 +98,7 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
               </div>
             )}
           </div>
-          <button
-            onClick={onClose}
-            className="entity_modal_close_btn"
-          >
+          <button onClick={onClose} className="entity_modal_close_btn">
             <Icon name="xCircle" className="entity_modal_icon_close" />
           </button>
         </div>
@@ -119,24 +108,17 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
           {isQuest && questData ? (
             <>
               {/* 1. Mục tiêu hiện tại */}
-              {questData.currentObjective &&
-                questData.status !== "hoàn thành" && (
-                  <div className="entity_modal_objective">
-                    <p className="entity_modal_objective_label">
-                      Mục Tiêu Hiện Tại
-                    </p>
-                    <p className="entity_modal_objective_text">
-                      {questData.currentObjective}
-                    </p>
-                  </div>
-                )}
+              {questData.currentObjective && questData.status !== "hoàn thành" && (
+                <div className="entity_modal_objective">
+                  <p className="entity_modal_objective_label">Mục Tiêu Hiện Tại</p>
+                  <p className="entity_modal_objective_text">{questData.currentObjective}</p>
+                </div>
+              )}
 
               {/* 2. Checklist (Subtasks) */}
               {questData.subTasks && questData.subTasks.length > 0 && (
                 <div>
-                  <p className="entity_modal_checklist_label">
-                    Danh sách công việc
-                  </p>
+                  <p className="entity_modal_checklist_label">Danh sách công việc</p>
                   <ul className="entity_modal_checklist">
                     {questData.subTasks.map((task: any, idx: number) => (
                       <li
@@ -147,10 +129,7 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
                           className={`entity_modal_task_checkbox ${task.isCompleted ? "entity_modal_task_checkbox_completed" : "entity_modal_task_checkbox_pending"}`}
                         >
                           {task.isCompleted && (
-                            <Icon
-                              name="checkCircle"
-                              className="entity_modal_task_icon"
-                            />
+                            <Icon name="checkCircle" className="entity_modal_task_icon" />
                           )}
                         </div>
                         <span
@@ -171,9 +150,7 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
               {/* 3. Mô tả chung */}
               <div>
                 <p className="entity_modal_desc_label">Mô tả</p>
-                <p className="entity_modal_desc_text">
-                  {stripTags(description)}
-                </p>
+                <p className="entity_modal_desc_text">{stripTags(description)}</p>
               </div>
 
               {/* 4. Nhật ký hành trình (Logs) */}
@@ -204,25 +181,17 @@ const EntityInfoModal: React.FC<EntityInfoModalProps> = ({
                 <div className="entity_modal_details">
                   {details.stats && (
                     <div>
-                      <strong className="entity_modal_detail_label">
-                        Chỉ số:
-                      </strong>
+                      <strong className="entity_modal_detail_label">Chỉ số:</strong>
                       <div className="entity_modal_detail_content">
-                        <p className="entity_modal_detail_stats">
-                          {details.stats}
-                        </p>
+                        <p className="entity_modal_detail_stats">{details.stats}</p>
                       </div>
                     </div>
                   )}
                   {details.effects && (
                     <div>
-                      <strong className="entity_modal_detail_label">
-                        Hiệu ứng đặc biệt:
-                      </strong>
+                      <strong className="entity_modal_detail_label">Hiệu ứng đặc biệt:</strong>
                       <div className="entity_modal_detail_content">
-                        <p className="entity_modal_detail_effects">
-                          {details.effects}
-                        </p>
+                        <p className="entity_modal_detail_effects">{details.effects}</p>
                       </div>
                     </div>
                   )}

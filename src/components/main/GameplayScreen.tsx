@@ -2,11 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import * as aiService from "@service/index";
 import * as fileService from "@service/fileService";
 import * as gameService from "@service/gameService";
-import {
-  getSeason,
-  generateWeather,
-  extractTimePassedFromText,
-} from "@utils/timeUtils";
+import { getSeason, generateWeather, extractTimePassedFromText } from "@utils/timeUtils";
 import Button from "@component/helper/Button";
 import Icon from "@component/helper/Icon";
 import TemporaryRulesModal from "@component/main/TemporaryRulesModal";
@@ -50,12 +46,7 @@ const StatusTooltipWrapper: React.FC<{
   const status = statuses.find(
     (s) => s.name.toLowerCase().trim() === statusName.toLowerCase().trim(),
   );
-  const specialStatuses = [
-    "trúng độc",
-    "bị thương nặng",
-    "tẩu hỏa nhập ma",
-    "suy yếu",
-  ]; // Keywords for special statuses
+  const specialStatuses = ["trúng độc", "bị thương nặng", "tẩu hỏa nhập ma", "suy yếu"]; // Keywords for special statuses
 
   const clickableElement = (
     <button
@@ -67,12 +58,7 @@ const StatusTooltipWrapper: React.FC<{
     </button>
   );
 
-  if (
-    !status ||
-    !specialStatuses.some((special) =>
-      status.name.toLowerCase().includes(special),
-    )
-  ) {
+  if (!status || !specialStatuses.some((special) => status.name.toLowerCase().includes(special))) {
     return clickableElement;
   }
 
@@ -166,10 +152,7 @@ const FormattedNarration: React.FC<{
               return part;
           }
         }
-        const cleanedPart = part.replace(
-          /<\/\s*(exp|thought|status|important|entity)\s*>/g,
-          "",
-        );
+        const cleanedPart = part.replace(/<\/\s*(exp|thought|status|important|entity)\s*>/g, "");
         return cleanedPart;
       })}
     </p>
@@ -199,27 +182,21 @@ const SuggestionCard: React.FC<{
         {stripTags(suggestion.description)}
       </p>
       <p className="text-blue-200/80 text-xs mt-1">
-        (% thành công: {suggestion.successRate}%, Rủi ro:{" "}
-        {stripTags(suggestion.risk)}, Phần thưởng:{" "}
+        (% thành công: {suggestion.successRate}%, Rủi ro: {stripTags(suggestion.risk)}, Phần thưởng:{" "}
         {stripTags(suggestion.reward)})
       </p>
     </button>
   );
 };
 
-const GameplayScreen: React.FC<GameplayScreenProps> = ({
-  initialGameState,
-  onBack,
-}) => {
+const GameplayScreen: React.FC<GameplayScreenProps> = ({ initialGameState, onBack }) => {
   const [gameState, setGameState] = useState<GameState>({
     ...initialGameState,
     companions: initialGameState.companions || [],
     quests: initialGameState.quests || [],
   });
   const [playerInput, setPlayerInput] = useState("");
-  const [isLoading, setIsLoading] = useState(
-    initialGameState.history.length === 0,
-  );
+  const [isLoading, setIsLoading] = useState(initialGameState.history.length === 0);
   const [isSaving, setIsSaving] = useState(false);
   const [notificationModal, setNotificationModal] = useState({
     isOpen: false,
@@ -261,32 +238,20 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
   const turnsPerPage = 5;
   const [currentPage, setCurrentPage] = useState(() => {
     if (initialGameState.history.length === 0) return 0;
-    const narrationTurns = initialGameState.history.filter(
-      (h) => h.type === "narration",
-    );
-    const totalPages = Math.max(
-      1,
-      Math.ceil(narrationTurns.length / turnsPerPage),
-    );
+    const narrationTurns = initialGameState.history.filter((h) => h.type === "narration");
+    const totalPages = Math.max(1, Math.ceil(narrationTurns.length / turnsPerPage));
     return totalPages > 0 ? totalPages - 1 : 0;
   });
   const [isPaginating, setIsPaginating] = useState(false);
-  const [storyLogInitialScrollTop, setStoryLogInitialScrollTop] = useState<
-    number | null
-  >(null);
+  const [storyLogInitialScrollTop, setStoryLogInitialScrollTop] = useState<number | null>(null);
 
   const logContainerRef = useRef<HTMLDivElement>(null);
   const logEndRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
   const scrollTimeoutRef = useRef<number | null>(null);
 
-  const narrationTurns = gameState.history.filter(
-    (h) => h.type === "narration",
-  );
-  const totalPages = Math.max(
-    1,
-    Math.ceil(narrationTurns.length / turnsPerPage),
-  );
+  const narrationTurns = gameState.history.filter((h) => h.type === "narration");
+  const totalPages = Math.max(1, Math.ceil(narrationTurns.length / turnsPerPage));
 
   const getTurnsForCurrentPage = () => {
     if (narrationTurns.length === 0) return gameState.history;
@@ -325,8 +290,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
   const isTurnLoading = isLoading && gameState.history.length > 0;
 
   const handleOpenStoryLog = useCallback(() => {
-    if (logContainerRef.current)
-      setStoryLogInitialScrollTop(logContainerRef.current.scrollTop);
+    if (logContainerRef.current) setStoryLogInitialScrollTop(logContainerRef.current.scrollTop);
     else setStoryLogInitialScrollTop(0);
     setIsStoryLogModalOpen(true);
   }, []);
@@ -367,9 +331,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           };
       }
       if (!found) {
-        const item = gameState.inventory.find(
-          (i) => i.name.toLowerCase().trim() === lowerCaseName,
-        );
+        const item = gameState.inventory.find((i) => i.name.toLowerCase().trim() === lowerCaseName);
         if (item)
           found = {
             title: item.name,
@@ -392,9 +354,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
       // Updated Logic for Quest finding to include questData
       if (!found) {
-        const quest = gameState.quests.find(
-          (q) => q.name.toLowerCase().trim() === lowerCaseName,
-        );
+        const quest = gameState.quests.find((q) => q.name.toLowerCase().trim() === lowerCaseName);
         if (quest)
           found = {
             title: quest.name,
@@ -435,9 +395,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
             title: discovered.name,
             description:
               discovered.description +
-              (discovered.personality
-                ? `\n\nTính cách: ${discovered.personality}`
-                : ""),
+              (discovered.personality ? `\n\nTính cách: ${discovered.personality}` : ""),
             type: discovered.type,
             details: discovered.details,
           };
@@ -451,9 +409,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
             title: entity.name,
             description:
               entity.description +
-              (entity.personality
-                ? `\n\nTính cách: ${entity.personality}`
-                : ""),
+              (entity.personality ? `\n\nTính cách: ${entity.personality}` : ""),
             type: entity.type,
             details: entity.details,
           };
@@ -467,10 +423,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           type: "Đang tải",
         });
         try {
-          const newEntity = await aiService.generateEntityInfoOnTheFly(
-            gameState,
-            name,
-          );
+          const newEntity = await aiService.generateEntityInfoOnTheFly(gameState, name);
           setGameState((prev) => ({
             ...prev,
             discoveredEntities: [...(prev.discoveredEntities || []), newEntity],
@@ -479,15 +432,12 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
             title: newEntity.name,
             description:
               newEntity.description +
-              (newEntity.personality
-                ? `\n\nTính cách: ${newEntity.personality}`
-                : ""),
+              (newEntity.personality ? `\n\nTính cách: ${newEntity.personality}` : ""),
             type: newEntity.type,
             details: newEntity.details,
           });
         } catch (error) {
-          const errorMessage =
-            error instanceof Error ? error.message : "Lỗi không xác định";
+          const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
           setEntityModalContent({
             title: name,
             description: `Không thể tạo thông tin: ${errorMessage}`,
@@ -500,15 +450,9 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
   );
 
   const compressDossiersForTurn = useCallback(
-    async (
-      currentState: GameState,
-      lastAction: GameTurn,
-      lastNarration: GameTurn,
-    ) => {
+    async (currentState: GameState, lastAction: GameTurn, lastNarration: GameTurn) => {
       const allKnownNpcNames = new Set([
-        ...(currentState.encounteredNPCs || []).map((n) =>
-          n.name.toLowerCase(),
-        ),
+        ...(currentState.encounteredNPCs || []).map((n) => n.name.toLowerCase()),
         ...(currentState.companions || []).map((c) => c.name.toLowerCase()),
         ...(currentState.worldConfig.initialEntities || [])
           .filter((e) => e.type === "NPC")
@@ -535,10 +479,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           ].find((n) => n.name.toLowerCase() === npcName);
           if (originalNpc) {
             const stateBefore = stateToCompress;
-            stateToCompress = await aiService.compressNpcDossier(
-              stateToCompress,
-              originalNpc.name,
-            );
+            stateToCompress = await aiService.compressNpcDossier(stateToCompress, originalNpc.name);
             if (stateBefore !== stateToCompress) {
               // Simple reference check
               wasCompressed = true;
@@ -586,8 +527,10 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           history: [...gameState.history, newAction],
         };
         // Bước 2: Truyền thời gian đã trích xuất vào dịch vụ AI
-        const { narration, tags, worldSim, thinking, newSummary } =
-          await aiService.getNextTurn(tempGameState, extractedTime);
+        const { narration, tags, worldSim, thinking, newSummary } = await aiService.getNextTurn(
+          tempGameState,
+          extractedTime,
+        );
         const narrationTurn: GameTurn = {
           type: "narration",
           content: processNarration(narration),
@@ -597,11 +540,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           setLatestWorldNews(worldSim);
         }
         if (thinking) {
-          console.log(
-            "%c[AI THINKING]",
-            "color: #8b5cf6; font-style: italic;",
-            thinking,
-          );
+          console.log("%c[AI THINKING]", "color: #8b5cf6; font-style: italic;", thinking);
         }
 
         setGameState((prev) => {
@@ -618,13 +557,9 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           // Handle new summary if generated
           if (newSummary) {
             narrationTurn.metadata = { isSummaryTurn: true }; // Mark this turn as generating a summary
-            updatedState.summaries = [
-              ...(updatedState.summaries || []),
-              newSummary,
-            ];
+            updatedState.summaries = [...(updatedState.summaries || []), newSummary];
             // Also create a PendingVectorItem for the summary
-            if (!updatedState.pendingVectorBuffer)
-              updatedState.pendingVectorBuffer = [];
+            if (!updatedState.pendingVectorBuffer) updatedState.pendingVectorBuffer = [];
             updatedState.pendingVectorBuffer.push({
               id: updatedState.summaries.length - 1, // Index of the new summary
               type: "Summary",
@@ -636,21 +571,15 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           const suggestions = tags
             .filter((t) => t.tagName === "SUGGESTION")
             .map((t) => t.params as ActionSuggestion);
-          const stateChangingTags = tags.filter(
-            (t) => t.tagName !== "SUGGESTION",
-          );
+          const stateChangingTags = tags.filter((t) => t.tagName !== "SUGGESTION");
 
           // 3. Gọi dispatcher để xử lý tất cả các thay đổi trạng thái và thu thập các cập nhật vector
-          const { finalState, vectorUpdates } = dispatchTags(
-            updatedState,
-            stateChangingTags,
-          );
+          const { finalState, vectorUpdates } = dispatchTags(updatedState, stateChangingTags);
 
           // --- PIGGYBACK QUEUEING ---
           // Thay vì gọi aiService.processVectorUpdates ngay, ta đẩy vào buffer cho lượt sau
           if (vectorUpdates.length > 0) {
-            if (!finalState.pendingVectorBuffer)
-              finalState.pendingVectorBuffer = [];
+            if (!finalState.pendingVectorBuffer) finalState.pendingVectorBuffer = [];
             vectorUpdates.forEach((update) => {
               finalState.pendingVectorBuffer!.push({
                 id: update.id,
@@ -667,9 +596,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           const lastActionIndex = prev.history.length;
           const lastNarrationIndex = prev.history.length + 1;
           const allKnownNpcNames = new Set([
-            ...(finalState.encounteredNPCs || []).map((n) =>
-              n.name.toLowerCase(),
-            ),
+            ...(finalState.encounteredNPCs || []).map((n) => n.name.toLowerCase()),
             ...(finalState.companions || []).map((c) => c.name.toLowerCase()),
             ...(finalState.worldConfig.initialEntities || [])
               .filter((e) => e.type === "NPC")
@@ -677,8 +604,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           ]);
           const involvedNpcs = new Set<string>();
           allKnownNpcNames.forEach((npcName) => {
-            if (newAction.content.toLowerCase().includes(npcName))
-              involvedNpcs.add(npcName);
+            if (newAction.content.toLowerCase().includes(npcName)) involvedNpcs.add(npcName);
           });
           const entityRegex = /<entity>(.*?)<\/entity>/gs;
           let match;
@@ -696,8 +622,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 };
               }
               const dossier = finalState.npcDossiers![npcNameKey];
-              if (!dossier.fresh.includes(lastActionIndex))
-                dossier.fresh.push(lastActionIndex);
+              if (!dossier.fresh.includes(lastActionIndex)) dossier.fresh.push(lastActionIndex);
               if (!dossier.fresh.includes(lastNarrationIndex))
                 dossier.fresh.push(lastNarrationIndex);
             });
@@ -711,26 +636,16 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           return finalState;
         });
 
-        const newNarrationTurns = [
-          ...narrationTurns,
-          { type: "narration", content: narration },
-        ];
-        const newTotalPages = Math.max(
-          1,
-          Math.ceil(newNarrationTurns.length / turnsPerPage),
-        );
+        const newNarrationTurns = [...narrationTurns, { type: "narration", content: narration }];
+        const newTotalPages = Math.max(1, Math.ceil(newNarrationTurns.length / turnsPerPage));
         const lastPage = newTotalPages > 0 ? newTotalPages - 1 : 0;
 
         setShowSuggestions(true);
         setCurrentPage(lastPage);
       } catch (e) {
         const errorMessage =
-          e instanceof Error
-            ? e.message
-            : "AI đã gặp lỗi khi xử lý. Vui lòng thử lại.";
-        if (
-          /bị chặn bởi bộ lọc an toàn|prohibited|safety/i.test(errorMessage)
-        ) {
+          e instanceof Error ? e.message : "AI đã gặp lỗi khi xử lý. Vui lòng thử lại.";
+        if (/bị chặn bởi bộ lọc an toàn|prohibited|safety/i.test(errorMessage)) {
           setNotificationModal({
             isOpen: true,
             title: "Nội dung bị chặn",
@@ -757,18 +672,11 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
   const startGame = useCallback(async () => {
     if (gameState.history.length > 0) {
       setIsLoading(false);
-      const narrationTurns = gameState.history.filter(
-        (h) => h.type === "narration",
-      );
-      const totalPages = Math.max(
-        1,
-        Math.ceil(narrationTurns.length / turnsPerPage),
-      );
+      const narrationTurns = gameState.history.filter((h) => h.type === "narration");
+      const totalPages = Math.max(1, Math.ceil(narrationTurns.length / turnsPerPage));
       const lastPage = totalPages > 0 ? totalPages - 1 : 0;
       setCurrentPage(lastPage);
-      setShowSuggestions(
-        gameState.suggestions ? gameState.suggestions.length > 0 : false,
-      );
+      setShowSuggestions(gameState.suggestions ? gameState.suggestions.length > 0 : false);
       return;
     }
 
@@ -792,24 +700,16 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
         setLatestWorldNews(worldSim);
       }
       if (thinking) {
-        console.log(
-          "%c[AI THINKING - START]",
-          "color: #8b5cf6; font-style: italic;",
-          thinking,
-        );
+        console.log("%c[AI THINKING - START]", "color: #8b5cf6; font-style: italic;", thinking);
       }
 
       // Bắt đầu với trạng thái ban đầu và áp dụng các thẻ khởi tạo
-      const { finalState, vectorUpdates } = dispatchTags(
-        gameState,
-        stateChangingTags,
-      );
+      const { finalState, vectorUpdates } = dispatchTags(gameState, stateChangingTags);
 
       // --- PIGGYBACK QUEUEING START ---
       // Xử lý cập nhật vector bằng cách đẩy vào hàng đợi thay vì gọi API ngay
       if (vectorUpdates.length > 0) {
-        if (!finalState.pendingVectorBuffer)
-          finalState.pendingVectorBuffer = [];
+        if (!finalState.pendingVectorBuffer) finalState.pendingVectorBuffer = [];
         vectorUpdates.forEach((update) => {
           finalState.pendingVectorBuffer!.push({
             id: update.id,
@@ -823,17 +723,9 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
       let updatedGameState = finalState;
 
       // Tính toán mùa và thời tiết sau khi thời gian được thiết lập
-      const archetype = resolveGenreArchetype(
-        updatedGameState.worldConfig.storyContext.genre,
-      );
-      updatedGameState.season = getSeason(
-        updatedGameState.worldTime.month,
-        archetype,
-      );
-      updatedGameState.weather = generateWeather(
-        updatedGameState.season,
-        archetype,
-      );
+      const archetype = resolveGenreArchetype(updatedGameState.worldConfig.storyContext.genre);
+      updatedGameState.season = getSeason(updatedGameState.worldTime.month, archetype);
+      updatedGameState.weather = generateWeather(updatedGameState.season, archetype);
 
       // Cập nhật lịch sử và gợi ý
       updatedGameState.history = [narrationTurn];
@@ -843,8 +735,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
       setShowSuggestions(true);
       await gameService.saveGame(updatedGameState, "auto");
     } catch (e) {
-      const errorMessage =
-        e instanceof Error ? e.message : "Lỗi không xác định khi bắt đầu game.";
+      const errorMessage = e instanceof Error ? e.message : "Lỗi không xác định khi bắt đầu game.";
       setNotificationModal({
         isOpen: true,
         title: "Lỗi Khởi Tạo",
@@ -880,9 +771,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           });
         } catch (e) {
           const errorMessage =
-            e instanceof Error
-              ? `Lỗi tạo cấp bậc danh vọng: ${e.message}`
-              : "Lỗi không xác định.";
+            e instanceof Error ? `Lỗi tạo cấp bậc danh vọng: ${e.message}` : "Lỗi không xác định.";
           setNotificationModal({
             isOpen: true,
             title: "Lỗi Phụ Trợ",
@@ -941,14 +830,12 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
       container.addEventListener("scroll", handleScroll, { passive: true });
       return () => {
         container.removeEventListener("scroll", handleScroll);
-        if (scrollTimeoutRef.current)
-          window.clearTimeout(scrollTimeoutRef.current);
+        if (scrollTimeoutRef.current) window.clearTimeout(scrollTimeoutRef.current);
       };
     }
   }, [handleScroll]);
 
-  const handleScrollToTop = () =>
-    logContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+  const handleScrollToTop = () => logContainerRef.current?.scrollTo({ top: 0, behavior: "smooth" });
   const handleScrollToBottom = () => {
     if (logContainerRef.current)
       logContainerRef.current.scrollTo({
@@ -957,8 +844,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
       });
   };
 
-  const performRestart = () =>
-    setGameState((prevState) => ({ ...initialGameState, history: [] })); // Quay về trạng thái ban đầu, xóa lịch sử
+  const performRestart = () => setGameState((prevState) => ({ ...initialGameState, history: [] })); // Quay về trạng thái ban đầu, xóa lịch sử
   const handleSaveAndRestart = async () => {
     setIsSaving(true);
     await gameService.saveGame(gameState, "manual");
@@ -998,10 +884,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
         newSummaries = gameState.summaries.slice(0, -1);
       }
       if (lastNarrationTurn.metadata.addedMemoryCount) {
-        newMemories = gameState.memories.slice(
-          0,
-          -lastNarrationTurn.metadata.addedMemoryCount,
-        );
+        newMemories = gameState.memories.slice(0, -lastNarrationTurn.metadata.addedMemoryCount);
       }
     }
 
@@ -1055,11 +938,8 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
     await gameService.saveGame(updatedGameState, "auto");
     setIsTempRulesModalOpen(false);
   };
-  const handleNarrationContainerClick = (
-    e: React.MouseEvent<HTMLDivElement>,
-  ) => {
-    if ((e.target as HTMLElement).tagName.toLowerCase() !== "button")
-      handleOpenStoryLog();
+  const handleNarrationContainerClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if ((e.target as HTMLElement).tagName.toLowerCase() !== "button") handleOpenStoryLog();
   };
 
   // Logic xóa Trạng thái (Initiate)
@@ -1077,16 +957,13 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
   }, []);
 
   // Logic xóa "mềm" (Initiate)
-  const handleDeleteFromEncyclopedia = useCallback(
-    (entityToDelete: { name: string }) => {
-      setDeletionState({
-        isOpen: true,
-        type: "entity_soft",
-        data: entityToDelete,
-      });
-    },
-    [],
-  );
+  const handleDeleteFromEncyclopedia = useCallback((entityToDelete: { name: string }) => {
+    setDeletionState({
+      isOpen: true,
+      type: "entity_soft",
+      data: entityToDelete,
+    });
+  }, []);
 
   const handleCompanionClick = useCallback(
     (companion: Companion) =>
@@ -1094,9 +971,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
         title: companion.name,
         description:
           companion.description +
-          (companion.personality
-            ? `\n\nTính cách: ${companion.personality}`
-            : ""),
+          (companion.personality ? `\n\nTính cách: ${companion.personality}` : ""),
         type: "Đồng hành",
       }),
     [],
@@ -1129,8 +1004,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
 
       if (type === "status") {
         newState.playerStatus = newState.playerStatus.filter(
-          (s: StatusEffect) =>
-            s.name.trim().toLowerCase() !== data.trim().toLowerCase(),
+          (s: StatusEffect) => s.name.trim().toLowerCase() !== data.trim().toLowerCase(),
         );
       } else if (type === "quest") {
         newState.quests = newState.quests.filter((q: Quest) => q.name !== data);
@@ -1140,8 +1014,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           (item: GameItem) => item.name.toLowerCase() !== nameToDelete,
         );
         newState.character.skills = (newState.character.skills || []).filter(
-          (skill: { name: string }) =>
-            skill.name.toLowerCase() !== nameToDelete,
+          (skill: { name: string }) => skill.name.toLowerCase() !== nameToDelete,
         );
         newState.encounteredNPCs = (newState.encounteredNPCs || []).filter(
           (npc: EncounteredNPC) => npc.name.toLowerCase() !== nameToDelete,
@@ -1152,17 +1025,15 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
         newState.quests = (newState.quests || []).filter(
           (q: Quest) => q.name.toLowerCase() !== nameToDelete,
         );
-        newState.encounteredFactions = (
-          newState.encounteredFactions || []
-        ).filter(
+        newState.encounteredFactions = (newState.encounteredFactions || []).filter(
           (f: EncounteredFaction) => f.name.toLowerCase() !== nameToDelete,
         );
-        newState.discoveredEntities = (
-          newState.discoveredEntities || []
-        ).filter((e: InitialEntity) => e.name.toLowerCase() !== nameToDelete);
-        newState.worldConfig.initialEntities = (
-          newState.worldConfig.initialEntities || []
-        ).filter((e: InitialEntity) => e.name.toLowerCase() !== nameToDelete);
+        newState.discoveredEntities = (newState.discoveredEntities || []).filter(
+          (e: InitialEntity) => e.name.toLowerCase() !== nameToDelete,
+        );
+        newState.worldConfig.initialEntities = (newState.worldConfig.initialEntities || []).filter(
+          (e: InitialEntity) => e.name.toLowerCase() !== nameToDelete,
+        );
       } else if (type === "entity_soft") {
         const nameToDelete = data.name.toLowerCase();
         newState.encounteredNPCs = (newState.encounteredNPCs || []).filter(
@@ -1174,17 +1045,15 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
         newState.quests = (newState.quests || []).filter(
           (q: Quest) => q.name.toLowerCase() !== nameToDelete,
         );
-        newState.encounteredFactions = (
-          newState.encounteredFactions || []
-        ).filter(
+        newState.encounteredFactions = (newState.encounteredFactions || []).filter(
           (f: EncounteredFaction) => f.name.toLowerCase() !== nameToDelete,
         );
-        newState.discoveredEntities = (
-          newState.discoveredEntities || []
-        ).filter((e: InitialEntity) => e.name.toLowerCase() !== nameToDelete);
-        newState.worldConfig.initialEntities = (
-          newState.worldConfig.initialEntities || []
-        ).filter((e: InitialEntity) => e.name.toLowerCase() !== nameToDelete);
+        newState.discoveredEntities = (newState.discoveredEntities || []).filter(
+          (e: InitialEntity) => e.name.toLowerCase() !== nameToDelete,
+        );
+        newState.worldConfig.initialEntities = (newState.worldConfig.initialEntities || []).filter(
+          (e: InitialEntity) => e.name.toLowerCase() !== nameToDelete,
+        );
       }
 
       gameService.saveGame(newState, "auto");
@@ -1219,13 +1088,8 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
     <div className="h-full bg-slate-800/80 backdrop-blur-md flex flex-col p-4 space-y-4 overflow-y-auto">
       <div className="shrink-0 space-y-4">
         <div className="text-center border-b border-slate-700 pb-4">
-          <h2 className="text-xl font-bold text-slate-100 truncate">
-            {gameState.character.name}
-          </h2>
-          <p
-            className="text-sm text-pink-400 truncate"
-            title={characterPersonality || ""}
-          >
+          <h2 className="text-xl font-bold text-slate-100 truncate">{gameState.character.name}</h2>
+          <p className="text-sm text-pink-400 truncate" title={characterPersonality || ""}>
             {characterPersonality}
           </p>
         </div>
@@ -1236,15 +1100,13 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           </div>
           <div className="text-xs space-y-1 text-slate-300">
             <p>
-              <strong>Hiện tại:</strong>{" "}
-              {String(gameState.worldTime.hour).padStart(2, "0")}:
-              {String(gameState.worldTime.minute).padStart(2, "0")} (Ngày{" "}
-              {gameState.worldTime.day}/{gameState.worldTime.month}/
-              {gameState.worldTime.year})
+              <strong>Hiện tại:</strong> {String(gameState.worldTime.hour).padStart(2, "0")}:
+              {String(gameState.worldTime.minute).padStart(2, "0")} (Ngày {gameState.worldTime.day}/
+              {gameState.worldTime.month}/{gameState.worldTime.year})
             </p>
             <p>
-              <strong>Mùa:</strong> {gameState.season} -{" "}
-              <strong>Thời tiết:</strong> {gameState.weather}
+              <strong>Mùa:</strong> {gameState.season} - <strong>Thời tiết:</strong>{" "}
+              {gameState.weather}
             </p>
           </div>
         </div>
@@ -1255,12 +1117,10 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           </div>
           <div className="text-xs space-y-1">
             <p className={reputationColor}>
-              <strong>Cấp:</strong>{" "}
-              <span className="font-bold">{gameState.reputation.tier}</span>
+              <strong>Cấp:</strong> <span className="font-bold">{gameState.reputation.tier}</span>
             </p>
             <p className={reputationColor}>
-              <strong>Điểm:</strong>{" "}
-              <span className="font-bold">{gameState.reputation.score}</span>
+              <strong>Điểm:</strong> <span className="font-bold">{gameState.reputation.score}</span>
             </p>
           </div>
         </div>
@@ -1317,11 +1177,8 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                   )}
                 </div>
               ))}
-              {(!gameState.character.stats ||
-                gameState.character.stats.length === 0) && (
-                <p className="text-slate-500 italic text-center text-xs">
-                  Không có chỉ số nào.
-                </p>
+              {(!gameState.character.stats || gameState.character.stats.length === 0) && (
+                <p className="text-slate-500 italic text-center text-xs">Không có chỉ số nào.</p>
               )}
             </div>
           </div>
@@ -1333,27 +1190,20 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
               Cột Mốc
             </div>
             <div className="space-y-1 text-xs">
-              {(gameState.character.milestones || []).map(
-                (milestone, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center"
-                    title={milestone.description}
-                  >
-                    <span className="font-semibold text-slate-300 truncate pr-2">
-                      {milestone.name}:
-                    </span>
-                    <span className="font-mono text-slate-200 text-right">
-                      {milestone.value}
-                    </span>
-                  </div>
-                ),
-              )}
-              {(!gameState.character.milestones ||
-                gameState.character.milestones.length === 0) && (
-                <p className="text-slate-500 italic text-center text-xs">
-                  Không có cột mốc nào.
-                </p>
+              {(gameState.character.milestones || []).map((milestone, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between items-center"
+                  title={milestone.description}
+                >
+                  <span className="font-semibold text-slate-300 truncate pr-2">
+                    {milestone.name}:
+                  </span>
+                  <span className="font-mono text-slate-200 text-right">{milestone.value}</span>
+                </div>
+              ))}
+              {(!gameState.character.milestones || gameState.character.milestones.length === 0) && (
+                <p className="text-slate-500 italic text-center text-xs">Không có cột mốc nào.</p>
               )}
             </div>
           </div>
@@ -1410,10 +1260,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           className="cursor-pointer w-full flex items-center justify-between px-3 py-3 text-sm text-left rounded-md hover:bg-slate-700 transition"
         >
           <span className="flex items-center">
-            <Icon
-              name="encyclopedia"
-              className="w-5 h-5 mr-3 text-orange-400"
-            />
+            <Icon name="encyclopedia" className="w-5 h-5 mr-3 text-orange-400" />
             Bách Khoa Toàn Thư
           </span>
         </button>
@@ -1489,9 +1336,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
     <>
       <ConfirmationModal
         isOpen={deletionState.isOpen}
-        onClose={() =>
-          setDeletionState({ isOpen: false, type: null, data: null })
-        }
+        onClose={() => setDeletionState({ isOpen: false, type: null, data: null })}
         onConfirm={executeDeletion}
         title={
           deletionState.type === "status"
@@ -1512,9 +1357,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
       />
       <NotificationModal
         isOpen={notificationModal.isOpen}
-        onClose={() =>
-          setNotificationModal((prev) => ({ ...prev, isOpen: false }))
-        }
+        onClose={() => setNotificationModal((prev) => ({ ...prev, isOpen: false }))}
         title={notificationModal.title}
         messages={notificationModal.messages}
       />
@@ -1577,12 +1420,8 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           {" "}
           <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6 w-full max-w-md relative animate-fade-in-up">
             {" "}
-            <h2 className="text-xl font-bold mb-4 text-slate-100">
-              Xác nhận thoát
-            </h2>{" "}
-            <p className="text-slate-300 mb-6">
-              Bạn có muốn lưu tiến trình trước khi thoát không?
-            </p>{" "}
+            <h2 className="text-xl font-bold mb-4 text-slate-100">Xác nhận thoát</h2>{" "}
+            <p className="text-slate-300 mb-6">Bạn có muốn lưu tiến trình trước khi thoát không?</p>{" "}
             <div className="flex justify-end gap-4">
               {" "}
               <Button
@@ -1593,11 +1432,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
               >
                 {isSaving ? "Đang lưu..." : "Lưu & Thoát"}
               </Button>{" "}
-              <Button
-                onClick={onBack}
-                variant="warning"
-                className="w-auto! py-2! px-4!"
-              >
+              <Button onClick={onBack} variant="warning" className="w-auto! py-2! px-4!">
                 Thoát không lưu
               </Button>{" "}
               <button
@@ -1653,24 +1488,18 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
           {" "}
           <div className="bg-slate-800 border border-slate-700 rounded-lg shadow-2xl p-6 w-full max-w-md relative animate-fade-in-up">
             {" "}
-            <h2 className="text-xl font-bold mb-4 text-yellow-400">
-              Lùi Lại Một Lượt?
-            </h2>{" "}
+            <h2 className="text-xl font-bold mb-4 text-yellow-400">Lùi Lại Một Lượt?</h2>{" "}
             <p className="text-slate-300 mb-2">
-              Hành động này sẽ xóa lượt đi cuối cùng của bạn và AI, đồng thời
-              hoàn tác các Ký Ức hoặc Tóm tắt được tạo ra trong lượt đó.
+              Hành động này sẽ xóa lượt đi cuối cùng của bạn và AI, đồng thời hoàn tác các Ký Ức
+              hoặc Tóm tắt được tạo ra trong lượt đó.
             </p>{" "}
             <p className="text-amber-400 text-sm mb-6">
-              <strong className="font-bold">Lưu ý:</strong> Các thay đổi về
-              trạng thái, vật phẩm... sẽ KHÔNG được hoàn tác.
+              <strong className="font-bold">Lưu ý:</strong> Các thay đổi về trạng thái, vật phẩm...
+              sẽ KHÔNG được hoàn tác.
             </p>{" "}
             <div className="flex justify-end gap-4">
               {" "}
-              <Button
-                onClick={handleConfirmUndo}
-                variant="warning"
-                className="w-auto! py-2! px-4!"
-              >
+              <Button onClick={handleConfirmUndo} variant="warning" className="w-auto! py-2! px-4!">
                 Tiếp tục
               </Button>{" "}
               <button
@@ -1701,9 +1530,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                   {gameState.worldConfig.storyContext.worldName ||
                     gameState.worldConfig.storyContext.genre}
                 </h1>
-                <p className="text-xs text-slate-400">
-                  Lượt: {narrationTurns.length}
-                </p>
+                <p className="text-xs text-slate-400">Lượt: {narrationTurns.length}</p>
               </div>
               <div className="flex items-center gap-2">
                 {latestWorldNews && (
@@ -1746,9 +1573,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
             >
               <div className="flex items-center justify-between gap-2">
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-bold text-green-400">
-                    Diễn biến câu chuyện:
-                  </h2>
+                  <h2 className="text-lg font-bold text-green-400">Diễn biến câu chuyện:</h2>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -1772,9 +1597,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                   ) : (
                     <div className="bg-blue-900/20 border-l-4 border-blue-500 rounded-r-lg p-4">
                       {" "}
-                      <p className="text-blue-300 font-semibold mb-1">
-                        Hành động của ngươi:
-                      </p>{" "}
+                      <p className="text-blue-300 font-semibold mb-1">Hành động của ngươi:</p>{" "}
                       <p className="text-slate-200 italic whitespace-pre-wrap leading-relaxed">
                         {turn.content}
                       </p>{" "}
@@ -1786,9 +1609,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 <div className="mt-6 flex flex-col items-center p-4">
                   {" "}
                   <div className="w-8 h-8 border-4 border-fuchsia-400 border-t-transparent rounded-full animate-spin"></div>{" "}
-                  <p className="mt-3 text-slate-300 font-semibold">
-                    AI đang suy nghĩ...
-                  </p>{" "}
+                  <p className="mt-3 text-slate-300 font-semibold">AI đang suy nghĩ...</p>{" "}
                   <p className="mt-1 text-slate-400 text-sm">
                     Đang tạo ra diễn biến tiếp theo cho câu chuyện của ngươi.
                   </p>{" "}
@@ -1821,9 +1642,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                 <div className="mb-4">
                   <div className="flex justify-between items-center mb-2">
                     {" "}
-                    <h3 className="text-lg font-bold text-green-400">
-                      Lựa chọn của ngươi:
-                    </h3>{" "}
+                    <h3 className="text-lg font-bold text-green-400">Lựa chọn của ngươi:</h3>{" "}
                     <button
                       onClick={() => setShowSuggestions(!showSuggestions)}
                       className="flex items-center gap-1.5 px-3 py-1 text-xs cursor-pointer font-semibold text-purple-300 bg-purple-900/40 hover:bg-purple-800/60 rounded-lg transition"
@@ -1919,9 +1738,7 @@ const GameplayScreen: React.FC<GameplayScreenProps> = ({
                   Trang {currentPage + 1}/{totalPages}
                 </span>{" "}
                 <button
-                  onClick={() =>
-                    handlePageChange((p) => Math.min(totalPages - 1, p + 1))
-                  }
+                  onClick={() => handlePageChange((p) => Math.min(totalPages - 1, p + 1))}
                   disabled={currentPage === totalPages - 1}
                   className="px-2 py-1 rounded-md bg-slate-700 hover:bg-slate-600 disabled:opacity-50 disabled:cursor-not-allowed transition"
                 >

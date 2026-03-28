@@ -1,9 +1,4 @@
-import {
-  advanceTime,
-  getSeason,
-  generateWeather,
-  shouldWeatherUpdate,
-} from "@utils/timeUtils";
+import { advanceTime, getSeason, generateWeather, shouldWeatherUpdate } from "@utils/timeUtils";
 import { resolveGenreArchetype } from "@utils/genreUtils";
 
 /**
@@ -60,9 +55,7 @@ export function processTimePass(
 
   // Tự động cập nhật mùa và thời tiết nếu cần thiết (ví dụ: qua ngày mới, qua giờ)
   if (shouldWeatherUpdate(timePassed, oldTime, newWorldTime)) {
-    const archetype = resolveGenreArchetype(
-      currentState.worldConfig.storyContext.genre,
-    );
+    const archetype = resolveGenreArchetype(currentState.worldConfig.storyContext.genre);
     newSeason = getSeason(newWorldTime.month, archetype);
     newWeather = generateWeather(newSeason, archetype);
   }

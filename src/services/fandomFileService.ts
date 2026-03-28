@@ -9,10 +9,7 @@ export const getAllFandomFiles = async (): Promise<FandomFile[]> => {
   }
 };
 
-export const saveFandomFile = async (
-  name: string,
-  content: string,
-): Promise<void> => {
+export const saveFandomFile = async (name: string, content: string): Promise<void> => {
   try {
     const newFile: FandomFile = {
       id: Date.now(),
@@ -36,10 +33,7 @@ export const deleteFandomFile = async (id: number): Promise<void> => {
   }
 };
 
-export const renameFandomFile = async (
-  id: number,
-  newName: string,
-): Promise<void> => {
+export const renameFandomFile = async (id: number, newName: string): Promise<void> => {
   try {
     const files = await dbService.getAllFandomFiles();
     const fileToUpdate = files.find((file) => file.id === id);

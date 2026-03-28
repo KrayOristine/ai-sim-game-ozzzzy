@@ -37,40 +37,28 @@ export function selectRelevantContext(
   partialContext.playerStatus = gameState.playerStatus;
   partialContext.companions = gameState.companions;
   if (partialContext.companions)
-    partialContext.companions.forEach((c) =>
-      includedCompanionNames.add(c.name.toLowerCase()),
-    );
+    partialContext.companions.forEach((c) => includedCompanionNames.add(c.name.toLowerCase()));
 
   // --- QUEST LOGIC NÂNG CẤP ---
   // Luôn gửi danh sách tên các quest đã hoàn thành để AI nhớ lịch sử
-  const completedQuests = (gameState.quests || []).filter(
-    (q) => q.status === "hoàn thành",
-  );
+  const completedQuests = (gameState.quests || []).filter((q) => q.status === "hoàn thành");
   if (completedQuests.length > 0) {
     partialContext.completedQuestsSummary = completedQuests.map((q) => q.name);
   }
 
   // Luôn gửi chi tiết các quest đang hoạt động
-  partialContext.activeQuests = (gameState.quests || []).filter(
-    (q) => q.status !== "hoàn thành",
-  );
+  partialContext.activeQuests = (gameState.quests || []).filter((q) => q.status !== "hoàn thành");
   if (partialContext.activeQuests)
-    partialContext.activeQuests.forEach((q) =>
-      includedQuestNames.add(q.name.toLowerCase()),
-    );
+    partialContext.activeQuests.forEach((q) => includedQuestNames.add(q.name.toLowerCase()));
 
   // Luôn gửi túi đồ và kỹ năng
   partialContext.inventory = gameState.inventory;
   if (partialContext.inventory)
-    partialContext.inventory.forEach((i) =>
-      includedItemNames.add(i.name.toLowerCase()),
-    );
+    partialContext.inventory.forEach((i) => includedItemNames.add(i.name.toLowerCase()));
 
   partialContext.characterSkills = gameState.character.skills;
   if (partialContext.characterSkills)
-    partialContext.characterSkills.forEach((s) =>
-      includedSkillNames.add(s.name.toLowerCase()),
-    );
+    partialContext.characterSkills.forEach((s) => includedSkillNames.add(s.name.toLowerCase()));
 
   // Khởi tạo các mảng để thêm vào
   partialContext.encounteredNPCs = [];
@@ -85,10 +73,7 @@ export function selectRelevantContext(
     const locationEntity = [
       ...(gameState.discoveredEntities || []),
       ...(gameState.worldConfig.initialEntities || []),
-    ].find(
-      (e) =>
-        e.name.toLowerCase() === lowerCaseLocation && e.type === "Địa điểm",
-    );
+    ].find((e) => e.name.toLowerCase() === lowerCaseLocation && e.type === "Địa điểm");
     if (locationEntity && !includedEntityNames.has(lowerCaseLocation)) {
       partialContext.discoveredEntities.push(locationEntity);
       includedEntityNames.add(lowerCaseLocation);
@@ -137,45 +122,22 @@ export function selectRelevantContext(
       const entityNameLower = entity.name.toLowerCase();
 
       // Phân loại và thêm vào đúng danh sách, tránh trùng lặp
-      if (
-        "thoughtsOnPlayer" in entity &&
-        !includedNpcNames.has(entityNameLower)
-      ) {
+      if ("thoughtsOnPlayer" in entity && !includedNpcNames.has(entityNameLower)) {
         // Đây là EncounteredNPC
         partialContext.encounteredNPCs!.push(entity as EncounteredNPC);
         includedNpcNames.add(entityNameLower);
-      } else if (
-        "status" in entity &&
-        !includedQuestNames.has(entityNameLower)
-      ) {
+      } else if ("status" in entity && !includedQuestNames.has(entityNameLower)) {
         // Đây là Quest
         // Nếu quest chưa có trong danh sách active (nghĩa là nó đã hoàn thành nhưng được nhắc đến),
         // thêm nó vào activeQuests để AI có chi tiết ngữ cảnh.
-        if (
-          !partialContext.activeQuests?.some(
-            (q) => q.name.toLowerCase() === entityNameLower,
-          )
-        ) {
-          partialContext.activeQuests = [
-            ...(partialContext.activeQuests || []),
-            entity as Quest,
-          ];
+        if (!partialContext.activeQuests?.some((q) => q.name.toLowerCase() === entityNameLower)) {
+          partialContext.activeQuests = [...(partialContext.activeQuests || []), entity as Quest];
         }
         includedQuestNames.add(entityNameLower);
-      } else if (
-        "quantity" in entity &&
-        !includedItemNames.has(entityNameLower)
-      ) {
+      } else if ("quantity" in entity && !includedItemNames.has(entityNameLower)) {
         // Đây là GameItem
-        if (
-          !partialContext.inventory?.some(
-            (i) => i.name.toLowerCase() === entityNameLower,
-          )
-        ) {
-          partialContext.inventory = [
-            ...(partialContext.inventory || []),
-            entity as GameItem,
-          ];
+        if (!partialContext.inventory?.some((i) => i.name.toLowerCase() === entityNameLower)) {
+          partialContext.inventory = [...(partialContext.inventory || []), entity as GameItem];
         }
         includedItemNames.add(entityNameLower);
       } else if (
@@ -185,15 +147,8 @@ export function selectRelevantContext(
         !includedCompanionNames.has(entityNameLower)
       ) {
         // Đây là Companion
-        if (
-          !partialContext.companions?.some(
-            (c) => c.name.toLowerCase() === entityNameLower,
-          )
-        ) {
-          partialContext.companions = [
-            ...(partialContext.companions || []),
-            entity as Companion,
-          ];
+        if (!partialContext.companions?.some((c) => c.name.toLowerCase() === entityNameLower)) {
+          partialContext.companions = [...(partialContext.companions || []), entity as Companion];
         }
         includedCompanionNames.add(entityNameLower);
         // FIX: The logic to identify factions from InitialEntity was flawed.
@@ -226,9 +181,7 @@ export function selectRelevantContext(
       ) {
         // Đây là Skill
         if (
-          !partialContext.characterSkills?.some(
-            (s) => s.name.toLowerCase() === entityNameLower,
-          )
+          !partialContext.characterSkills?.some((s) => s.name.toLowerCase() === entityNameLower)
         ) {
           partialContext.characterSkills = [
             ...(partialContext.characterSkills || []),
@@ -254,12 +207,9 @@ export function selectRelevantContext(
   });
 
   // Dọn dẹp các mảng rỗng nếu không có gì được thêm vào để prompt gọn gàng hơn
-  if (partialContext.encounteredNPCs?.length === 0)
-    delete partialContext.encounteredNPCs;
-  if (partialContext.encounteredFactions?.length === 0)
-    delete partialContext.encounteredFactions;
-  if (partialContext.discoveredEntities?.length === 0)
-    delete partialContext.discoveredEntities;
+  if (partialContext.encounteredNPCs?.length === 0) delete partialContext.encounteredNPCs;
+  if (partialContext.encounteredFactions?.length === 0) delete partialContext.encounteredFactions;
+  if (partialContext.discoveredEntities?.length === 0) delete partialContext.discoveredEntities;
 
   return partialContext;
 }

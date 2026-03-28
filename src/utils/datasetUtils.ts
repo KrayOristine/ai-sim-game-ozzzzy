@@ -45,10 +45,7 @@ export const extractCleanTextFromDataset = (content: string): string => {
     return data.chunks.map((chunk) => chunk.text).join("\n\n");
   } catch (error) {
     // Điều này lý tưởng sẽ không xảy ra do đã có kiểm tra isFandomDataset, nhưng để dự phòng:
-    console.error(
-      "Lỗi khi phân tích dataset ngay cả sau khi đã xác thực:",
-      error,
-    );
+    console.error("Lỗi khi phân tích dataset ngay cả sau khi đã xác thực:", error);
     return content; // Trả về nội dung gốc khi có lỗi
   }
 };
@@ -72,9 +69,7 @@ export const filterDatasetChunks = (
 
   try {
     const data = JSON.parse(datasetContent) as FandomDataset;
-    const keywords = anchorKeywords
-      .map((k) => k.toLowerCase().trim())
-      .filter(Boolean);
+    const keywords = anchorKeywords.map((k) => k.toLowerCase().trim()).filter(Boolean);
 
     if (keywords.length === 0) {
       // Nếu không có từ khóa, lấy maxChunks đoạn đầu tiên làm bối cảnh mặc định

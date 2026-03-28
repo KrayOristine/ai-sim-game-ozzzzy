@@ -4,10 +4,7 @@
  * @param maxValue - Giá trị tối đa của chỉ số để tính toán %.
  * @returns Một số nguyên là giá trị thay đổi.
  */
-function calculateFuzzyChange(
-  level: "low" | "medium" | "high",
-  maxValue: number,
-): number {
+function calculateFuzzyChange(level: "low" | "medium" | "high", maxValue: number): number {
   let percentageMin = 0;
   let percentageMax = 0;
 
@@ -29,8 +26,7 @@ function calculateFuzzyChange(
   }
 
   // Tạo một số ngẫu nhiên trong khoảng phần trăm đã định
-  const randomPercentage =
-    Math.random() * (percentageMax - percentageMin) + percentageMin;
+  const randomPercentage = Math.random() * (percentageMax - percentageMin) + percentageMin;
   const change = Math.round(maxValue * randomPercentage);
   return Math.max(1, change); // Đảm bảo thay đổi ít nhất là 1
 }
@@ -119,10 +115,7 @@ export function processStatChange(
   // 3. Chuẩn hóa giá trị (Clamping)
   if (statToUpdate.hasLimit !== false) {
     // Nếu có giới hạn: 0 <= value <= maxValue
-    statToUpdate.value = Math.max(
-      0,
-      Math.min(statToUpdate.value, statToUpdate.maxValue),
-    );
+    statToUpdate.value = Math.max(0, Math.min(statToUpdate.value, statToUpdate.maxValue));
   } else {
     // Nếu không giới hạn (như Sức Mạnh, Trí Tuệ): Chỉ cần không âm, maxValue tự động tăng theo value
     statToUpdate.value = Math.max(0, statToUpdate.value);

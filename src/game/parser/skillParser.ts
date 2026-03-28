@@ -23,10 +23,7 @@ export function processSkillLearned(
     description: params.description || "",
   };
 
-  const updatedSkills = mergeAndDeduplicateByName(
-    currentState.character.skills || [],
-    [newSkill],
-  );
+  const updatedSkills = mergeAndDeduplicateByName(currentState.character.skills || [], [newSkill]);
 
   const vectorContent = `Kỹ năng: ${newSkill.name}\nMô tả: ${newSkill.description}`;
   const vectorUpdate: VectorUpdate = {

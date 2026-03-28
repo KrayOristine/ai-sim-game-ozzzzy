@@ -1,19 +1,10 @@
 import { ATMOSPHERE_CONFIG } from "#/constants/atmosphere";
 import { NARRATIVE_ARCHETYPES } from "#/constants/narrative_styles";
 
-export const advanceTime = (
-  currentTime: WorldTime,
-  timePassed: TimePassed | {},
-): WorldTime => {
+export const advanceTime = (currentTime: WorldTime, timePassed: TimePassed | {}): WorldTime => {
   if (!timePassed || Object.keys(timePassed).length === 0) return currentTime;
 
-  const {
-    years = 0,
-    months = 0,
-    days = 0,
-    hours = 0,
-    minutes = 0,
-  } = timePassed as TimePassed;
+  const { years = 0, months = 0, days = 0, hours = 0, minutes = 0 } = timePassed as TimePassed;
 
   // Sử dụng JS Date để xử lý rollover một cách mạnh mẽ (ví dụ: 25 giờ -> +1 ngày, 1 giờ)
   // Tháng trong JS Date là 0-indexed, vì vậy trừ 1 khi đặt và cộng 1 khi lấy.
@@ -62,11 +53,7 @@ const parseHour = (hourStr: string, modifier?: string): number | null => {
     if (hour < 12) return hour + 12;
   }
   // "sáng" hoặc định dạng 24h không cần thay đổi (12h đêm là 0)
-  if (
-    hour === 12 &&
-    (lowerModifier.includes("trưa") || lowerModifier.includes("sáng"))
-  )
-    return 12;
+  if (hour === 12 && (lowerModifier.includes("trưa") || lowerModifier.includes("sáng"))) return 12;
   if (hour === 12 && lowerModifier.includes("đêm")) return 0;
 
   return hour;
@@ -114,8 +101,7 @@ export const extractTimePassedFromText = (
         const integerPart = Math.floor(totalValue);
         const decimalPart = totalValue - integerPart;
 
-        (timePassed[unitKey] as number) =
-          ((timePassed[unitKey] as number) || 0) + integerPart;
+        (timePassed[unitKey] as number) = ((timePassed[unitKey] as number) || 0) + integerPart;
 
         if (decimalPart > 0) {
           if (unitKey === "days") {
@@ -170,9 +156,7 @@ export const extractTimePassedFromText = (
     chiều: 14,
     tối: 18,
   };
-  const untilKeywordMatch = lowerText.match(
-    /(?:đến|tới)\s+(sáng|trưa|chiều|tối)(?:\s+(mai))?/i,
-  );
+  const untilKeywordMatch = lowerText.match(/(?:đến|tới)\s+(sáng|trưa|chiều|tối)(?:\s+(mai))?/i);
   const untilTimeMatch = lowerText.match(
     /(?:đến|tới)\s*(\d+)\s*(giờ|h)?\s*(sáng|chiều|tối|đêm)?(?:\s+(mai))?/i,
   );
@@ -217,26 +201,19 @@ export const extractTimePassedFromText = (
 };
 
 export const getSeason = (month: number, archetype: string): string => {
-  const config =
-    ATMOSPHERE_CONFIG[archetype] ||
-    ATMOSPHERE_CONFIG[NARRATIVE_ARCHETYPES.DEFAULT];
+  const config = ATMOSPHERE_CONFIG[archetype] || ATMOSPHERE_CONFIG[NARRATIVE_ARCHETYPES.DEFAULT];
   return config.seasons[month] || "Không xác định";
 };
 
 export const generateWeather = (season: string, archetype: string): string => {
-  const config =
-    ATMOSPHERE_CONFIG[archetype] ||
-    ATMOSPHERE_CONFIG[NARRATIVE_ARCHETYPES.DEFAULT];
+  const config = ATMOSPHERE_CONFIG[archetype] || ATMOSPHERE_CONFIG[NARRATIVE_ARCHETYPES.DEFAULT];
   const weatherOptions = config.weather[season];
 
   if (!weatherOptions || weatherOptions.length === 0) {
     return "Bình thường";
   }
 
-  const totalWeight = weatherOptions.reduce(
-    (sum, weather) => sum + weather.weight,
-    0,
-  );
+  const totalWeight = weatherOptions.reduce((sum, weather) => sum + weather.weight, 0);
   let random = Math.random() * totalWeight;
 
   for (const weather of weatherOptions) {
@@ -258,9 +235,7 @@ export const shouldWeatherUpdate = (
     return false;
   }
   const totalMinutesPassed =
-    (timePassed.days || 0) * 24 * 60 +
-    (timePassed.hours || 0) * 60 +
-    (timePassed.minutes || 0);
+    (timePassed.days || 0) * 24 * 60 + (timePassed.hours || 0) * 60 + (timePassed.minutes || 0);
 
   // Cập nhật nếu trôi qua hơn một giờ hoặc nếu ngày thay đổi
   return (

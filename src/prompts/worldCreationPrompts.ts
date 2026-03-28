@@ -98,12 +98,7 @@ export const getGenerateSettingPrompt = (config: WorldConfig): string => {
 
 const getWorldCreationSchema = (generateMilestones: boolean) => {
   // Chỉ cho phép các loại thực thể cụ thể trong quá trình kiến tạo ban đầu, loại bỏ Lore/Hệ thống sức mạnh
-  const allowedEntityTypes = [
-    "NPC",
-    "Vật phẩm",
-    "Địa điểm",
-    "Phe phái/Thế lực",
-  ];
+  const allowedEntityTypes = ["NPC", "Vật phẩm", "Địa điểm", "Phe phái/Thế lực"];
 
   const entitySchema = {
     type: Type.OBJECT,
@@ -120,8 +115,7 @@ const getWorldCreationSchema = (generateMilestones: boolean) => {
       },
       personality: {
         type: Type.STRING,
-        description:
-          "Mô tả tính cách (chỉ dành cho NPC, có thể để trống cho các loại khác).",
+        description: "Mô tả tính cách (chỉ dành cho NPC, có thể để trống cho các loại khác).",
       },
       description: {
         type: Type.STRING,
@@ -154,14 +148,7 @@ const getWorldCreationSchema = (generateMilestones: boolean) => {
           "Đặt là 'true' cho các chỉ số có giới hạn (như Máu, Năng lượng). Đặt là 'false' cho các chỉ số thuộc tính có thể tăng vô hạn (như Sức mạnh, Trí tuệ).",
       },
     },
-    required: [
-      "name",
-      "value",
-      "maxValue",
-      "isPercentage",
-      "description",
-      "hasLimit",
-    ],
+    required: ["name", "value", "maxValue", "isPercentage", "description", "hasLimit"],
   };
 
   const milestoneSchema = {
@@ -171,8 +158,7 @@ const getWorldCreationSchema = (generateMilestones: boolean) => {
       value: { type: Type.STRING },
       description: {
         type: Type.STRING,
-        description:
-          "Mô tả chi tiết ý nghĩa và hệ thống cấp bậc của cột mốc này cho AI.",
+        description: "Mô tả chi tiết ý nghĩa và hệ thống cấp bậc của cột mốc này cho AI.",
       },
       category: { type: Type.STRING, enum: ["Tu Luyện", "Thân Thể"] },
     },
@@ -253,8 +239,7 @@ const getWorldCreationSchema = (generateMilestones: boolean) => {
           },
           genre: {
             type: Type.STRING,
-            description:
-              "Thể loại của câu chuyện (VD: Tiên hiệp, Khoa học viễn tưởng).",
+            description: "Thể loại của câu chuyện (VD: Tiên hiệp, Khoa học viễn tưởng).",
           },
           setting: {
             type: Type.STRING,
@@ -310,10 +295,7 @@ export const getGenerateWorldFromIdeaPrompt = (
   backgroundKnowledge?: { name: string; content: string }[],
 ) => {
   // Sàng lọc kiến thức nền bằng cách dùng 'idea' làm từ khóa neo
-  const backgroundKnowledgePrompt = buildWorldCreationKnowledgePrompt(
-    backgroundKnowledge,
-    idea,
-  );
+  const backgroundKnowledgePrompt = buildWorldCreationKnowledgePrompt(backgroundKnowledge, idea);
 
   let milestoneInstruction = `8.  **HỆ THỐNG CỘT MỐC (TẮT):**
     a. BẮT BUỘC đặt \`enableMilestoneSystem: false\`.
@@ -365,10 +347,7 @@ export const getGenerateFanfictionWorldPrompt = (
   backgroundKnowledge?: { name: string; content: string }[],
 ) => {
   // Sàng lọc kiến thức nền bằng cách dùng 'idea' làm từ khóa neo
-  const backgroundKnowledgePrompt = buildWorldCreationKnowledgePrompt(
-    backgroundKnowledge,
-    idea,
-  );
+  const backgroundKnowledgePrompt = buildWorldCreationKnowledgePrompt(backgroundKnowledge, idea);
 
   let milestoneInstruction = `8.  **HỆ THỐNG CỘT MỐC (TẮT):**
     a. BẮT BUỘC đặt \`enableMilestoneSystem: false\`.
@@ -433,8 +412,7 @@ export const getGenerateEntityInfoOnTheFlyPrompt = (
       type: {
         type: Type.STRING,
         enum: CORE_ENTITY_TYPES,
-        description:
-          "Loại cốt lõi của thực thể. BẮT BUỘC phải là một trong các giá trị sau.",
+        description: "Loại cốt lõi của thực thể. BẮT BUỘC phải là một trong các giá trị sau.",
       },
       customCategory: {
         type: Type.STRING,
@@ -447,8 +425,7 @@ export const getGenerateEntityInfoOnTheFlyPrompt = (
       },
       description: {
         type: Type.STRING,
-        description:
-          "Mô tả chi tiết, hợp lý và sáng tạo về thực thể dựa trên bối cảnh.",
+        description: "Mô tả chi tiết, hợp lý và sáng tạo về thực thể dựa trên bối cảnh.",
       },
       tags: {
         type: Type.ARRAY,

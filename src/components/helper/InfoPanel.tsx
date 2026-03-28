@@ -22,23 +22,14 @@ const InfoPanel: React.FC<InfoPanelProps> = ({
   const [isOpen, setIsOpen] = useState(isInitiallyOpen);
 
   return (
-    <div
-      className={`info_panel_main_div ${borderColorClass}`}
-    >
+    <div className={`info_panel_main_div ${borderColorClass}`}>
       <button onClick={() => setIsOpen(!isOpen)} className="info_panel_btn">
         <div className="info_panel_btn_div">
           <div className="info_panel_btn_div_b">
             <Icon name={iconName} className="info_panel_btn_icon" />
-            <h3
-              className={`info_panel_btn_title ${textColorClass}`}
-            >
-              {title}
-            </h3>
+            <h3 className={`info_panel_btn_title ${textColorClass}`}>{title}</h3>
           </div>
-          <Icon
-            name={isOpen ? "arrowUp" : "arrowDown"}
-            className="info_panel_btn_arrow"
-          />
+          <Icon name={isOpen ? "arrowUp" : "arrowDown"} className="info_panel_btn_arrow" />
         </div>
       </button>
 

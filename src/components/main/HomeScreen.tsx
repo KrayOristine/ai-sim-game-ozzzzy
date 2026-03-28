@@ -50,10 +50,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
       if (navigator.storage && navigator.storage.estimate) {
         try {
           const estimation = await navigator.storage.estimate();
-          if (
-            estimation.usage !== undefined &&
-            estimation.quota !== undefined
-          ) {
+          if (estimation.usage !== undefined && estimation.quota !== undefined) {
             const usageMB = (estimation.usage / 1024 / 1024).toFixed(2);
             const quotaGB = (estimation.quota / 1024 / 1024 / 1024).toFixed(2);
             setStorageUsage(`${usageMB} MB / ${quotaGB} GB`);
@@ -71,9 +68,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       try {
@@ -93,11 +88,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
           );
         }
       } catch (error) {
-        alert(
-          error instanceof Error
-            ? error.message
-            : "Lỗi không xác định khi xử lý tệp.",
-        );
+        alert(error instanceof Error ? error.message : "Lỗi không xác định khi xử lý tệp.");
       }
     }
     if (event.target) {
@@ -123,10 +114,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
         onClose={handleCloseLoadModal}
         onLoad={onLoadSavedGame}
       />
-      <UpdateLogModal
-        isOpen={isUpdateLogOpen}
-        onClose={() => setIsUpdateLogOpen(false)}
-      />
+      <UpdateLogModal isOpen={isUpdateLogOpen} onClose={() => setIsUpdateLogOpen(false)} />
       <NotificationModal
         isOpen={isNotificationOpen}
         onClose={() => setIsNotificationOpen(false)}
@@ -142,11 +130,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
         </div>
 
         <div className="w-full max-w-sm space-y-4">
-          <Button
-            onClick={onStartNew}
-            icon={<Icon name="play" />}
-            variant="primary"
-          >
+          <Button onClick={onStartNew} icon={<Icon name="play" />} variant="primary">
             Bắt Đầu Cuộc Phiêu Lưu Mới
           </Button>
           <Button
@@ -155,18 +139,12 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
             variant={hasSaveFile ? "success" : "secondary"}
             disabled={!hasSaveFile || isCheckingSaves}
             className={
-              !hasSaveFile || isCheckingSaves
-                ? "opacity-50 cursor-not-allowed hover:scale-100"
-                : ""
+              !hasSaveFile || isCheckingSaves ? "opacity-50 cursor-not-allowed hover:scale-100" : ""
             }
           >
             {isCheckingSaves ? "Đang kiểm tra..." : "Tải Game Đã Lưu"}
           </Button>
-          <Button
-            onClick={handleLoadFromJson}
-            icon={<Icon name="upload" />}
-            variant="secondary"
-          >
+          <Button onClick={handleLoadFromJson} icon={<Icon name="upload" />} variant="secondary">
             Tải Thiết Lập/Game Từ Tệp (.json)
           </Button>
           <input
@@ -190,11 +168,7 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
           >
             Xem Cập Nhật Game
           </Button>
-          <Button
-            onClick={onNavigateToSettings}
-            icon={<Icon name="settings" />}
-            variant="info"
-          >
+          <Button onClick={onNavigateToSettings} icon={<Icon name="settings" />} variant="info">
             Cài Đặt
           </Button>
         </div>

@@ -10,17 +10,10 @@ import * as dbService from "./dbService";
 import * as embeddingService from "./embeddingService";
 import * as backgroundService from "./backgroundService"; // Import background service
 import { cosineSimilarity } from "@utils/vectorUtils";
-import {
-  calculateKeywordScore,
-  reciprocalRankFusion,
-} from "@utils/searchUtils";
+import { calculateKeywordScore, reciprocalRankFusion } from "@utils/searchUtils";
 import { parseResponse } from "#/game/parser";
 import { selectRelevantContext } from "@utils/ContextManager";
-import {
-  resetRequestStats,
-  printRequestStats,
-  setDebugContext,
-} from "./geminiService";
+import { resetRequestStats, printRequestStats, setDebugContext } from "./geminiService";
 import { AIModel } from "#/constants";
 
 const DEBUG_MODE = true; // Bật/tắt chế độ debug chi tiết trong Console (F12)
@@ -38,7 +31,7 @@ export const startGame = async (
 
   const { prompt, systemInstruction } = getStartGamePrompt(config);
   // Bật thử lại 2 lần cho giai đoạn Gameplay quan trọng
-  const rawResponse = await generate(prompt, systemInstruction, 2 ,undefined,config);
+  const rawResponse = await generate(prompt, systemInstruction, 2, undefined, config);
 
   printRequestStats("Khởi tạo Thế giới"); // In báo cáo
 
@@ -54,10 +47,7 @@ export const startGame = async (
 
   // Xóa các dòng giải thích của AI (Bullet points đậm - thường thấy ở model Pro)
   finalNarration = finalNarration.replace(/^\s*\*\s*\*\*.*?:.*/gm, ""); // Matches "* **Dieu kien...: ..."
-  finalNarration = finalNarration.replace(
-    /^\s*\*\s*Điều kiện kích hoạt.*/gim,
-    "",
-  );
+  finalNarration = finalNarration.replace(/^\s*\*\s*Điều kiện kích hoạt.*/gim, "");
   finalNarration = finalNarration.replace(/^\s*\*\s*Sự kiện.*/gim, "");
 
   // 2. Loại bỏ các header/footer thừa bên trong narration
@@ -79,9 +69,7 @@ export const startGame = async (
   return { ...parsed, narration: finalNarration, worldSim: undefined };
 };
 
-export const generateReputationTiers = async (
-  genre: string,
-): Promise<string[]> => {
+export const generateReputationTiers = async (genre: string): Promise<string[]> => {
   setDebugContext("Auxiliary - Reputation Tiers");
   const { prompt, schema } = getGenerateReputationTiersPrompt(genre);
   const result = await generateJson<{ tiers: string[] }>(
@@ -92,9 +80,7 @@ export const generateReputationTiers = async (
     undefined,
     2,
   );
-  return (
-    result.tiers || ["Tai Tiếng", "Bị Ghét", "Vô Danh", "Được Mến", "Nổi Vọng"]
-  );
+  return result.tiers || ["Tai Tiếng", "Bị Ghét", "Vô Danh", "Được Mến", "Nổi Vọng"];
 };
 
 // Hàm trợ giúp mới để triển khai logic trí nhớ kết hợp
@@ -109,9 +95,7 @@ async function getInjectedMemories(
   const lastPlayerAction = history[history.length - 1];
 
   if (!worldId) {
-    console.warn(
-      "getInjectedMemories được gọi mà không có worldId. Bỏ qua truy xuất ký ức.",
-    );
+    console.warn("getInjectedMemories được gọi mà không có worldId. Bỏ qua truy xuất ký ức.");
     return { memories: "" };
   }
 
@@ -133,9 +117,7 @@ async function getInjectedMemories(
   const allKnownNpcNames = [
     ...gameState.encounteredNPCs.map((n) => n.name),
     ...gameState.companions.map((c) => c.name),
-    ...gameState.worldConfig.initialEntities
-      .filter((e) => e.type === "NPC")
-      .map((e) => e.name),
+    ...gameState.worldConfig.initialEntities.filter((e) => e.type === "NPC").map((e) => e.name),
   ];
   const uniqueNpcNames = [...new Set(allKnownNpcNames)];
   const involvedNpcsInAction = uniqueNpcNames.filter((name) =>
@@ -158,9 +140,7 @@ async function getInjectedMemories(
         let npcDossierString = `--- HỒ SƠ TƯƠNG TÁC VỚI ${npcName} ---\n`;
         if (dossier.archived && dossier.archived.length > 0) {
           npcDossierString +=
-            "Ký ức đã lưu trữ (sự kiện cũ):\n- " +
-            dossier.archived.join("\n- ") +
-            "\n\n";
+            "Ký ức đã lưu trữ (sự kiện cũ):\n- " + dossier.archived.join("\n- ") + "\n\n";
         }
         if (dossier.fresh && dossier.fresh.length > 0) {
           const freshHistory = dossier.fresh
@@ -178,11 +158,7 @@ async function getInjectedMemories(
       }
     }
     if (DEBUG_MODE) {
-      console.log(
-        `%c[INJECTED DOSSIER]`,
-        "color: lightblue;",
-        dossierContent || "Không có hồ sơ.",
-      );
+      console.log(`%c[INJECTED DOSSIER]`, "color: lightblue;", dossierContent || "Không có hồ sơ.");
     }
     return { memories: dossierContent };
   }
@@ -190,9 +166,7 @@ async function getInjectedMemories(
   // 3. Sử dụng Phương pháp 3 (Hybrid Search) nếu không có NPC cụ thể nào
   // LƯU Ý: queryEmbedding ĐƯỢC TRUYỀN VÀO TỪ BÊN NGOÀI, KHÔNG GỌI API Ở ĐÂY.
   if (!queryEmbedding) {
-    console.warn(
-      "getInjectedMemories cần RAG nhưng không có embedding được truyền vào.",
-    );
+    console.warn("getInjectedMemories cần RAG nhưng không có embedding được truyền vào.");
     return { memories: "" };
   }
 
@@ -220,18 +194,12 @@ async function getInjectedMemories(
           data: vector,
         }))
         .sort((a, b) => b.score - a.score);
-      const fusedTurnResults = reciprocalRankFusion([
-        vectorRankedTurns,
-        keywordRankedTurns,
-      ]);
+      const fusedTurnResults = reciprocalRankFusion([vectorRankedTurns, keywordRankedTurns]);
       const topTurns = fusedTurnResults.slice(0, ragSettings.topK);
       foundTurnsCount = topTurns.length;
       if (topTurns.length > 0) {
         relevantPastTurns = topTurns
-          .map(
-            (t) =>
-              `[Lượt ${t.data.turnIndex}]: ${t.data.content.replace(/<[^>]*>/g, "")}`,
-          )
+          .map((t) => `[Lượt ${t.data.turnIndex}]: ${t.data.content.replace(/<[^>]*>/g, "")}`)
           .join("\n\n");
       }
     }
@@ -267,10 +235,7 @@ async function getInjectedMemories(
       foundSummariesCount = topSummaries.length;
       if (topSummaries.length > 0) {
         relevantMemories = topSummaries
-          .map(
-            (s) =>
-              `[Tóm tắt giai đoạn ${s.data.summaryIndex + 1}]: ${s.data.content}`,
-          )
+          .map((s) => `[Tóm tắt giai đoạn ${s.data.summaryIndex + 1}]: ${s.data.content}`)
           .join("\n\n");
       }
     }
@@ -311,9 +276,7 @@ export const getNextTurn = async (
 
   const lastPlayerAction = history[history.length - 1];
   if (!lastPlayerAction || lastPlayerAction.type !== "action") {
-    throw new Error(
-      "Lỗi logic: Lượt đi cuối cùng phải là hành động của người chơi.",
-    );
+    throw new Error("Lỗi logic: Lượt đi cuối cùng phải là hành động của người chơi.");
   }
 
   // --- PIGGYBACK VECTORIZATION STRATEGY ---
@@ -329,10 +292,7 @@ export const getNextTurn = async (
 
   // 3. Gom tất cả vào 1 mảng để gọi API Embed duy nhất (Batching)
   // Item đầu tiên luôn là Query cho lượt này. Các item sau là dữ liệu cần lưu của lượt trước.
-  const textsToEmbed = [
-    ragQueryText,
-    ...pendingItems.map((item) => item.content),
-  ];
+  const textsToEmbed = [ragQueryText, ...pendingItems.map((item) => item.content)];
 
   let queryEmbedding: number[] | null = null;
   let bufferEmbeddings: number[][] = [];
@@ -342,8 +302,7 @@ export const getNextTurn = async (
   const shouldEmbed =
     textsToEmbed.length > 1 ||
     history.length > 10 ||
-    (worldConfig.backgroundKnowledge &&
-      worldConfig.backgroundKnowledge.length > 0);
+    (worldConfig.backgroundKnowledge && worldConfig.backgroundKnowledge.length > 0);
 
   if (shouldEmbed) {
     setDebugContext("Piggyback Vectorization (Query + Buffer)");
@@ -410,16 +369,9 @@ export const getNextTurn = async (
   }
 
   // Bước 1: Quản lý Ngữ cảnh Thông minh (Smart Context Manager)
-  const relevantContext = selectRelevantContext(
-    gameState,
-    lastPlayerAction.content,
-  );
+  const relevantContext = selectRelevantContext(gameState, lastPlayerAction.content);
   if (DEBUG_MODE) {
-    console.log(
-      `%c[SMART CONTEXT]`,
-      "color: #FFD700; font-weight: bold;",
-      relevantContext,
-    );
+    console.log(`%c[SMART CONTEXT]`, "color: #FFD700; font-weight: bold;", relevantContext);
   }
 
   // Bước 2: Lấy bối cảnh trí nhớ được tiêm vào (Dossier hoặc RAG)
@@ -459,10 +411,7 @@ export const getNextTurn = async (
     ].map((e) => e.name);
 
     if (entitiesInAction.length > 0) {
-      graphContext = await backgroundService.fetchGraphContext(
-        gameState.worldId,
-        entitiesInAction,
-      );
+      graphContext = await backgroundService.fetchGraphContext(gameState.worldId, entitiesInAction);
       if (DEBUG_MODE && graphContext) {
         console.log(`%c[GRAPH RAG]`, "color: #d8b4fe;", graphContext);
       }
@@ -481,11 +430,7 @@ export const getNextTurn = async (
   );
 
   if (DEBUG_MODE) {
-    console.log(
-      "%c[FOUND KNOWLEDGE]",
-      "color: lightblue;",
-      relevantKnowledge || "Không có.",
-    );
+    console.log("%c[FOUND KNOWLEDGE]", "color: lightblue;", relevantKnowledge || "Không có.");
     console.groupEnd();
   }
 
@@ -506,10 +451,7 @@ export const getNextTurn = async (
 
   // Xóa các dòng giải thích của AI (Bullet points đậm - thường thấy ở model Pro)
   finalNarration = finalNarration.replace(/^\s*\*\s*\*\*.*?:.*/gm, ""); // Matches "* **Dieu kien...: ..."
-  finalNarration = finalNarration.replace(
-    /^\s*\*\s*Điều kiện kích hoạt.*/gim,
-    "",
-  );
+  finalNarration = finalNarration.replace(/^\s*\*\s*Điều kiện kích hoạt.*/gim, "");
   finalNarration = finalNarration.replace(/^\s*\*\s*Sự kiện.*/gim, "");
 
   // 2. Loại bỏ các header/footer thừa
@@ -530,10 +472,7 @@ export const getNextTurn = async (
   let newSummary: string | undefined;
   const totalTurns = history.length + 2; // history (old) + user action (1) + ai response (1)
 
-  if (
-    ragSettings.summaryFrequency > 0 &&
-    totalTurns % ragSettings.summaryFrequency === 0
-  ) {
+  if (ragSettings.summaryFrequency > 0 && totalTurns % ragSettings.summaryFrequency === 0) {
     setDebugContext("Auto Summary (Flash)");
     // Create a temporary history array including the just-generated narration
     const currentTurnObj: GameTurn = {
@@ -563,11 +502,7 @@ export const getNextTurn = async (
   // Gọi Background Service để phân tích Graph và EQ sau khi đã render xong Narration
   // Sử dụng context cũ để AI so sánh sự thay đổi
   const previousContextSummary = `Hành động: ${lastPlayerAction.content}`;
-  backgroundService.runPiggybackAnalysis(
-    gameState,
-    finalNarration,
-    previousContextSummary,
-  );
+  backgroundService.runPiggybackAnalysis(gameState, finalNarration, previousContextSummary);
 
   // Return undefined for worldSim to ensure component doesn't show separate modal
   return {

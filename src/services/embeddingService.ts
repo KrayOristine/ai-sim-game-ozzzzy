@@ -34,15 +34,10 @@ export async function embedContents(
 
       // Chỉ thêm độ trễ nếu còn batch tiếp theo
       if (i + BATCH_SIZE < chunks.length) {
-        await new Promise((resolve) =>
-          setTimeout(resolve, DELAY_BETWEEN_BATCHES),
-        );
+        await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_BATCHES));
       }
     } catch (error) {
-      console.error(
-        `Lỗi khi xử lý embedding batch bắt đầu từ chunk ${i}:`,
-        error,
-      );
+      console.error(`Lỗi khi xử lý embedding batch bắt đầu từ chunk ${i}:`, error);
       // Ném lỗi ra để các hàm gọi có thể xử lý, thay vì chỉ trả về mảng rỗng
       throw new Error(
         `Lỗi khi tạo embeddings cho dữ liệu. Vui lòng thử lại. Chi tiết: ${error instanceof Error ? error.message : String(error)}`,
@@ -75,9 +70,6 @@ export async function createEntityVector(
       console.log(`[Embedding] Đã tạo và lưu vector cho thực thể: ${entityId}`);
     }
   } catch (error) {
-    console.error(
-      `[Embedding] Lỗi khi tạo vector cho thực thể ${entityId}:`,
-      error,
-    );
+    console.error(`[Embedding] Lỗi khi tạo vector cho thực thể ${entityId}:`, error);
   }
 }

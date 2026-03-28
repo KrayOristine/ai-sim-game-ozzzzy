@@ -35,10 +35,7 @@ export function dispatchTags(
   const validatedTags = tags.map((tag) => {
     const newTag = { ...tag, params: { ...tag.params } }; // Tạo bản sao sâu hơn
 
-    if (
-      newTag.tagName === "LOCATION_DISCOVERED" ||
-      newTag.tagName === "LORE_DISCOVERED"
-    ) {
+    if (newTag.tagName === "LOCATION_DISCOVERED" || newTag.tagName === "LORE_DISCOVERED") {
       const name = (newTag.params.name as string)?.toLowerCase() || "";
       const itemKeywords = [
         "kiếm",
@@ -160,11 +157,7 @@ export function dispatchTags(
           processResult = processFactionUpdate(acc.state, tag.params);
           break;
         case "LOCATION_DISCOVERED":
-          processResult = processEntityDiscovered(
-            acc.state,
-            tag.params,
-            "Địa điểm",
-          );
+          processResult = processEntityDiscovered(acc.state, tag.params, "Địa điểm");
           break;
         case "LORE_DISCOVERED":
           processResult = processEntityDiscovered(

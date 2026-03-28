@@ -2,11 +2,7 @@ import * as dbService from "./dbService";
 import * as embeddingService from "./embeddingService";
 import * as ragService from "./ragService";
 import { getSettings } from "./settingsService";
-import {
-  setDebugContext,
-  resetRequestStats,
-  printRequestStats,
-} from "./geminiService";
+import { setDebugContext, resetRequestStats, printRequestStats } from "./geminiService";
 
 const LEGACY_SAVES_STORAGE_KEY = "ai_rpg_all_saves";
 const MAX_MANUAL_SAVES = 5;
@@ -45,9 +41,7 @@ export const migrateSaves = (): Promise<void> => {
   migrationPromise = (async () => {
     const legacySaves = loadAllSavesFromLocalStorage();
     if (legacySaves.length > 0) {
-      console.log(
-        `Migrating ${legacySaves.length} saves from localStorage to IndexedDB...`,
-      );
+      console.log(`Migrating ${legacySaves.length} saves from localStorage to IndexedDB...`);
       try {
         // Save saves from oldest to newest to maintain order if trimming is needed
         for (const save of legacySaves.reverse()) {
@@ -130,24 +124,18 @@ export const saveGame = async (
 ): Promise<void> => {
   try {
     const lastTurn =
-      gameState.history.length > 0
-        ? gameState.history[gameState.history.length - 1]
-        : null;
+      gameState.history.length > 0 ? gameState.history[gameState.history.length - 1] : null;
 
     let previewText = "Bắt đầu cuộc phiêu lưu...";
     if (lastTurn) {
-      const contentSnippet = lastTurn.content
-        .replace(/<[^>]*>/g, "")
-        .substring(0, 80);
+      const contentSnippet = lastTurn.content.replace(/<[^>]*>/g, "").substring(0, 80);
       previewText = `${lastTurn.type === "action" ? "Bạn" : "AI"}: ${contentSnippet}...`;
     }
 
     const newSave: SaveSlot = {
       ...gameState,
       worldId: gameState.worldId || crypto.randomUUID().replace("-", ""), // Đảm bảo worldId luôn tồn tại khi lưu
-      worldName:
-        gameState.worldConfig.storyContext.worldName ||
-        "Cuộc phiêu lưu không tên",
+      worldName: gameState.worldConfig.storyContext.worldName || "Cuộc phiêu lưu không tên",
       saveId: Date.now(),
       saveDate: new Date().toISOString(),
       previewText: previewText,
@@ -188,8 +176,7 @@ export const deleteSave = async (saveId: number): Promise<void> => {
     const turnVectors = await dbService.getAllTurnVectors(worldIdToDelete);
     for (const v of turnVectors) await dbService.deleteSave(v.turnId); // Assuming deleteSave can handle other stores based on some logic not shown
 
-    const summaryVectors =
-      await dbService.getAllSummaryVectors(worldIdToDelete);
+    const summaryVectors = await dbService.getAllSummaryVectors(worldIdToDelete);
     for (const v of summaryVectors) await dbService.deleteSave(v.summaryId);
 
     const entityVectors = await dbService.getAllEntityVectors(worldIdToDelete);

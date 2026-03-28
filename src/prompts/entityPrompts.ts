@@ -1,8 +1,4 @@
-
-export const getGenerateEntityNamePrompt = (
-  config: WorldConfig,
-  entity: InitialEntity,
-): string => {
+export const getGenerateEntityNamePrompt = (config: WorldConfig, entity: InitialEntity): string => {
   const currentName = entity.name.trim();
   return currentName
     ? `Một thực thể loại "${entity.type}" hiện có tên là "${currentName}". Dựa vào tên này và bối cảnh thế giới "${config.storyContext.setting}", hãy gợi ý một cái tên khác hay hơn, hoặc một danh hiệu, hoặc một tên đầy đủ cho thực thể này. Chỉ trả lời bằng tên mới.`

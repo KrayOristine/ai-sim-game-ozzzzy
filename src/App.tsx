@@ -35,9 +35,7 @@ const App: React.FC = () => {
         personality: "",
       };
       const existing = (worldConfigWithLore.initialEntities || []).find(
-        (e) =>
-          e.name === powerSystemEntity.name &&
-          e.type === powerSystemEntity.type,
+        (e) => e.name === powerSystemEntity.name && e.type === powerSystemEntity.type,
       );
       if (!existing) {
         worldConfigWithLore.initialEntities = [
@@ -80,8 +78,7 @@ const App: React.FC = () => {
             : DEFAULT_STATS
           : [],
         milestones: config.enableMilestoneSystem
-          ? config.character.milestones &&
-            config.character.milestones.length > 0
+          ? config.character.milestones && config.character.milestones.length > 0
             ? config.character.milestones
             : []
           : [],
@@ -133,9 +130,7 @@ const App: React.FC = () => {
         ...(state.discoveredEntities || []),
       ];
       const existing = allEntities.find(
-        (e) =>
-          e.name === powerSystemEntity.name &&
-          e.type === powerSystemEntity.type,
+        (e) => e.name === powerSystemEntity.name && e.type === powerSystemEntity.type,
       );
       if (!existing) {
         worldConfigWithLore.initialEntities = [
@@ -146,10 +141,7 @@ const App: React.FC = () => {
     }
 
     const completeState: GameState = {
-      worldId:
-        state.worldId ||
-        (state as any).saveId ||
-        crypto.randomUUID().replace(/-/g, ""), // Gán worldId nếu chưa có
+      worldId: state.worldId || (state as any).saveId || crypto.randomUUID().replace(/-/g, ""), // Gán worldId nếu chưa có
       memories: [],
       summaries: [],
       playerStatus: [],
@@ -174,7 +166,7 @@ const App: React.FC = () => {
         enableMilestoneSystem:
           state.worldConfig.enableMilestoneSystem ??
           (state.character.milestones && state.character.milestones.length > 0),
-          allowCheatEffects: true,
+        allowCheatEffects: true,
       },
       character: {
         ...(state.character || state.worldConfig.character), // Handle very old saves
@@ -193,14 +185,8 @@ const App: React.FC = () => {
     // Di chuyển npcDossiers nếu nó ở định dạng cũ
     if (completeState.npcDossiers) {
       const firstDossierKey = Object.keys(completeState.npcDossiers)[0];
-      if (
-        firstDossierKey &&
-        Array.isArray(completeState.npcDossiers[firstDossierKey])
-      ) {
-        const oldDossiers = completeState.npcDossiers as unknown as Record<
-          string,
-          number[]
-        >;
+      if (firstDossierKey && Array.isArray(completeState.npcDossiers[firstDossierKey])) {
+        const oldDossiers = completeState.npcDossiers as unknown as Record<string, number[]>;
         const newDossiers: Record<string, NpcDossier> = {};
         for (const npcName in oldDossiers) {
           newDossiers[npcName] = {
@@ -214,13 +200,8 @@ const App: React.FC = () => {
 
     // Tính toán mùa/thời tiết nếu thiếu
     if (!completeState.season || !completeState.weather) {
-      const archetype = resolveGenreArchetype(
-        completeState.worldConfig.storyContext.genre,
-      );
-      completeState.season = getSeason(
-        completeState.worldTime.month,
-        archetype,
-      );
+      const archetype = resolveGenreArchetype(completeState.worldConfig.storyContext.genre);
+      completeState.season = getSeason(completeState.worldTime.month, archetype);
       completeState.weather = generateWeather(completeState.season, archetype);
     }
 
@@ -258,12 +239,7 @@ const App: React.FC = () => {
         return <FandomGenesisScreen onBack={handleBackToHome} />;
       case "gameplay":
         if (gameState) {
-          return (
-            <GameplayScreen
-              initialGameState={gameState}
-              onBack={handleBackToHome}
-            />
-          );
+          return <GameplayScreen initialGameState={gameState} onBack={handleBackToHome} />;
         }
         // Fallback if no config
         setCurrentScreen("home");

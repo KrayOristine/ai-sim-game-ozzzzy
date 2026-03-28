@@ -5,7 +5,6 @@
     "useDefineForClassFields": false,
     "module": "ESNext",
     "rootDir": ".",
-    "baseUrl": "./src",
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
     "types": [],
@@ -17,13 +16,13 @@
     "allowJs": true,
     "jsx": "react-jsx",
     "paths": {
-      "#/*": ["./*"],
-      "@component/*": ["./components/*"],
-      "@service/*": ["./services/*"],
-      "@utils/*": ["./utils/*"],
-      "@game/*": ["./game/*"],
-      "@prompt/*": ["./prompts/*"],
-      "@const/*": ["./constants/*"]
+      "#/*": ["./src/*"],
+      "@component/*": ["./src/components/*"],
+      "@service/*": ["./src/services/*"],
+      "@utils/*": ["./src/utils/*"],
+      "@game/*": ["./src/game/*"],
+      "@prompt/*": ["./src/prompts/*"],
+      "@const/*": ["./src/constants/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/types"],
     "allowImportingTsExtensions": true,

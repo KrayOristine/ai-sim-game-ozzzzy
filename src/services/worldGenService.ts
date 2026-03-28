@@ -48,9 +48,7 @@ export async function generateWorldFromIdea(
       (acc, file) => acc + (file.content?.length || 0),
       0,
     );
-    const hasDataset = backgroundKnowledge.some((f) =>
-      f.name.startsWith("[DATASET]"),
-    );
+    const hasDataset = backgroundKnowledge.some((f) => f.name.startsWith("[DATASET]"));
 
     if (hasDataset && totalKnowledgeSize > KNOWLEDGE_SIZE_THRESHOLD) {
       const [queryEmbedding] = await embeddingService.embedContents([idea]);
@@ -92,9 +90,7 @@ export async function generateFanfictionWorld(
       (acc, file) => acc + (file.content?.length || 0),
       0,
     );
-    const hasDataset = backgroundKnowledge.some((f) =>
-      f.name.startsWith("[DATASET]"),
-    );
+    const hasDataset = backgroundKnowledge.some((f) => f.name.startsWith("[DATASET]"));
 
     if (hasDataset && totalKnowledgeSize > KNOWLEDGE_SIZE_THRESHOLD) {
       const [queryEmbedding] = await embeddingService.embedContents([idea]);
@@ -107,12 +103,11 @@ export async function generateFanfictionWorld(
     }
   }
 
-  const { prompt, schema, creativeCallConfig } =
-    getGenerateFanfictionWorldPrompt(
-      idea,
-      enableMilestoneSystem,
-      knowledgeForGeneration,
-    );
+  const { prompt, schema, creativeCallConfig } = getGenerateFanfictionWorldPrompt(
+    idea,
+    enableMilestoneSystem,
+    knowledgeForGeneration,
+  );
   // Tắt retry (0) cho kiến tạo thế giới
   return generateJson<WorldConfig>(
     prompt,
@@ -126,10 +121,7 @@ export async function generateFanfictionWorld(
 
 // --- Entity Creation AI Helpers ---
 
-export const generateEntityName = (
-  config: WorldConfig,
-  entity: InitialEntity,
-): Promise<string> => {
+export const generateEntityName = (config: WorldConfig, entity: InitialEntity): Promise<string> => {
   const prompt = getGenerateEntityNamePrompt(config, entity);
   return generate(prompt, undefined, 0);
 };
@@ -156,10 +148,7 @@ export async function generateFandomSummary(
   workName: string,
   authorName?: string,
 ): Promise<string> {
-  const { prompt, systemInstruction } = getGenerateFandomSummaryPrompt(
-    workName,
-    authorName,
-  );
+  const { prompt, systemInstruction } = getGenerateFandomSummaryPrompt(workName, authorName);
   const result = await generate(prompt, systemInstruction, 0);
   if (result.includes("WORK_NOT_FOUND")) {
     throw new Error(
@@ -169,9 +158,7 @@ export async function generateFandomSummary(
   return result;
 }
 
-export async function extractArcListFromSummary(
-  summaryContent: string,
-): Promise<string[]> {
+export async function extractArcListFromSummary(summaryContent: string): Promise<string[]> {
   const { prompt, schema } = getExtractArcListFromSummaryPrompt(summaryContent);
   const result = await generateJson<{ arcs: string[] }>(
     prompt,
@@ -190,13 +177,12 @@ export async function generateFandomGenesis(
   workName: string,
   authorName?: string,
 ): Promise<string> {
-  const { prompt, systemInstruction, creativeCallConfig } =
-    getGenerateFandomGenesisPrompt(
-      summaryContent,
-      arcName,
-      workName,
-      authorName,
-    );
+  const { prompt, systemInstruction, creativeCallConfig } = getGenerateFandomGenesisPrompt(
+    summaryContent,
+    arcName,
+    workName,
+    authorName,
+  );
   const result = await generate(prompt, systemInstruction, 0);
   if (result.trim() === "ARC_NOT_FOUND") {
     throw new Error(
@@ -226,14 +212,13 @@ export const generateEntityInfoOnTheFly = (
     finalCategory = detection.category;
   }
 
-  const { prompt, schema, creativeCallConfig } =
-    getGenerateEntityInfoOnTheFlyPrompt(
-      worldConfig,
-      history,
-      entityName,
-      finalType,
-      finalCategory,
-    );
+  const { prompt, schema, creativeCallConfig } = getGenerateEntityInfoOnTheFlyPrompt(
+    worldConfig,
+    history,
+    entityName,
+    finalType,
+    finalCategory,
+  );
   // Vẫn nên retry cho cái này vì nó thuộc Gameplay loop
   return generateJson<InitialEntity>(
     prompt,

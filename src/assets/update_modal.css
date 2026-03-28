@@ -2,7 +2,7 @@
 
 /* Update Modal */
 .update_modal_main_div {
-  @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4
+  @apply fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 p-4;
 }
 
 .update_modal_second_div {
@@ -11,29 +11,29 @@
 }
 
 .update_modal_third_div {
-  @apply flex justify-between items-center mb-4 shrink-0
+  @apply flex justify-between items-center mb-4 shrink-0;
 }
 
 .update_modal_title {
-  @apply text-xl font-bold flex items-center gap-3
+  @apply text-xl font-bold flex items-center gap-3;
 }
 
 .update_modal_display {
-  @apply grow overflow-y-auto pr-2 space-y-6
+  @apply grow overflow-y-auto pr-2 space-y-6;
 }
 
 .update_modal_close_div {
-  @apply flex justify-end mt-6 shrink-0
+  @apply flex justify-end mt-6 shrink-0;
 }
 
 .update_modal_close_btn {
-  @apply w-auto! py-2! px-5! text-base!
+  @apply w-auto! py-2! px-5! text-base!;
 }
 
 .update_modal_text_version {
-  @apply text-lg font-semibold text-fuchsia-300 border-b border-fuchsia-500/30 pb-1 mb-2
+  @apply text-lg font-semibold text-fuchsia-300 border-b border-fuchsia-500/30 pb-1 mb-2;
 }
 
 .update_modal_text_notes {
-  @apply list-disc list-inside space-y-2 text-slate-300 text-sm
+  @apply list-disc list-inside space-y-2 text-slate-300 text-sm;
 }

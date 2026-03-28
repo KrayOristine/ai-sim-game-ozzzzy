@@ -8,8 +8,7 @@ export interface Genre {
 export const GENRES: Genre[] = [
   {
     name: "Tùy chỉnh",
-    description:
-      "Tự do nhập thể loại của riêng bạn hoặc kết hợp nhiều thể loại.",
+    description: "Tự do nhập thể loại của riêng bạn hoặc kết hợp nhiều thể loại.",
   },
   {
     name: "Tiên hiệp / Tu tiên",

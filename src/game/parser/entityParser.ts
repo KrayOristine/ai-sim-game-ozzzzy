@@ -29,10 +29,9 @@ export function processFactionUpdate(
     customCategory: params.category, // Capture category
   };
 
-  const updatedFactions = mergeAndDeduplicateByName(
-    currentState.encounteredFactions || [],
-    [newFaction],
-  );
+  const updatedFactions = mergeAndDeduplicateByName(currentState.encounteredFactions || [], [
+    newFaction,
+  ]);
 
   const vectorContent = `Thế lực: ${newFaction.name}\nMô tả: ${newFaction.description}\nPhân loại: ${newFaction.customCategory || "Chưa rõ"}`;
   const vectorUpdate: VectorUpdate = {
@@ -88,10 +87,9 @@ export function processEntityDiscovered(
     locationId: currentState.currentLocationId,
   };
 
-  const updatedEntities = mergeAndDeduplicateByName(
-    currentState.discoveredEntities || [],
-    [newEntity],
-  );
+  const updatedEntities = mergeAndDeduplicateByName(currentState.discoveredEntities || [], [
+    newEntity,
+  ]);
 
   const vectorContent = `${type}: ${newEntity.name}\nMô tả: ${newEntity.description}\nPhân loại: ${newEntity.customCategory || "Chưa rõ"}`;
   const vectorUpdate: VectorUpdate = {

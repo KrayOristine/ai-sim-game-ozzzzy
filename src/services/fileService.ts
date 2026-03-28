@@ -1,7 +1,8 @@
+import { ArkErrors, type } from "arktype";
+
 export const saveWorldConfigToFile = (config: WorldConfig): void => {
   const dataStr = JSON.stringify(config, null, 2);
-  const dataUri =
-    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+  const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
 
   const exportFileDefaultName = "ai_rpg_world.json";
 
@@ -13,8 +14,7 @@ export const saveWorldConfigToFile = (config: WorldConfig): void => {
 
 export const saveGameStateToFile = (state: GameState): void => {
   const dataStr = JSON.stringify(state, null, 2);
-  const dataUri =
-    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+  const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
   const exportFileDefaultName = "ai_rpg_save.json";
   const linkElement = document.createElement("a");
   linkElement.setAttribute("href", dataUri);
@@ -23,8 +23,7 @@ export const saveGameStateToFile = (state: GameState): void => {
 };
 
 export const saveTextToFile = (content: string, fileName: string): void => {
-  const dataUri =
-    "data:text/plain;charset=utf-8," + encodeURIComponent(content);
+  const dataUri = "data:text/plain;charset=utf-8," + encodeURIComponent(content);
   const linkElement = document.createElement("a");
   linkElement.setAttribute("href", dataUri);
   linkElement.setAttribute("download", fileName);
@@ -33,19 +32,91 @@ export const saveTextToFile = (content: string, fileName: string): void => {
 
 export const saveJsonToFile = (data: object, defaultFileName: string): void => {
   const dataStr = JSON.stringify(data, null, 2);
-  const dataUri =
-    "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
+  const dataUri = "data:application/json;charset=utf-8," + encodeURIComponent(dataStr);
 
   const linkElement = document.createElement("a");
   linkElement.setAttribute("href", dataUri);
   linkElement.setAttribute("download", defaultFileName);
   linkElement.click();
 };
-
+const ccSchema = type({
+  name: "string",
+  personality: "string",
+  "customPersonality?": "string",
+  gender: "string",
+  bio: "string",
+  skills: type({
+    name: "string",
+    description: "string",
+  }).array,
+  stats: type({
+    name: "string",
+    value: "number",
+    maxValue: "number",
+    isPercentage: "boolean",
+    "description?": "string",
+    "hasLimit?": "boolean",
+  }).array,
+  milestones: type({
+    name: "string",
+    value: "string",
+    description: "string",
+    category: "string",
+  }).array,
+  motivation: "string",
+});
+const ieSchema = type({
+  name: "string",
+  type: type.enumerated(
+    "NPC",
+    "Vật phẩm",
+    "Địa điểm",
+    "Tri thức thế giới",
+    "Phe phái/Thế lực",
+    "Hệ thống sức mạnh / Lore",
+  ),
+  "personality?": "string",
+  description: "string",
+  "tags?": "string[]",
+  "customCategory?": "string",
+  "locationId?": "string",
+  "details?": type({
+    "subType?": "string",
+    "rarity?": "string",
+    "stats?": "string",
+    "effects?": "string",
+  }),
+});
+const trSchema = type({
+  text: "string",
+  enabled: "boolean",
+});
+const wcschema = type({
+  storyContext: type({
+    worldName: "string",
+    genre: "string",
+    setting: "string",
+  }),
+  character: ccSchema,
+  difficulty: "string",
+  "aiResponseLength?": "string",
+  "backgroundKnowledge?": type({ name: "string", content: "string" }).array,
+  allowAdultContent: type.boolean.default(true),
+  allowCheatEffects: type.boolean.default(true),
+  "sexualContentStyle?": "string",
+  "violenceLevel?": "string",
+  "storyTone?": "string",
+  enableStatsSystem: type.boolean.default(true),
+  enableMilestoneSystem: type.boolean.default(true),
+  coreRules: "string[]",
+  initialEntities: ieSchema.array,
+  temporaryRules: trSchema.array,
+});
+const parseJESON = type("string.json.parse").to(wcschema);
 export const loadWorldConfigFromFile = (file: File): Promise<WorldConfig> => {
   return new Promise((resolve, reject) => {
-    if (!file || file.type !== "application/json") {
-      reject(new Error("Vui lòng chọn một tệp .json hợp lệ."));
+    if (!file) {
+      reject(new Error("Vui lòng chọn một tệp hợp lệ."));
       return;
     }
 
@@ -54,13 +125,13 @@ export const loadWorldConfigFromFile = (file: File): Promise<WorldConfig> => {
       try {
         const text = event.target?.result;
         if (typeof text === "string") {
-          const config = JSON.parse(text) as WorldConfig;
-          // Basic validation
-          if (config.storyContext && config.character) {
-            resolve(config);
-          } else {
-            reject(new Error("Tệp JSON không có cấu trúc hợp lệ."));
+          const data = parseJESON(text);
+          if (data instanceof ArkErrors) {
+            reject(data.toTraversalError());
+            return;
           }
+
+          resolve(data);
         } else {
           reject(new Error("Không thể đọc nội dung tệp."));
         }

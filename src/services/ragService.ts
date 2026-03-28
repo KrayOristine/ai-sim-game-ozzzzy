@@ -8,10 +8,7 @@ import {
   getSummarizeNpcDossierPrompt,
 } from "#/prompts/analysisPrompts";
 import { buildBackgroundKnowledgePrompt } from "#/prompts/worldCreationPrompts";
-import {
-  isFandomDataset,
-  extractCleanTextFromDataset,
-} from "@utils/datasetUtils";
+import { isFandomDataset, extractCleanTextFromDataset } from "@utils/datasetUtils";
 import * as embeddingService from "./embeddingService";
 import * as fandomFileService from "@service/fandomFileService";
 import { cosineSimilarity } from "@utils/vectorUtils";
@@ -35,10 +32,7 @@ export async function generateSummary(
     )
     .join("\n\n");
 
-  const nsfwPayload = buildNsfwPayload(
-    worldConfig,
-    getSettings().safetySettings,
-  );
+  const nsfwPayload = buildNsfwPayload(worldConfig, getSettings().safetySettings);
 
   const academicSandboxProtocol = `
 --- GIAO THỨC GHI CHÉP HỌC THUẬT (ƯU TIÊN TUYỆT ĐỐI) ---
@@ -54,12 +48,7 @@ export async function generateSummary(
   const prompt = `Dựa vào đoạn hội thoại và diễn biến sau, hãy viết một đoạn tóm tắt ngắn gọn (3-4 câu) về các sự kiện chính, các nhân vật mới xuất hiện, và các thông tin quan trọng đã được tiết lộ. Tóm tắt này sẽ được dùng làm ký ức dài hạn.\n\n--- LỊCH SỬ CẦN TÓM TẮT ---\n${historyText}`;
 
   // Force using 'gemini-2.5-flash' for summarization
-  const summary = await generate(
-    prompt,
-    systemInstruction,
-    0,
-    AIModel.Gemini3d1FlashLite,
-  );
+  const summary = await generate(prompt, systemInstruction, 0, AIModel.Gemini3d1FlashLite);
   return summary.replace(/<[^>]*>/g, "");
 }
 
@@ -98,16 +87,8 @@ export async function compressNpcDossier(
   }
 
   try {
-    const prompt = getSummarizeNpcDossierPrompt(
-      npcName,
-      interactionHistoryText,
-    );
-    const summaryText = await generate(
-      prompt,
-      undefined,
-      0,
-      AIModel.Gemini3d1FlashLite,
-    );
+    const prompt = getSummarizeNpcDossierPrompt(npcName, interactionHistoryText);
+    const summaryText = await generate(prompt, undefined, 0, AIModel.Gemini3d1FlashLite);
     // Tách tóm tắt thành các gạch đầu dòng riêng lẻ
     const newArchivedFacts = summaryText
       .split("\n")
@@ -150,19 +131,14 @@ export async function compressNpcDossier(
  * Đã loại bỏ hoàn toàn việc gọi AI để tiết kiệm tài nguyên.
  * Nó vẫn được giữ lại để duy trì chữ ký hàm (function signature) cho các module khác.
  */
-export async function contextualizeText(
-  text: string,
-  context: string,
-): Promise<string> {
+export async function contextualizeText(text: string, context: string): Promise<string> {
   if (!text.trim()) return "";
   // Trả về text nguyên bản hoặc kết hợp đơn giản nếu cần thiết ở nơi gọi
   // Ở đây ta trả về text vì việc nối chuỗi đã được thực hiện ở gameService
   return text;
 }
 
-export async function generateRagQueryFromTurns(
-  turns: GameTurn[],
-): Promise<string> {
+export async function generateRagQueryFromTurns(turns: GameTurn[]): Promise<string> {
   if (turns.length === 0) return "";
   const historyText = turns
     .map(
@@ -173,12 +149,7 @@ export async function generateRagQueryFromTurns(
 
   const prompt = `Tóm tắt ngắn gọn (1-2 câu) các sự kiện, nhân vật, và địa điểm chính trong đoạn hội thoại sau để tạo câu truy vấn tìm kiếm thông tin liên quan: \n\n${historyText}`;
 
-  const summary = await generate(
-    prompt,
-    undefined,
-    0,
-    AIModel.Gemini3d1FlashLite,
-  );
+  const summary = await generate(prompt, undefined, 0, AIModel.Gemini3d1FlashLite);
   return summary.replace(/<[^>]*>/g, "");
 }
 
@@ -189,11 +160,7 @@ export async function retrieveRelevantSummaries(
 ): Promise<string> {
   if (allSummaries.length === 0) return "";
 
-  const { prompt, schema } = getRetrieveRelevantSummariesPrompt(
-    context,
-    allSummaries,
-    topK,
-  );
+  const { prompt, schema } = getRetrieveRelevantSummariesPrompt(context, allSummaries, topK);
   const result = await generateJson<{ relevant_summaries: string[] }>(
     prompt,
     schema,
@@ -212,9 +179,7 @@ export async function retrieveRelevantKnowledgeChunks(
   if (!allKnowledge || allKnowledge.length === 0) return [];
 
   const summaries = allKnowledge.filter((k) => k.name.startsWith("tom_tat_"));
-  const datasetFiles = allKnowledge.filter((k) =>
-    k.name.startsWith("[DATASET]"),
-  );
+  const datasetFiles = allKnowledge.filter((k) => k.name.startsWith("[DATASET]"));
 
   let relevantChunks: { text: string; score: number }[] = [];
 
@@ -291,9 +256,7 @@ export async function distillKnowledgeForWorldCreation(
 ): Promise<{ name: string; content: string }[]> {
   const fullContent = knowledge
     .map((k) => {
-      return isFandomDataset(k.content)
-        ? extractCleanTextFromDataset(k.content)
-        : k.content;
+      return isFandomDataset(k.content) ? extractCleanTextFromDataset(k.content) : k.content;
     })
     .join("\n\n");
 
@@ -304,17 +267,13 @@ export async function distillKnowledgeForWorldCreation(
 
   const createAndSaveEmbeddedDataset = async () => {
     try {
-      console.log(
-        "Starting background task: Create and save embedded dataset...",
-      );
+      console.log("Starting background task: Create and save embedded dataset...");
       const embeddings = await embeddingService.embedContents(textChunks, (p) =>
         console.log(`Background embedding progress: ${Math.round(p * 100)}%`),
       );
 
       if (embeddings.length !== textChunks.length) {
-        throw new Error(
-          "Mismatch between number of chunks and embeddings returned.",
-        );
+        throw new Error("Mismatch between number of chunks and embeddings returned.");
       }
 
       const dataset: FandomDataset = {
@@ -337,18 +296,10 @@ export async function distillKnowledgeForWorldCreation(
         .replace(/\.txt$/i, "")
         .replace(/[\s/\\?%*:|"<>]/g, "_");
       const fileName = `[DATASET]_${baseName}.json`;
-      await fandomFileService.saveFandomFile(
-        fileName,
-        JSON.stringify(dataset, null, 2),
-      );
-      console.log(
-        `Successfully created and saved embedded dataset in background: ${fileName}`,
-      );
+      await fandomFileService.saveFandomFile(fileName, JSON.stringify(dataset, null, 2));
+      console.log(`Successfully created and saved embedded dataset in background: ${fileName}`);
     } catch (error) {
-      console.error(
-        "Failed to create and save embedded dataset in the background:",
-        error,
-      );
+      console.error("Failed to create and save embedded dataset in the background:", error);
     }
   };
 
@@ -377,24 +328,13 @@ export async function distillKnowledgeForWorldCreation(
     }
 
     if (i + BATCH_SIZE_DISTILL < textChunks.length) {
-      await new Promise((resolve) =>
-        setTimeout(resolve, DELAY_BETWEEN_BATCHES_DISTILL),
-      );
+      await new Promise((resolve) => setTimeout(resolve, DELAY_BETWEEN_BATCHES_DISTILL));
     }
   }
 
   const combinedSummaries = chunkSummaries.join("\n\n---\n\n");
-  const finalReducePrompt = getDistillKnowledgePrompt(
-    idea,
-    combinedSummaries,
-    true,
-  );
-  const finalSummary = await generate(
-    finalReducePrompt,
-    undefined,
-    0,
-    AIModel.Gemini3d1FlashLite,
-  );
+  const finalReducePrompt = getDistillKnowledgePrompt(idea, combinedSummaries, true);
+  const finalSummary = await generate(finalReducePrompt, undefined, 0, AIModel.Gemini3d1FlashLite);
 
   return [
     {
@@ -429,9 +369,7 @@ export async function processVectorUpdates(
       }));
 
       // Lưu đồng thời các vector mới vào DB
-      await Promise.all(
-        newVectors.map((vector) => dbService.addEntityVector(vector)),
-      );
+      await Promise.all(newVectors.map((vector) => dbService.addEntityVector(vector)));
 
       if (DEBUG_MODE) {
         console.log(
@@ -452,10 +390,7 @@ export async function sanitizeTextForAIContext(
     return "";
   }
 
-  const nsfwPayload = buildNsfwPayload(
-    worldConfig,
-    getSettings().safetySettings,
-  );
+  const nsfwPayload = buildNsfwPayload(worldConfig, getSettings().safetySettings);
 
   const academicSandboxProtocol = `
 --- GIAO THỨC GHI CHÉP HỌC THUẬT (ƯU TIÊN TUYỆT ĐỐI) ---
@@ -480,12 +415,7 @@ ${text}
 --- KẾT THÚC VĂN BẢN GỐC ---`;
 
   try {
-    const sanitizedText = await generate(
-      prompt,
-      systemInstruction,
-      0,
-      AIModel.Gemini3d1FlashLite,
-    );
+    const sanitizedText = await generate(prompt, systemInstruction, 0, AIModel.Gemini3d1FlashLite);
     // Fallback: if sanitization fails and returns empty, return a generic safe message
     // to avoid sending empty context to the main AI.
     return sanitizedText.trim() || "Các sự kiện gần đây đã diễn ra.";

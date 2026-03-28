@@ -1,8 +1,4 @@
-import {
-  generateJson,
-  setDebugContext,
-  printRequestStats,
-} from "./geminiService";
+import { generateJson, setDebugContext, printRequestStats } from "./geminiService";
 import { getPiggybackAnalysisPrompt } from "#/prompts/analysisPrompts";
 import * as dbService from "./dbService";
 import { AIModel } from "#/constants";
@@ -31,24 +27,14 @@ export async function runPiggybackAnalysis(
     try {
       setDebugContext("Background Worker (Graph + EQ)");
 
-      const { prompt, schema } = getPiggybackAnalysisPrompt(
-        lastNarration,
-        previousContextSummary,
-      );
+      const { prompt, schema } = getPiggybackAnalysisPrompt(lastNarration, previousContextSummary);
 
       // Gọi Gemini Flash
       const analysisResult = await generateJson<{
         nodes: GraphNode[];
         edges: GraphEdge[];
         eqUpdates: { npcName: string; emotion: string; value: number }[];
-      }>(
-        prompt,
-        schema,
-        undefined,
-        AIModel.Gemini3d1FlashLite,
-        backgroundConfig,
-        0,
-      ); // Retry 0 lần để tiết kiệm
+      }>(prompt, schema, undefined, AIModel.Gemini3d1FlashLite, backgroundConfig, 0); // Retry 0 lần để tiết kiệm
 
       if (!analysisResult) return;
 
@@ -82,9 +68,7 @@ export async function runPiggybackAnalysis(
       // (Nâng cao: Có thể update thẳng vào EncounteredNPC trong DB nếu ta tách bảng NPC ra khỏi SaveSlot,
       // nhưng hiện tại NPC nằm trong SaveSlot blob. Vì vậy EQ update ở đây chủ yếu để phục vụ Graph Relation).
 
-      console.groupCollapsed(
-        `🧠 [BACKGROUND AI] Phân tích EQ & Graph (World ID: ${worldId})`,
-      );
+      console.groupCollapsed(`🧠 [BACKGROUND AI] Phân tích EQ & Graph (World ID: ${worldId})`);
       console.log(`[Nodes Found]: ${analysisResult.nodes?.length || 0}`);
       if (analysisResult.nodes?.length) console.table(analysisResult.nodes);
 
@@ -92,8 +76,7 @@ export async function runPiggybackAnalysis(
       if (analysisResult.edges?.length) console.table(analysisResult.edges);
 
       console.log(`[EQ Updates]: ${analysisResult.eqUpdates?.length || 0}`);
-      if (analysisResult.eqUpdates?.length)
-        console.table(analysisResult.eqUpdates);
+      if (analysisResult.eqUpdates?.length) console.table(analysisResult.eqUpdates);
       console.groupEnd();
 
       printRequestStats("Background Worker Completed");
@@ -104,10 +87,7 @@ export async function runPiggybackAnalysis(
   }, 100); // Delay nhẹ để nhường UI render xong
 }
 
-export async function fetchGraphContext(
-  worldId: string,
-  entityNames: string[],
-): Promise<string> {
+export async function fetchGraphContext(worldId: string, entityNames: string[]): Promise<string> {
   if (!entityNames || entityNames.length === 0) return "";
 
   try {

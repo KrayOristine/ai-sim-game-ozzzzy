@@ -1,4 +1,4 @@
-import type { HarmCategory, HarmBlockThreshold } from '@google/genai';
+import type { HarmCategory, HarmBlockThreshold } from "@google/genai";
 export {};
 declare global {
   type SafetySetting = {
@@ -30,5 +30,4 @@ declare global {
   interface ApiKeyStorage {
     keys: string[];
   }
-
 }

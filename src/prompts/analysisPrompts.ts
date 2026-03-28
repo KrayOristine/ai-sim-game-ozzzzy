@@ -27,10 +27,7 @@ export const getSummarizeNpcDossierPrompt = (
 Nhiệm vụ: Hãy tóm tắt những sự kiện, thông tin, hoặc lời hứa quan trọng nhất từ lịch sử này thành các gạch đầu dòng ngắn gọn. Những tóm tắt này sẽ được dùng làm "ký ức lưu trữ" cho NPC. Chỉ trả về các gạch đầu dòng, không thêm lời dẫn.`;
 };
 
-export const getContextualizePrompt = (
-  textToContextualize: string,
-  surroundingContext: string,
-) => {
+export const getContextualizePrompt = (textToContextualize: string, surroundingContext: string) => {
   const systemInstruction =
     "Bạn là một AI xử lý văn bản. Nhiệm vụ của bạn là viết lại một đoạn văn bản để nó trở nên độc lập, dễ hiểu bằng cách tích hợp ngữ cảnh liên quan vào bên trong nó. Không thêm thông tin mới, chỉ tích hợp bối cảnh đã cho. Chỉ trả lời bằng văn bản đã được viết lại, không thêm lời dẫn.";
   const prompt = `
@@ -111,10 +108,7 @@ Chỉ trả về tên tệp chính xác. Nếu không có gì liên quan, trả 
   return { prompt, schema, smallAnalyticalConfig };
 };
 
-export const getRelevantContextEntitiesPrompt = (
-  gameState: GameState,
-  playerAction: string,
-) => {
+export const getRelevantContextEntitiesPrompt = (gameState: GameState, playerAction: string) => {
   const {
     inventory,
     playerStatus,
@@ -128,9 +122,7 @@ export const getRelevantContextEntitiesPrompt = (
   const manifest: { [key: string]: string[] } = {
     availableNPCs: encounteredNPCs.map((e) => e.name),
     availableItems: inventory.map((e) => e.name),
-    activeQuests: quests
-      .filter((q) => q.status !== "hoàn thành")
-      .map((e) => e.name),
+    activeQuests: quests.filter((q) => q.status !== "hoàn thành").map((e) => e.name),
     availableFactions: encounteredFactions.map((e) => e.name),
     availableCompanions: companions.map((e) => e.name),
     characterSkills: character.skills.map((e) => e.name),
@@ -178,11 +170,7 @@ Based *only* on the player's action, identify which of the available entities ar
   return { prompt, schema, systemInstruction, smallAnalyticalConfig };
 };
 
-export const createUpdatePrompt = (
-  narration: string,
-  context: object,
-  instructions: string,
-) => {
+export const createUpdatePrompt = (narration: string, context: object, instructions: string) => {
   return `Bạn là một AI quản lý dữ liệu. Nhiệm vụ của bạn là đọc một đoạn tường thuật từ game nhập vai và cập nhật lại dữ liệu của trò chơi một cách chính xác.
 
 --- BỐI CẢNH DỮ LIỆU HIỆN TẠI ---
@@ -203,10 +191,7 @@ ${narration.replace(/<[^>]*>/g, "")}
 **OUTPUT:** Trả về MỘT đối tượng JSON duy nhất tuân thủ schema đã cho. Nếu không có bất kỳ thay đổi nào, bạn có thể trả về một đối tượng JSON trống \`{}\`.`;
 };
 
-export const getDynamicStateUpdatePrompt = (
-  gameState: GameState,
-  lastNarration: string,
-) => {
+export const getDynamicStateUpdatePrompt = (gameState: GameState, lastNarration: string) => {
   const { inventory, playerStatus, companions, quests, character } = gameState;
   const gameItemSchema = {
     type: Type.OBJECT,
@@ -254,28 +239,19 @@ export const getDynamicStateUpdatePrompt = (
       description: { type: Type.STRING },
       hasLimit: { type: Type.BOOLEAN },
     },
-    required: [
-      "name",
-      "value",
-      "maxValue",
-      "isPercentage",
-      "description",
-      "hasLimit",
-    ],
+    required: ["name", "value", "maxValue", "isPercentage", "description", "hasLimit"],
   };
   const schema = {
     type: Type.OBJECT,
     properties: {
       updatedInventory: {
         type: Type.ARRAY,
-        description:
-          "Toàn bộ danh sách vật phẩm trong túi đồ sau khi đã được cập nhật.",
+        description: "Toàn bộ danh sách vật phẩm trong túi đồ sau khi đã được cập nhật.",
         items: gameItemSchema,
       },
       updatedPlayerStatus: {
         type: Type.ARRAY,
-        description:
-          "Toàn bộ danh sách trạng thái của người chơi sau khi đã được cập nhật.",
+        description: "Toàn bộ danh sách trạng thái của người chơi sau khi đã được cập nhật.",
         items: statusEffectSchema,
       },
       updatedCompanions: {
@@ -290,8 +266,7 @@ export const getDynamicStateUpdatePrompt = (
       },
       updatedStats: {
         type: Type.ARRAY,
-        description:
-          "Toàn bộ danh sách chỉ số nhân vật đã được cập nhật sau hành động.",
+        description: "Toàn bộ danh sách chỉ số nhân vật đã được cập nhật sau hành động.",
         items: statSchema,
       },
     },
@@ -310,12 +285,8 @@ export const getDynamicStateUpdatePrompt = (
   return { prompt, schema };
 };
 
-export const getEncyclopediaUpdatePrompt = (
-  gameState: GameState,
-  lastNarration: string,
-) => {
-  const { encounteredNPCs, encounteredFactions, discoveredEntities } =
-    gameState;
+export const getEncyclopediaUpdatePrompt = (gameState: GameState, lastNarration: string) => {
+  const { encounteredNPCs, encounteredFactions, discoveredEntities } = gameState;
   const npcSchema = {
     type: Type.OBJECT,
     properties: {
@@ -377,10 +348,7 @@ export const getEncyclopediaUpdatePrompt = (
   return { prompt, schema };
 };
 
-export const getCharacterStateUpdatePrompt = (
-  gameState: GameState,
-  lastNarration: string,
-) => {
+export const getCharacterStateUpdatePrompt = (gameState: GameState, lastNarration: string) => {
   const { character, worldTime, reputation } = gameState;
   const skillSchema = {
     type: Type.OBJECT,
@@ -392,8 +360,7 @@ export const getCharacterStateUpdatePrompt = (
   };
   const timePassedSchema = {
     type: Type.OBJECT,
-    description:
-      "Thời gian đã trôi qua sau hành động, tính bằng giờ hoặc phút.",
+    description: "Thời gian đã trôi qua sau hành động, tính bằng giờ hoặc phút.",
     properties: {
       hours: { type: Type.NUMBER },
       minutes: { type: Type.NUMBER },
@@ -401,8 +368,7 @@ export const getCharacterStateUpdatePrompt = (
   };
   const reputationChangeSchema = {
     type: Type.OBJECT,
-    description:
-      "Sự thay đổi về điểm danh vọng của người chơi sau hành động (nếu có).",
+    description: "Sự thay đổi về điểm danh vọng của người chơi sau hành động (nếu có).",
     properties: {
       score: {
         type: Type.NUMBER,
@@ -419,8 +385,7 @@ export const getCharacterStateUpdatePrompt = (
     properties: {
       updatedCharacter: {
         type: Type.OBJECT,
-        description:
-          "Cập nhật nếu có sự thay đổi LÂU DÀI về tiểu sử hoặc động lực của nhân vật.",
+        description: "Cập nhật nếu có sự thay đổi LÂU DÀI về tiểu sử hoặc động lực của nhân vật.",
         properties: {
           bio: { type: Type.STRING },
           motivation: { type: Type.STRING },
@@ -434,8 +399,7 @@ export const getCharacterStateUpdatePrompt = (
       newMemories: {
         type: Type.ARRAY,
         items: { type: Type.STRING },
-        description:
-          "Chỉ thêm ký ức nếu có sự kiện CỰC KỲ quan trọng, thay đổi cốt truyện xảy ra.",
+        description: "Chỉ thêm ký ức nếu có sự kiện CỰC KỲ quan trọng, thay đổi cốt truyện xảy ra.",
       },
       timePassed: timePassedSchema,
       reputationChange: reputationChangeSchema,
@@ -524,9 +488,7 @@ Chỉ trả về nội dung tóm tắt.
 `;
 };
 
-export const getEntityDeduplicationPrompt = (
-  entities: { name: string; id: string }[],
-) => {
+export const getEntityDeduplicationPrompt = (entities: { name: string; id: string }[]) => {
   const schema = {
     type: Type.OBJECT,
     properties: {
@@ -568,10 +530,7 @@ Nếu không có mục nào trùng lặp, trả về một mảng rỗng.`;
   return { prompt, schema };
 };
 
-export const getPiggybackAnalysisPrompt = (
-  lastTurnContent: string,
-  previousContext: string,
-) => {
+export const getPiggybackAnalysisPrompt = (lastTurnContent: string, previousContext: string) => {
   const graphNodeSchema = {
     type: Type.OBJECT,
     properties: {
@@ -595,13 +554,11 @@ export const getPiggybackAnalysisPrompt = (
       target: { type: Type.STRING, description: "ID của thực thể đích." },
       relation: {
         type: Type.STRING,
-        description:
-          "Động từ mô tả mối quan hệ (VD: ghét, yêu, sở hữu, ở tại, tấn công).",
+        description: "Động từ mô tả mối quan hệ (VD: ghét, yêu, sở hữu, ở tại, tấn công).",
       },
       description: {
         type: Type.STRING,
-        description:
-          "Mô tả chi tiết hơn về mối quan hệ này trong bối cảnh hiện tại.",
+        description: "Mô tả chi tiết hơn về mối quan hệ này trong bối cảnh hiện tại.",
       },
     },
     required: ["source", "target", "relation"],
@@ -626,14 +583,12 @@ export const getPiggybackAnalysisPrompt = (
       nodes: {
         type: Type.ARRAY,
         items: graphNodeSchema,
-        description:
-          "Danh sách các thực thể quan trọng xuất hiện hoặc được nhắc đến.",
+        description: "Danh sách các thực thể quan trọng xuất hiện hoặc được nhắc đến.",
       },
       edges: {
         type: Type.ARRAY,
         items: graphEdgeSchema,
-        description:
-          "Danh sách các mối quan hệ mới hoặc được cập nhật giữa các thực thể.",
+        description: "Danh sách các mối quan hệ mới hoặc được cập nhật giữa các thực thể.",
       },
       eqUpdates: {
         type: Type.ARRAY,

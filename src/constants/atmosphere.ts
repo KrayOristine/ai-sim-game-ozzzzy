@@ -106,14 +106,8 @@ export const ATMOSPHERE_CONFIG: Record<string, ArchetypeConfig> = {
     ...MODERN_CONFIG,
     weather: {
       ...MODERN_CONFIG.weather,
-      "Mùa Đông": [
-        ...MODERN_CONFIG.weather["Mùa Đông"],
-        { type: "Bão tuyết ma thuật", weight: 1 },
-      ],
-      "Mùa Hè": [
-        ...MODERN_CONFIG.weather["Mùa Hè"],
-        { type: "Mưa axit nhẹ", weight: 1 },
-      ],
+      "Mùa Đông": [...MODERN_CONFIG.weather["Mùa Đông"], { type: "Bão tuyết ma thuật", weight: 1 }],
+      "Mùa Hè": [...MODERN_CONFIG.weather["Mùa Hè"], { type: "Mưa axit nhẹ", weight: 1 }],
     },
   },
   [NARRATIVE_ARCHETYPES.DEFAULT]: DEFAULT_CONFIG,

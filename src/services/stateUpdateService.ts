@@ -14,10 +14,7 @@ export const updateDynamicStateFromNarration = async (
   lastNarration: string,
 ): Promise<DynamicStateUpdateResponse | null> => {
   setDebugContext("Phase 2 - Dynamic State Update");
-  const { prompt, schema } = getDynamicStateUpdatePrompt(
-    gameState,
-    lastNarration,
-  );
+  const { prompt, schema } = getDynamicStateUpdatePrompt(gameState, lastNarration);
   try {
     return await generateJson<DynamicStateUpdateResponse>(
       prompt,
@@ -37,10 +34,7 @@ export const updateEncyclopediaEntriesFromNarration = async (
   lastNarration: string,
 ): Promise<EncyclopediaEntriesUpdateResponse | null> => {
   setDebugContext("Phase 2 - Encyclopedia Update");
-  const { prompt, schema } = getEncyclopediaUpdatePrompt(
-    gameState,
-    lastNarration,
-  );
+  const { prompt, schema } = getEncyclopediaUpdatePrompt(gameState, lastNarration);
   try {
     return await generateJson<EncyclopediaEntriesUpdateResponse>(
       prompt,
@@ -60,10 +54,7 @@ export const updateCharacterStateFromNarration = async (
   lastNarration: string,
 ): Promise<CharacterStateUpdateResponse | null> => {
   setDebugContext("Phase 2 - Character State Update");
-  const { prompt, schema } = getCharacterStateUpdatePrompt(
-    gameState,
-    lastNarration,
-  );
+  const { prompt, schema } = getCharacterStateUpdatePrompt(gameState, lastNarration);
   try {
     const response = await generateJson<CharacterStateUpdateResponse>(
       prompt,
@@ -74,9 +65,7 @@ export const updateCharacterStateFromNarration = async (
     );
     // Strip tags from new core memories to ensure clean storage and display.
     if (response.newMemories) {
-      response.newMemories = response.newMemories.map((mem) =>
-        mem.replace(/<[^>]*>/g, ""),
-      );
+      response.newMemories = response.newMemories.map((mem) => mem.replace(/<[^>]*>/g, ""));
     }
     return response;
   } catch (error) {
@@ -89,9 +78,7 @@ export const normalizeCategoriesWithAI = async (
   allEntities: { name: string; customCategory?: string }[],
 ): Promise<{ oldCategory: string; newCategory: string }[]> => {
   const customCategories = [
-    ...new Set(
-      allEntities.map((e) => e.customCategory).filter(Boolean) as string[],
-    ),
+    ...new Set(allEntities.map((e) => e.customCategory).filter(Boolean) as string[]),
   ];
   if (customCategories.length === 0) {
     return [];
@@ -102,13 +89,7 @@ export const normalizeCategoriesWithAI = async (
   try {
     const result = await generateJson<{
       normalizationMappings: { oldCategory: string; newCategory: string }[];
-    }>(
-      prompt,
-      schema,
-      undefined,
-      AIModel.Gemini3d1FlashLite,
-      analyticalCallConfig,
-    );
+    }>(prompt, schema, undefined, AIModel.Gemini3d1FlashLite, analyticalCallConfig);
     return result.normalizationMappings || [];
   } catch (error) {
     console.error("Lỗi khi chuẩn hóa category bằng AI:", error);
@@ -128,13 +109,7 @@ export const deduplicateEntitiesInCategoryWithAI = async (
   try {
     const result = await generateJson<{
       deduplicationPairs: { idToDelete: string; idToKeep: string }[];
-    }>(
-      prompt,
-      schema,
-      undefined,
-      AIModel.Gemini3d1FlashLite,
-      analyticalCallConfig,
-    );
+    }>(prompt, schema, undefined, AIModel.Gemini3d1FlashLite, analyticalCallConfig);
     return result.deduplicationPairs || [];
   } catch (error) {
     console.error("Lỗi khi gộp trùng lặp thực thể bằng AI:", error);

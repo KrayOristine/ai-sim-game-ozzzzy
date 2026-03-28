@@ -102,10 +102,8 @@ ${summaryContent}
   const { aiPerformanceSettings } = getSettings();
   const perfSettings = aiPerformanceSettings || DEFAULT_AI_PERFORMANCE_SETTINGS;
   const creativeCallConfig: Partial<AiPerformanceSettings> = {
-    maxOutputTokens:
-      perfSettings.maxOutputTokens + (perfSettings.jsonBuffer || 0),
-    thinkingBudget:
-      perfSettings.thinkingBudget + (perfSettings.jsonBuffer || 0),
+    maxOutputTokens: perfSettings.maxOutputTokens + (perfSettings.jsonBuffer || 0),
+    thinkingBudget: perfSettings.thinkingBudget + (perfSettings.jsonBuffer || 0),
     thinkingLevel: perfSettings.thinkingLevel,
   };
 

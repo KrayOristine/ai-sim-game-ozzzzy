@@ -26,24 +26,17 @@ export const buildNsfwPayload = (
     if (!styleKey) return undefined;
 
     const archetypeStyles = NARRATIVE_STYLES[archetype]?.[styleType];
-    const defaultStyles =
-      NARRATIVE_STYLES[NARRATIVE_ARCHETYPES.DEFAULT]?.[styleType];
+    const defaultStyles = NARRATIVE_STYLES[NARRATIVE_ARCHETYPES.DEFAULT]?.[styleType];
 
     return archetypeStyles?.[styleKey] ?? defaultStyles?.[styleKey];
   };
 
-  const sexualStylePrompt = getStylePrompt(
-    "sexualContentStyle",
-    config.sexualContentStyle,
-  );
+  const sexualStylePrompt = getStylePrompt("sexualContentStyle", config.sexualContentStyle);
   if (sexualStylePrompt) {
     payload.push(sexualStylePrompt);
   }
 
-  const violenceStylePrompt = getStylePrompt(
-    "violenceLevel",
-    config.violenceLevel,
-  );
+  const violenceStylePrompt = getStylePrompt("violenceLevel", config.violenceLevel);
   if (violenceStylePrompt) {
     payload.push(violenceStylePrompt);
   }
@@ -68,8 +61,7 @@ ${payload.join("\n\n")}
 
 export const buildPronounPayload = (genre: string): string => {
   const archetype = resolveGenreArchetype(genre);
-  const pronounRule =
-    PRONOUN_RULES[archetype] ?? PRONOUN_RULES[NARRATIVE_ARCHETYPES.DEFAULT];
+  const pronounRule = PRONOUN_RULES[archetype] ?? PRONOUN_RULES[NARRATIVE_ARCHETYPES.DEFAULT];
 
   if (pronounRule) {
     return `
@@ -88,8 +80,7 @@ export const buildReputationPayload = (): string => {
 
 export const buildTimePayload = (genre: string): string => {
   const archetype = resolveGenreArchetype(genre);
-  const timeRule =
-    TIME_RULES[archetype] ?? TIME_RULES[NARRATIVE_ARCHETYPES.DEFAULT];
+  const timeRule = TIME_RULES[archetype] ?? TIME_RULES[NARRATIVE_ARCHETYPES.DEFAULT];
 
   if (timeRule) {
     return `

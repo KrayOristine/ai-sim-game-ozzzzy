@@ -1,10 +1,4 @@
-import React, {
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  useMemo,
-} from "react";
+import React, { useState, useCallback, useEffect, useRef, useMemo } from "react";
 import {
   DEFAULT_WORLD_CONFIG,
   GENDER_OPTIONS,
@@ -23,10 +17,7 @@ import { getSettings, saveSettings } from "#/services/settingsService";
 import Accordion from "../helper/Accordion";
 import Icon from "../helper/Icon";
 import Button from "../helper/Button";
-import {
-  saveWorldConfigToFile,
-  loadWorldConfigFromFile,
-} from "#/services/fileService";
+import { saveWorldConfigToFile, loadWorldConfigFromFile } from "#/services/fileService";
 import AiAssistButton from "../helper/AiAssistButton";
 import ApiKeyModal from "../helper/ApiKeyModal";
 import NotificationModal from "../helper/NotificationModal";
@@ -45,27 +36,21 @@ type LoadingStates = {
   [key: string]: boolean;
 };
 
-const StyledInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (
-  props,
-) => (
+const StyledInput: React.FC<React.InputHTMLAttributes<HTMLInputElement>> = (props) => (
   <input
     {...props}
     className="w-full bg-slate-900/70 border border-slate-700 rounded-md px-3 py-2 text-slate-200 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition placeholder:text-slate-500"
   />
 );
 
-const StyledTextArea: React.FC<
-  React.TextareaHTMLAttributes<HTMLTextAreaElement>
-> = (props) => (
+const StyledTextArea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = (props) => (
   <textarea
     {...props}
     className="w-full bg-slate-900/70 border border-slate-700 rounded-md px-3 py-2 text-slate-200 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition resize-y placeholder:text-slate-500"
   />
 );
 
-const StyledSelect: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (
-  props,
-) => (
+const StyledSelect: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> = (props) => (
   <select
     {...props}
     className="w-full bg-slate-900/70 border border-slate-700 rounded-md px-3 py-2 text-slate-200 focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition"
@@ -79,9 +64,7 @@ const FormRow: React.FC<{
   labelClassName?: string;
 }> = ({ label, children, tooltip, labelClassName = "text-slate-300" }) => (
   <div className="mb-4">
-    <label
-      className={`flex items-center text-sm font-medium ${labelClassName} mb-1`}
-    >
+    <label className={`flex items-center text-sm font-medium ${labelClassName} mb-1`}>
       <span>{label}</span>
       {tooltip && <Tooltip text={tooltip} />}
     </label>
@@ -109,8 +92,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
               ? initialConfig.character.skills
               : [],
             stats:
-              initialConfig.character.stats &&
-              initialConfig.character.stats.length > 0
+              initialConfig.character.stats && initialConfig.character.stats.length > 0
                 ? initialConfig.character.stats
                 : DEFAULT_STATS,
           },
@@ -151,8 +133,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     messages: [""],
   });
   const [isFanficSelectModalOpen, setIsFanficSelectModalOpen] = useState(false);
-  const [isKnowledgeSelectModalOpen, setIsKnowledgeSelectModalOpen] =
-    useState(false);
+  const [isKnowledgeSelectModalOpen, setIsKnowledgeSelectModalOpen] = useState(false);
   const [isCustomGenre, setIsCustomGenre] = useState(false);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -175,11 +156,8 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       .map((entity, originalIndex) => ({ entity, originalIndex }))
       .filter(({ entity }) => {
         const displayType = entity.customCategory || entity.type;
-        const matchesFilter =
-          entityTypeFilter === "Tất cả" || displayType === entityTypeFilter;
-        const matchesSearch = entity.name
-          .toLowerCase()
-          .includes(entitySearchTerm.toLowerCase());
+        const matchesFilter = entityTypeFilter === "Tất cả" || displayType === entityTypeFilter;
+        const matchesSearch = entity.name.toLowerCase().includes(entitySearchTerm.toLowerCase());
         return matchesFilter && matchesSearch;
       });
   }, [config.initialEntities, entityTypeFilter, entitySearchTerm]);
@@ -228,10 +206,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       .sort()
       .join(",");
 
-    if (
-      currentStructureKey !== templateStructureKey ||
-      config.character.milestones.length === 0
-    ) {
+    if (currentStructureKey !== templateStructureKey || config.character.milestones.length === 0) {
       const newEmptyMilestones = templates.map(() => ({
         name: "",
         value: "",
@@ -240,17 +215,11 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       }));
       handleNestedChange("character", "milestones", newEmptyMilestones);
     }
-  }, [
-    config.storyContext.genre,
-    config.enableMilestoneSystem,
-    handleNestedChange,
-  ]);
+  }, [config.storyContext.genre, config.enableMilestoneSystem, handleNestedChange]);
 
   // Effect to handle custom genre selection
   useEffect(() => {
-    const genreExists = GENRES.some(
-      (g) => g.name === config.storyContext.genre,
-    );
+    const genreExists = GENRES.some((g) => g.name === config.storyContext.genre);
     if (!genreExists && config.storyContext.genre !== "Tùy chỉnh") {
       setIsCustomGenre(true);
     } else if (config.storyContext.genre === "Tùy chỉnh") {
@@ -271,10 +240,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
   );
 
   const addSkill = useCallback(() => {
-    const newSkills = [
-      ...config.character.skills,
-      { name: "", description: "" },
-    ];
+    const newSkills = [...config.character.skills, { name: "", description: "" }];
     handleNestedChange("character", "skills", newSkills);
   }, [config.character.skills, handleNestedChange]);
 
@@ -287,11 +253,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
   );
 
   const handleStatChange = useCallback(
-    (
-      index: number,
-      field: keyof CharacterStat,
-      value: string | number | boolean,
-    ) => {
+    (index: number, field: keyof CharacterStat, value: string | number | boolean) => {
       const newStats = [...config.character.stats];
       const statToUpdate = { ...newStats[index] };
 
@@ -303,10 +265,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
           if (field === "value") {
             // If it's a limited stat, cap the value at maxValue.
-            if (
-              statToUpdate.hasLimit !== false &&
-              numValue > statToUpdate.maxValue
-            ) {
+            if (statToUpdate.hasLimit !== false && numValue > statToUpdate.maxValue) {
               statToUpdate.value = statToUpdate.maxValue;
             } else {
               statToUpdate.value = numValue;
@@ -386,9 +345,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
   const removeMilestone = useCallback(
     (index: number) => {
-      const newMilestones = (config.character.milestones || []).filter(
-        (_, i) => i !== index,
-      );
+      const newMilestones = (config.character.milestones || []).filter((_, i) => i !== index);
       handleNestedChange("character", "milestones", newMilestones);
     },
     [config.character.milestones, handleNestedChange],
@@ -433,8 +390,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
         else if (value === "Vật phẩm" || value === "Công pháp / Kỹ năng")
           updatedEntity.type = "Vật phẩm";
         else if (value === "Địa điểm") updatedEntity.type = "Địa điểm";
-        else if (value === "Phe phái/Thế lực")
-          updatedEntity.type = "Phe phái/Thế lực";
+        else if (value === "Phe phái/Thế lực") updatedEntity.type = "Phe phái/Thế lực";
         else {
           // For 'Hệ thống sức mạnh / Lore', 'Cảnh giới', 'Khái niệm'
           updatedEntity.type = "Hệ thống sức mạnh / Lore";
@@ -458,10 +414,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       personality: "",
       description: "",
     };
-    handleSimpleChange("initialEntities", [
-      ...config.initialEntities,
-      newEntity,
-    ]);
+    handleSimpleChange("initialEntities", [...config.initialEntities, newEntity]);
   }, [config.initialEntities, handleSimpleChange]);
 
   const removeEntity = useCallback(
@@ -474,13 +427,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
   const handleCreateWorld = () => {
     const missingFields: string[] = [];
-    if (!config.storyContext.worldName.trim())
-      missingFields.push("Tên Thế Giới");
+    if (!config.storyContext.worldName.trim()) missingFields.push("Tên Thế Giới");
     if (!config.storyContext.genre.trim()) missingFields.push("Thể loại");
-    if (!config.storyContext.setting.trim())
-      missingFields.push("Thế Giới/Bối Cảnh Cụ Thể");
-    if (!config.character.name.trim())
-      missingFields.push("Danh xưng (Tên nhân vật)");
+    if (!config.storyContext.setting.trim()) missingFields.push("Thế Giới/Bối Cảnh Cụ Thể");
+    if (!config.character.name.trim()) missingFields.push("Danh xưng (Tên nhân vật)");
     if (
       config.character.personality === "Tuỳ chỉnh" &&
       !config.character.customPersonality?.trim()
@@ -488,8 +438,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       missingFields.push("Mô tả tính cách tùy chỉnh");
     }
     if (!config.character.bio.trim()) missingFields.push("Sơ Lược Tiểu Sử");
-    if (!config.character.motivation.trim())
-      missingFields.push("Mục Tiêu/Động Lực");
+    if (!config.character.motivation.trim()) missingFields.push("Mục Tiêu/Động Lực");
 
     if (missingFields.length > 0) {
       setNotificationContent({
@@ -508,9 +457,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     } catch (error) {
       console.error("Lỗi khi tạo thế giới:", error);
       const errorMessage =
-        error instanceof Error
-          ? error.message
-          : "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.";
+        error instanceof Error ? error.message : "Đã xảy ra lỗi không mong muốn. Vui lòng thử lại.";
       setNotificationContent({
         title: "Lỗi Không Mong Muốn",
         messages: [errorMessage],
@@ -535,8 +482,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     try {
       await task();
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Lỗi không xác định";
+      const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
       if (errorMessage.includes("Không tìm thấy API Key nào")) {
         setRetryAiTask(() => task);
         setIsApiKeyModalOpen(true);
@@ -568,9 +514,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     if (!config.storyContext.genre.trim()) {
       setNotificationContent({
         title: "Thiếu thông tin",
-        messages: [
-          'Vui lòng điền "Thể loại" trước khi AI có thể hỗ trợ tạo bối cảnh.',
-        ],
+        messages: ['Vui lòng điền "Thể loại" trước khi AI có thể hỗ trợ tạo bối cảnh.'],
       });
       setIsNotificationOpen(true);
       return;
@@ -651,9 +595,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     if (!config.storyContext.genre.trim() || !config.character.bio.trim()) {
       setNotificationContent({
         title: "Thiếu thông tin",
-        messages: [
-          'AI cần biết "Thể loại" và "Tiểu sử" để tạo ra bộ chỉ số phù hợp.',
-        ],
+        messages: ['AI cần biết "Thể loại" và "Tiểu sử" để tạo ra bộ chỉ số phù hợp.'],
       });
       setIsNotificationOpen(true);
       return;
@@ -663,9 +605,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       () => aiService.generateCharacterStats(config),
       (res: CharacterStat[]) => {
         const newStats = [...DEFAULT_STATS];
-        const existingNames = new Set(
-          newStats.map((s) => s.name.toLowerCase()),
-        );
+        const existingNames = new Set(newStats.map((s) => s.name.toLowerCase()));
         for (const stat of res) {
           if (!existingNames.has(stat.name.toLowerCase())) {
             newStats.push(stat);
@@ -757,12 +697,8 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       character: {
         ...config.character, // Giữ lại cài đặt nhân vật hiện tại
         ...newConfig.character, // Ghi đè bằng dữ liệu từ AI
-        stats: newConfig.enableStatsSystem
-          ? newConfig.character.stats || DEFAULT_STATS
-          : [],
-        milestones: newConfig.enableMilestoneSystem
-          ? newConfig.character.milestones || []
-          : [],
+        stats: newConfig.enableStatsSystem ? newConfig.character.stats || DEFAULT_STATS : [],
+        milestones: newConfig.enableMilestoneSystem ? newConfig.character.milestones || [] : [],
       },
       initialEntities: newConfig.initialEntities || [],
     };
@@ -848,9 +784,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     fanficFileInputRef.current?.click();
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
       try {
@@ -862,8 +796,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
         });
         setIsNotificationOpen(true);
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Lỗi không xác định";
+        const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
         setNotificationContent({
           title: "Lỗi Tải Tệp",
           messages: [errorMessage],
@@ -876,9 +809,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     }
   };
 
-  const handleFanficFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleFanficFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files && files.length > 0) {
       try {
@@ -888,17 +819,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
           newKnowledgeFiles.push({ name: file.name, content });
         }
 
-        const existingNames = new Set(
-          (config.backgroundKnowledge || []).map((k) => k.name),
-        );
-        const finalNewKnowledge = newKnowledgeFiles.filter(
-          (k) => !existingNames.has(k.name),
-        );
+        const existingNames = new Set((config.backgroundKnowledge || []).map((k) => k.name));
+        const finalNewKnowledge = newKnowledgeFiles.filter((k) => !existingNames.has(k.name));
 
-        const combined = [
-          ...(config.backgroundKnowledge || []),
-          ...finalNewKnowledge,
-        ];
+        const combined = [...(config.backgroundKnowledge || []), ...finalNewKnowledge];
         // Sort after adding new files
         combined.sort((a, b) => {
           const aIsSummary = a.name.startsWith("tom_tat_");
@@ -915,14 +839,11 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
         setNotificationContent({
           title: "Thành công!",
-          messages: [
-            `Đã tải ${files.length} tệp và thêm vào Kiến thức nền AI.`,
-          ],
+          messages: [`Đã tải ${files.length} tệp và thêm vào Kiến thức nền AI.`],
         });
         setIsNotificationOpen(true);
       } catch (error) {
-        const errorMessage =
-          error instanceof Error ? error.message : "Lỗi không xác định";
+        const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
         setNotificationContent({
           title: "Lỗi Tải Tệp",
           messages: [errorMessage],
@@ -949,9 +870,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       name: f.name,
       content: f.content,
     }));
-    const existingNames = new Set(
-      (config.backgroundKnowledge || []).map((k) => k.name),
-    );
+    const existingNames = new Set((config.backgroundKnowledge || []).map((k) => k.name));
     const newKnowledge = knowledge.filter((k) => !existingNames.has(k.name));
     handleSimpleChange("backgroundKnowledge", [
       ...(config.backgroundKnowledge || []),
@@ -961,9 +880,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     setIsFanficSelectModalOpen(false);
     setNotificationContent({
       title: "Thành công!",
-      messages: [
-        `Đã chọn ${selectedFiles.length} tệp và thêm vào Kiến thức nền AI.`,
-      ],
+      messages: [`Đã chọn ${selectedFiles.length} tệp và thêm vào Kiến thức nền AI.`],
     });
     setIsNotificationOpen(true);
   };
@@ -985,9 +902,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
     setIsKnowledgeSelectModalOpen(false);
   };
 
-  const handleKnowledgeFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleKnowledgeFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files || files.length === 0) return;
 
@@ -998,10 +913,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
         newKnowledgeFiles.push({ name: file.name, content });
       }
 
-      const combined = [
-        ...(config.backgroundKnowledge || []),
-        ...newKnowledgeFiles,
-      ];
+      const combined = [...(config.backgroundKnowledge || []), ...newKnowledgeFiles];
       // Sort after adding new files
       combined.sort((a, b) => {
         const aIsSummary = a.name.startsWith("tom_tat_");
@@ -1022,8 +934,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
       });
       setIsNotificationOpen(true);
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Lỗi không xác định";
+      const errorMessage = error instanceof Error ? error.message : "Lỗi không xác định";
       setNotificationContent({
         title: "Lỗi Tải Tệp",
         messages: [errorMessage],
@@ -1098,11 +1009,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
           <h1 className="text-2xl md:text-3xl font-bold text-slate-100">
             Kiến Tạo Thế Giới Của Người Chơi
           </h1>
-          <Button
-            onClick={onBack}
-            variant="secondary"
-            className="w-auto! py-2! px-4! text-base!"
-          >
+          <Button onClick={onBack} variant="secondary" className="w-auto! py-2! px-4! text-base!">
             <Icon name="back" className="w-5 h-5 mr-2" />
             Quay lại
           </Button>
@@ -1110,12 +1017,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
         <div className="bg-slate-800/60 backdrop-blur-sm rounded-lg mb-8 border-l-4 border-fuchsia-500 p-4">
           <h3 className="text-xl font-bold text-left text-fuchsia-400 mb-2 flex items-center">
-            <Icon name="magic" className="w-6 h-6 mr-3" />Ý Tưởng Cốt Truyện Ban
-            Đầu (AI Hỗ Trợ)
+            <Icon name="magic" className="w-6 h-6 mr-3" />Ý Tưởng Cốt Truyện Ban Đầu (AI Hỗ Trợ)
           </h3>
           <p className="text-sm text-slate-400 mb-3">
-            Nhập một ý tưởng ngắn gọn, AI sẽ tự động kiến tạo toàn bộ thế giới
-            cho bạn.
+            Nhập một ý tưởng ngắn gọn, AI sẽ tự động kiến tạo toàn bộ thế giới cho bạn.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-2">
             <StyledInput
@@ -1136,13 +1041,11 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
 
         <div className="bg-slate-800/60 backdrop-blur-sm rounded-lg mb-8 border-l-4 border-violet-500 p-4">
           <h3 className="text-xl font-bold text-left text-violet-400 mb-2 flex items-center">
-            <Icon name="magic" className="w-6 h-6 mr-3" />Ý Tưởng Đồng Nhân /
-            Fanfiction (AI Hỗ Trợ)
+            <Icon name="magic" className="w-6 h-6 mr-3" />Ý Tưởng Đồng Nhân / Fanfiction (AI Hỗ Trợ)
           </h3>
           <p className="text-sm text-slate-400 mb-3">
-            Nhập tên tác phẩm và ý tưởng. Tải lên các tệp nguyên tác (.txt) sẽ
-            tự động thêm chúng vào "Kiến thức nền AI" bên dưới để có kết quả
-            chính xác nhất.
+            Nhập tên tác phẩm và ý tưởng. Tải lên các tệp nguyên tác (.txt) sẽ tự động thêm chúng
+            vào "Kiến thức nền AI" bên dưới để có kết quả chính xác nhất.
           </p>
           <div className="flex flex-col sm:flex-row items-center gap-2 mb-3">
             <StyledInput
@@ -1194,11 +1097,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     <StyledInput
                       value={config.storyContext.worldName}
                       onChange={(e) =>
-                        handleNestedChange(
-                          "storyContext",
-                          "worldName",
-                          e.target.value,
-                        )
+                        handleNestedChange("storyContext", "worldName", e.target.value)
                       }
                       placeholder="VD: Lục Địa Gió, Tinh Hệ X..."
                     />
@@ -1206,17 +1105,9 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   <div>
                     <FormRow label="Thể loại:" labelClassName="text-sky-300">
                       <StyledSelect
-                        value={
-                          isCustomGenre
-                            ? "Tùy chỉnh"
-                            : config.storyContext.genre
-                        }
+                        value={isCustomGenre ? "Tùy chỉnh" : config.storyContext.genre}
                         onChange={(e) =>
-                          handleNestedChange(
-                            "storyContext",
-                            "genre",
-                            e.target.value,
-                          )
+                          handleNestedChange("storyContext", "genre", e.target.value)
                         }
                       >
                         {GENRES.map((genre) => (
@@ -1230,11 +1121,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                       <StyledInput
                         value={config.storyContext.genre}
                         onChange={(e) =>
-                          handleNestedChange(
-                            "storyContext",
-                            "genre",
-                            e.target.value,
-                          )
+                          handleNestedChange("storyContext", "genre", e.target.value)
                         }
                         placeholder="Nhập thể loại tùy chỉnh/hỗn hợp..."
                         className="mt-2"
@@ -1255,13 +1142,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   </div>
                   <StyledTextArea
                     value={config.storyContext.setting}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "storyContext",
-                        "setting",
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => handleNestedChange("storyContext", "setting", e.target.value)}
                     rows={2}
                     placeholder="VD: Một vương quốc bay lơ lửng trên mây, nơi các hiệp sĩ cưỡi rồng..."
                   />
@@ -1280,9 +1161,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   <FormRow label="Chọn Độ Khó" labelClassName="text-lime-300">
                     <StyledSelect
                       value={config.difficulty}
-                      onChange={(e) =>
-                        handleSimpleChange("difficulty", e.target.value)
-                      }
+                      onChange={(e) => handleSimpleChange("difficulty", e.target.value)}
                     >
                       {DIFFICULTY_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>
@@ -1291,17 +1170,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                       ))}
                     </StyledSelect>
                   </FormRow>
-                  <FormRow
-                    label="Độ Dài Phản Hồi Ưu Tiên Của AI"
-                    labelClassName="text-lime-300"
-                  >
+                  <FormRow label="Độ Dài Phản Hồi Ưu Tiên Của AI" labelClassName="text-lime-300">
                     <StyledSelect
-                      value={
-                        config.aiResponseLength || AI_RESPONSE_LENGTH_OPTIONS[0]
-                      }
-                      onChange={(e) =>
-                        handleSimpleChange("aiResponseLength", e.target.value)
-                      }
+                      value={config.aiResponseLength || AI_RESPONSE_LENGTH_OPTIONS[0]}
+                      onChange={(e) => handleSimpleChange("aiResponseLength", e.target.value)}
                     >
                       {AI_RESPONSE_LENGTH_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>
@@ -1313,14 +1185,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                 </div>
 
                 <div className="mt-4 border-t border-slate-700 pt-4">
-                  <FormRow
-                    label="Kiến thức nền AI (Tùy chọn)"
-                    labelClassName="text-lime-300"
-                  >
+                  <FormRow label="Kiến thức nền AI (Tùy chọn)" labelClassName="text-lime-300">
                     <p className="text-xs text-slate-400 mb-2">
-                      Chọn các tệp nguyên tác (.txt) hoặc dataset (.json) từ kho
-                      hoặc tải lên từ máy để AI sử dụng làm kiến thức nền khi
-                      tạo thế giới và dẫn truyện.
+                      Chọn các tệp nguyên tác (.txt) hoặc dataset (.json) từ kho hoặc tải lên từ máy
+                      để AI sử dụng làm kiến thức nền khi tạo thế giới và dẫn truyện.
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <Button
@@ -1328,68 +1196,52 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                         variant="secondary"
                         className="w-auto! text-sm! py-2!"
                       >
-                        <Icon name="save" className="w-4 h-4 mr-2" /> Chọn từ
-                        Kho
+                        <Icon name="save" className="w-4 h-4 mr-2" /> Chọn từ Kho
                       </Button>
                       <Button
                         onClick={() => knowledgeFileInputRef.current?.click()}
                         variant="secondary"
                         className="w-auto! text-sm! py-2!"
                       >
-                        <Icon name="upload" className="w-4 h-4 mr-2" /> Tải từ
-                        máy
+                        <Icon name="upload" className="w-4 h-4 mr-2" /> Tải từ máy
                       </Button>
                     </div>
-                    {config.backgroundKnowledge &&
-                      config.backgroundKnowledge.length > 0 && (
-                        <div className="mt-3 space-y-2">
-                          <p className="text-sm font-semibold text-slate-300">
-                            Đã chọn:
-                          </p>
-                          <ul className="space-y-1 max-h-52 overflow-y-auto pr-2">
-                            {config.backgroundKnowledge.map((file, index) => {
-                              // Kiểm tra nếu là file Dataset (.json)
-                              const isDataset =
-                                file.name.endsWith(".json") ||
-                                file.name.startsWith("[DATASET]");
+                    {config.backgroundKnowledge && config.backgroundKnowledge.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        <p className="text-sm font-semibold text-slate-300">Đã chọn:</p>
+                        <ul className="space-y-1 max-h-52 overflow-y-auto pr-2">
+                          {config.backgroundKnowledge.map((file, index) => {
+                            // Kiểm tra nếu là file Dataset (.json)
+                            const isDataset =
+                              file.name.endsWith(".json") || file.name.startsWith("[DATASET]");
 
-                              return (
-                                <li
-                                  key={index}
-                                  className="flex items-center justify-between bg-slate-900/50 p-2 rounded-md text-sm"
+                            return (
+                              <li
+                                key={index}
+                                className="flex items-center justify-between bg-slate-900/50 p-2 rounded-md text-sm"
+                              >
+                                <div className="flex items-center gap-2 truncate">
+                                  {isDataset ? (
+                                    <Tooltip text="File dữ liệu hệ thống (Chỉ đọc bởi AI) - Không thể xem trực tiếp để đảm bảo hiệu suất.">
+                                      <Icon name="key" className="w-4 h-4 text-yellow-500" />
+                                    </Tooltip>
+                                  ) : (
+                                    <Icon name="news" className="w-4 h-4 text-slate-400" />
+                                  )}
+                                  <span className="text-slate-300 truncate">{file.name}</span>
+                                </div>
+                                <button
+                                  onClick={() => handleRemoveKnowledgeFile(index)}
+                                  className="p-1 text-red-400 hover:bg-red-500/20 rounded-full transition"
                                 >
-                                  <div className="flex items-center gap-2 truncate">
-                                    {isDataset ? (
-                                      <Tooltip text="File dữ liệu hệ thống (Chỉ đọc bởi AI) - Không thể xem trực tiếp để đảm bảo hiệu suất.">
-                                        <Icon
-                                          name="key"
-                                          className="w-4 h-4 text-yellow-500"
-                                        />
-                                      </Tooltip>
-                                    ) : (
-                                      <Icon
-                                        name="news"
-                                        className="w-4 h-4 text-slate-400"
-                                      />
-                                    )}
-                                    <span className="text-slate-300 truncate">
-                                      {file.name}
-                                    </span>
-                                  </div>
-                                  <button
-                                    onClick={() =>
-                                      handleRemoveKnowledgeFile(index)
-                                    }
-                                    className="p-1 text-red-400 hover:bg-red-500/20 rounded-full transition"
-                                  >
-                                    <Icon name="trash" className="w-4 h-4" />
-                                  </button>
-                                </li>
-                              );
-                            })}
-                          </ul>
-                        </div>
-                      )}
+                                  <Icon name="trash" className="w-4 h-4" />
+                                </button>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
                   </FormRow>
                 </div>
 
@@ -1399,35 +1251,26 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     id="adult-content"
                     checked={config.allowAdultContent}
                     onChange={(e) => {
-                      handleSimpleChange("allowAdultContent", e.target.checked),
-                      handleSimpleChange("allowCheatEffects", e.target.checked)
-                    }
-                    }
+                      (handleSimpleChange("allowAdultContent", e.target.checked),
+                        handleSimpleChange("allowCheatEffects", e.target.checked));
+                    }}
                     onClick={handleAdultContentClick}
-                    disabled={isSafetyFilterEnabled}
+                    disabled={false /*isSafetyFilterEnabled*/}
                     className="h-4 w-4 rounded border-gray-300 text-pink-600 focus:ring-pink-500 disabled:opacity-50"
                   />
                   <label
                     htmlFor="adult-content"
-                    className={`text-sm font-medium ${isSafetyFilterEnabled ? "text-slate-500 cursor-not-allowed" : "text-slate-300"}`}
+                    className={`text-sm font-medium ${false /*isSafetyFilterEnabled*/ ? "text-slate-500 cursor-not-allowed" : "text-slate-300"}`}
                   >
                     Cho phép nội dung 18+ và chít
                   </label>
                 </div>
-                {config.allowAdultContent && !isSafetyFilterEnabled && (
+                {config.allowAdultContent && true /*!isSafetyFilterEnabled*/ && (
                   <div className="mt-4 space-y-4 border-t border-slate-700 pt-4 animate-fade-in">
-                    <FormRow
-                      label="Phong Cách Miêu Tả Tình Dục"
-                      labelClassName="text-lime-300"
-                    >
+                    <FormRow label="Phong Cách Miêu Tả Tình Dục" labelClassName="text-lime-300">
                       <StyledSelect
                         value={config.sexualContentStyle}
-                        onChange={(e) =>
-                          handleSimpleChange(
-                            "sexualContentStyle",
-                            e.target.value,
-                          )
-                        }
+                        onChange={(e) => handleSimpleChange("sexualContentStyle", e.target.value)}
                       >
                         {SEXUAL_CONTENT_STYLE_OPTIONS.map((opt) => (
                           <option key={opt} value={opt}>
@@ -1436,15 +1279,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                         ))}
                       </StyledSelect>
                     </FormRow>
-                    <FormRow
-                      label="Mức Độ Miêu Tả Bạo Lực"
-                      labelClassName="text-lime-300"
-                    >
+                    <FormRow label="Mức Độ Miêu Tả Bạo Lực" labelClassName="text-lime-300">
                       <StyledSelect
                         value={config.violenceLevel}
-                        onChange={(e) =>
-                          handleSimpleChange("violenceLevel", e.target.value)
-                        }
+                        onChange={(e) => handleSimpleChange("violenceLevel", e.target.value)}
                       >
                         {VIOLENCE_LEVEL_OPTIONS.map((opt) => (
                           <option key={opt} value={opt}>
@@ -1453,15 +1291,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                         ))}
                       </StyledSelect>
                     </FormRow>
-                    <FormRow
-                      label="Tông Màu Câu Chuyện"
-                      labelClassName="text-lime-300"
-                    >
+                    <FormRow label="Tông Màu Câu Chuyện" labelClassName="text-lime-300">
                       <StyledSelect
                         value={config.storyTone}
-                        onChange={(e) =>
-                          handleSimpleChange("storyTone", e.target.value)
-                        }
+                        onChange={(e) => handleSimpleChange("storyTone", e.target.value)}
                       >
                         {STORY_TONE_OPTIONS.map((opt) => (
                           <option key={opt} value={opt}>
@@ -1488,9 +1321,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     <div key={index} className="flex items-center space-x-2">
                       <StyledInput
                         value={rule}
-                        onChange={(e) =>
-                          handleCoreRuleChange(index, e.target.value)
-                        }
+                        onChange={(e) => handleCoreRuleChange(index, e.target.value)}
                         placeholder={`Luật ${index + 1}`}
                       />
                       <button
@@ -1553,23 +1384,12 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                 Tên Thực Thể:
                               </label>
                               <AiAssistButton
-                                isLoading={
-                                  loadingStates[`entity_name_${originalIndex}`]
-                                }
+                                isLoading={loadingStates[`entity_name_${originalIndex}`]}
                                 onClick={() =>
                                   runAiAssist(
                                     `entity_name_${originalIndex}`,
-                                    () =>
-                                      aiService.generateEntityName(
-                                        config,
-                                        entity,
-                                      ),
-                                    (res) =>
-                                      handleEntityChange(
-                                        originalIndex,
-                                        "name",
-                                        res,
-                                      ),
+                                    () => aiService.generateEntityName(config, entity),
+                                    (res) => handleEntityChange(originalIndex, "name", res),
                                   )
                                 }
                               />
@@ -1577,35 +1397,22 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                             <StyledInput
                               value={entity.name}
                               onChange={(e) =>
-                                handleEntityChange(
-                                  originalIndex,
-                                  "name",
-                                  e.target.value,
-                                )
+                                handleEntityChange(originalIndex, "name", e.target.value)
                               }
                               placeholder="VD: Lão Ma Đầu, Thanh Cổ Kiếm..."
                             />
                           </div>
-                          <FormRow
-                            label="Loại Thực Thể:"
-                            labelClassName="text-green-300"
-                          >
+                          <FormRow label="Loại Thực Thể:" labelClassName="text-green-300">
                             <StyledSelect
                               value={
-                                ENTITY_TYPE_OPTIONS.includes(
-                                  entity.customCategory || "",
-                                )
+                                ENTITY_TYPE_OPTIONS.includes(entity.customCategory || "")
                                   ? entity.customCategory
                                   : ENTITY_TYPE_OPTIONS.includes(entity.type)
                                     ? entity.type
                                     : "NPC"
                               }
                               onChange={(e) =>
-                                handleEntityChange(
-                                  originalIndex,
-                                  "type_select",
-                                  e.target.value,
-                                )
+                                handleEntityChange(originalIndex, "type_select", e.target.value)
                               }
                             >
                               {ENTITY_TYPE_OPTIONS.map((opt) => (
@@ -1622,25 +1429,12 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                 Tính Cách (Nếu là NPC):
                               </label>
                               <AiAssistButton
-                                isLoading={
-                                  loadingStates[
-                                    `entity_personality_${originalIndex}`
-                                  ]
-                                }
+                                isLoading={loadingStates[`entity_personality_${originalIndex}`]}
                                 onClick={() =>
                                   runAiAssist(
                                     `entity_personality_${originalIndex}`,
-                                    () =>
-                                      aiService.generateEntityPersonality(
-                                        config,
-                                        entity,
-                                      ),
-                                    (res) =>
-                                      handleEntityChange(
-                                        originalIndex,
-                                        "personality",
-                                        res,
-                                      ),
+                                    () => aiService.generateEntityPersonality(config, entity),
+                                    (res) => handleEntityChange(originalIndex, "personality", res),
                                   )
                                 }
                               />
@@ -1648,11 +1442,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                             <StyledTextArea
                               value={entity.personality}
                               onChange={(e) =>
-                                handleEntityChange(
-                                  originalIndex,
-                                  "personality",
-                                  e.target.value,
-                                )
+                                handleEntityChange(originalIndex, "personality", e.target.value)
                               }
                               rows={2}
                               placeholder="VD: Lạnh lùng, đa nghi..."
@@ -1666,25 +1456,12 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                               Mô Tả Thực Thể:
                             </label>
                             <AiAssistButton
-                              isLoading={
-                                loadingStates[
-                                  `entity_description_${originalIndex}`
-                                ]
-                              }
+                              isLoading={loadingStates[`entity_description_${originalIndex}`]}
                               onClick={() =>
                                 runAiAssist(
                                   `entity_description_${originalIndex}`,
-                                  () =>
-                                    aiService.generateEntityDescription(
-                                      config,
-                                      entity,
-                                    ),
-                                  (res) =>
-                                    handleEntityChange(
-                                      originalIndex,
-                                      "description",
-                                      res,
-                                    ),
+                                  () => aiService.generateEntityDescription(config, entity),
+                                  (res) => handleEntityChange(originalIndex, "description", res),
                                 )
                               }
                             />
@@ -1692,11 +1469,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                           <StyledTextArea
                             value={entity.description}
                             onChange={(e) =>
-                              handleEntityChange(
-                                originalIndex,
-                                "description",
-                                e.target.value,
-                              )
+                              handleEntityChange(originalIndex, "description", e.target.value)
                             }
                             rows={3}
                             placeholder="VD: Một thanh kiếm cổ..."
@@ -1743,15 +1516,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     Nhân Vật Chính
                   </h3>
                 </div>
-                <FormRow
-                  label="Danh xưng (Tên nhân vật):"
-                  labelClassName="text-pink-300"
-                >
+                <FormRow label="Danh xưng (Tên nhân vật):" labelClassName="text-pink-300">
                   <StyledInput
                     value={config.character.name}
-                    onChange={(e) =>
-                      handleNestedChange("character", "name", e.target.value)
-                    }
+                    onChange={(e) => handleNestedChange("character", "name", e.target.value)}
                     placeholder="VD: Trần Dạ, Luna Nguyễn, K-7..."
                   />
                 </FormRow>
@@ -1759,13 +1527,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   <FormRow label="Giới tính" labelClassName="text-pink-300">
                     <StyledSelect
                       value={config.character.gender}
-                      onChange={(e) =>
-                        handleNestedChange(
-                          "character",
-                          "gender",
-                          e.target.value,
-                        )
-                      }
+                      onChange={(e) => handleNestedChange("character", "gender", e.target.value)}
                     >
                       {GENDER_OPTIONS.map((opt) => (
                         <option key={opt} value={opt}>
@@ -1778,11 +1540,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     <StyledSelect
                       value={config.character.personality}
                       onChange={(e) =>
-                        handleNestedChange(
-                          "character",
-                          "personality",
-                          e.target.value,
-                        )
+                        handleNestedChange("character", "personality", e.target.value)
                       }
                     >
                       {PERSONALITY_OPTIONS.map((opt) => (
@@ -1794,18 +1552,11 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   </FormRow>
                 </div>
                 {config.character.personality === "Tuỳ chỉnh" && (
-                  <FormRow
-                    label="Mô tả tính cách tùy chỉnh"
-                    labelClassName="text-pink-300"
-                  >
+                  <FormRow label="Mô tả tính cách tùy chỉnh" labelClassName="text-pink-300">
                     <StyledTextArea
                       value={config.character.customPersonality}
                       onChange={(e) =>
-                        handleNestedChange(
-                          "character",
-                          "customPersonality",
-                          e.target.value,
-                        )
+                        handleNestedChange("character", "customPersonality", e.target.value)
                       }
                       rows={3}
                       placeholder="VD: Một người cộc cằn..."
@@ -1817,16 +1568,11 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     <label className="block text-sm font-medium text-pink-300">
                       Sơ Lược Tiểu Sử/ngoại hình:
                     </label>
-                    <AiAssistButton
-                      isLoading={loadingStates["bio"]}
-                      onClick={handleGenerateBio}
-                    />
+                    <AiAssistButton isLoading={loadingStates["bio"]} onClick={handleGenerateBio} />
                   </div>
                   <StyledTextArea
                     value={config.character.bio}
-                    onChange={(e) =>
-                      handleNestedChange("character", "bio", e.target.value)
-                    }
+                    onChange={(e) => handleNestedChange("character", "bio", e.target.value)}
                     rows={2}
                     placeholder="VD: Là đứa con cuối cùng của một gia tộc cổ xưa..."
                   />
@@ -1867,19 +1613,13 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                         <div className="space-y-2">
                           <StyledInput
                             value={skill.name}
-                            onChange={(e) =>
-                              handleSkillChange(index, "name", e.target.value)
-                            }
+                            onChange={(e) => handleSkillChange(index, "name", e.target.value)}
                             placeholder="Tên kỹ năng. VD: Hỏa thuật, Đàm phán..."
                           />
                           <StyledTextArea
                             value={skill.description}
                             onChange={(e) =>
-                              handleSkillChange(
-                                index,
-                                "description",
-                                e.target.value,
-                              )
+                              handleSkillChange(index, "description", e.target.value)
                             }
                             rows={2}
                             placeholder="Mô tả kỹ năng. VD: Khả năng điều khiển lửa..."
@@ -1887,11 +1627,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                         </div>
                       </div>
                     ))}
-                    <Button
-                      onClick={addSkill}
-                      variant="special"
-                      className="w-full! text-sm! py-2!"
-                    >
+                    <Button onClick={addSkill} variant="special" className="w-full! text-sm! py-2!">
                       <Icon name="plus" className="w-4 h-4 mr-2" />
                       Thêm Kỹ Năng
                     </Button>
@@ -1910,13 +1646,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                   </div>
                   <StyledTextArea
                     value={config.character.motivation}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "character",
-                        "motivation",
-                        e.target.value,
-                      )
-                    }
+                    onChange={(e) => handleNestedChange("character", "motivation", e.target.value)}
                     rows={2}
                     placeholder="VD: Tìm lại di vật của gia đình..."
                   />
@@ -1938,18 +1668,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                       type="checkbox"
                       id="enable-stats"
                       checked={config.enableStatsSystem}
-                      onChange={(e) =>
-                        handleSimpleChange(
-                          "enableStatsSystem",
-                          e.target.checked,
-                        )
-                      }
+                      onChange={(e) => handleSimpleChange("enableStatsSystem", e.target.checked)}
                       className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                     />
-                    <label
-                      htmlFor="enable-stats"
-                      className="text-sm font-medium text-slate-300"
-                    >
+                    <label htmlFor="enable-stats" className="text-sm font-medium text-slate-300">
                       Bật hệ thống chỉ số (Dạng số)
                     </label>
                   </div>
@@ -1960,10 +1682,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                       id="enable-milestones"
                       checked={config.enableMilestoneSystem}
                       onChange={(e) =>
-                        handleSimpleChange(
-                          "enableMilestoneSystem",
-                          e.target.checked,
-                        )
+                        handleSimpleChange("enableMilestoneSystem", e.target.checked)
                       }
                       className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                     />
@@ -2004,20 +1723,14 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                   <StyledInput
                                     value={stat.name}
                                     onChange={(e) =>
-                                      handleStatChange(
-                                        index,
-                                        "name",
-                                        e.target.value,
-                                      )
+                                      handleStatChange(index, "name", e.target.value)
                                     }
                                     disabled={index < 2}
                                   />
                                   {index >= 2 && (
                                     <AiAssistButton
                                       isLoading={loadingStates[`stat_${index}`]}
-                                      onClick={() =>
-                                        handleGenerateSingleStat(index)
-                                      }
+                                      onClick={() => handleGenerateSingleStat(index)}
                                     />
                                   )}
                                 </div>
@@ -2032,15 +1745,9 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                     type="number"
                                     value={stat.value}
                                     onChange={(e) =>
-                                      handleStatChange(
-                                        index,
-                                        "value",
-                                        e.target.value,
-                                      )
+                                      handleStatChange(index, "value", e.target.value)
                                     }
-                                    max={
-                                      stat.hasLimit === false ? 9999 : undefined
-                                    }
+                                    max={stat.hasLimit === false ? 9999 : undefined}
                                   />
                                 </div>
                                 {stat.hasLimit !== false && (
@@ -2055,11 +1762,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                         type="number"
                                         value={stat.maxValue}
                                         onChange={(e) =>
-                                          handleStatChange(
-                                            index,
-                                            "maxValue",
-                                            e.target.value,
-                                          )
+                                          handleStatChange(index, "maxValue", e.target.value)
                                         }
                                       />
                                     </div>
@@ -2075,11 +1778,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                               <StyledTextArea
                                 value={stat.description || ""}
                                 onChange={(e) =>
-                                  handleStatChange(
-                                    index,
-                                    "description",
-                                    e.target.value,
-                                  )
+                                  handleStatChange(index, "description", e.target.value)
                                 }
                                 rows={2}
                                 placeholder="VD: Tăng khả năng né tránh, thể hiện sức mạnh phép thuật..."
@@ -2093,11 +1792,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                     id={`has-limit-${index}`}
                                     checked={stat.hasLimit !== false}
                                     onChange={(e) =>
-                                      handleStatChange(
-                                        index,
-                                        "hasLimit",
-                                        e.target.checked,
-                                      )
+                                      handleStatChange(index, "hasLimit", e.target.checked)
                                     }
                                     className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                                     disabled={index < 2}
@@ -2117,11 +1812,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                                       id={`is-percentage-${index}`}
                                       checked={stat.isPercentage}
                                       onChange={(e) =>
-                                        handleStatChange(
-                                          index,
-                                          "isPercentage",
-                                          e.target.checked,
-                                        )
+                                        handleStatChange(index, "isPercentage", e.target.checked)
                                       }
                                       className="h-4 w-4 rounded border-gray-300 text-teal-600 focus:ring-teal-500"
                                     />
@@ -2145,11 +1836,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                             </div>
                           </div>
                         ))}
-                        <Button
-                          onClick={addStat}
-                          variant="info"
-                          className="w-full! text-sm! py-2!"
-                        >
+                        <Button onClick={addStat} variant="info" className="w-full! text-sm! py-2!">
                           <Icon name="plus" className="w-4 h-4 mr-2" />
                           Thêm Chỉ Số
                         </Button>
@@ -2169,130 +1856,97 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                       />
                     </div>
                     <div className="max-h-96 overflow-y-auto pr-2 space-y-4">
-                      {(config.character.milestones || []).map(
-                        (milestone, index) => (
-                          <div
-                            key={index}
-                            className="bg-slate-900/50 p-3 rounded-lg border border-slate-700"
-                          >
-                            <div className="flex justify-end items-center mb-2">
-                              <div className="flex items-center gap-2">
-                                <span className="text-xs text-slate-400">
-                                  AI Hỗ trợ
-                                </span>
-                                <AiAssistButton
-                                  isLoading={
-                                    loadingStates[`milestone_item_${index}`]
-                                  }
-                                  onClick={() =>
-                                    handleGenerateSingleMilestone(index)
-                                  }
-                                />
-                              </div>
-                            </div>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2">
-                              <FormRow
-                                label="Tên Cột Mốc"
-                                labelClassName="text-slate-300 text-xs"
-                                tooltip="Tên của cột mốc mà bạn và AI sẽ thấy trong game. VD: Cảnh Giới Tu Luyện, Thân Phận."
-                              >
-                                <StyledInput
-                                  value={milestone.name}
-                                  onChange={(e) =>
-                                    handleMilestoneChange(
-                                      index,
-                                      "name",
-                                      e.target.value,
-                                    )
-                                  }
-                                  placeholder={
-                                    milestoneTemplates[index]?.name ||
-                                    "VD: Cảnh Giới"
-                                  }
-                                />
-                              </FormRow>
-                              <FormRow
-                                label="Giá trị Hiện tại"
-                                labelClassName="text-slate-300 text-xs"
-                                tooltip="Giá trị khởi đầu của cột mốc. VD: 'Luyện Khí Tầng 1', 'Nội Môn Đệ Tử'."
-                              >
-                                <StyledInput
-                                  value={milestone.value}
-                                  onChange={(e) =>
-                                    handleMilestoneChange(
-                                      index,
-                                      "value",
-                                      e.target.value,
-                                    )
-                                  }
-                                  placeholder={
-                                    milestoneTemplates[index]?.value ||
-                                    "VD: Phàm Nhân"
-                                  }
-                                />
-                              </FormRow>
-                            </div>
-                            <div className="mb-2">
-                              <FormRow
-                                label="Phân Loại"
-                                labelClassName="text-slate-300 text-xs"
-                                tooltip="Phân loại cột mốc để quản lý. 'Tu Luyện' cho các cấp bậc sức mạnh, 'Thân Thể' cho các đặc tính cơ thể."
-                              >
-                                <StyledSelect
-                                  value={
-                                    milestoneTemplates[index]?.category ||
-                                    milestone.category
-                                  }
-                                  onChange={(e) =>
-                                    handleMilestoneChange(
-                                      index,
-                                      "category",
-                                      e.target.value,
-                                    )
-                                  }
-                                >
-                                  {MILESTONE_CATEGORY_OPTIONS.map((opt) => (
-                                    <option key={opt} value={opt}>
-                                      {opt}
-                                    </option>
-                                  ))}
-                                </StyledSelect>
-                              </FormRow>
-                            </div>
-                            <div className="mb-2">
-                              <FormRow
-                                label="Mô tả (cho AI)"
-                                labelClassName="text-slate-300 text-xs"
-                                tooltip="Giải thích cho AI biết cột mốc này có ý nghĩa gì và hệ thống cấp bậc của nó (nếu có). Đây là phần QUAN TRỌNG NHẤT để AI dẫn truyện logic."
-                              >
-                                <StyledTextArea
-                                  value={milestone.description}
-                                  onChange={(e) =>
-                                    handleMilestoneChange(
-                                      index,
-                                      "description",
-                                      e.target.value,
-                                    )
-                                  }
-                                  rows={2}
-                                  placeholder={
-                                    milestoneTemplates[index]?.description ||
-                                    "VD: Cấp bậc tu vi, cảnh giới sức mạnh cốt lõi của nhân vật..."
-                                  }
-                                />
-                              </FormRow>
-                            </div>
-                            <div className="flex justify-end">
-                              <button
-                                onClick={() => removeMilestone(index)}
-                                className="p-1 text-red-400 hover:bg-red-500/20 rounded-full transition"
-                              >
-                                <Icon name="trash" className="w-4 h-4" />
-                              </button>
+                      {(config.character.milestones || []).map((milestone, index) => (
+                        <div
+                          key={index}
+                          className="bg-slate-900/50 p-3 rounded-lg border border-slate-700"
+                        >
+                          <div className="flex justify-end items-center mb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-slate-400">AI Hỗ trợ</span>
+                              <AiAssistButton
+                                isLoading={loadingStates[`milestone_item_${index}`]}
+                                onClick={() => handleGenerateSingleMilestone(index)}
+                              />
                             </div>
                           </div>
-                        ),
-                      )}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 mb-2">
+                            <FormRow
+                              label="Tên Cột Mốc"
+                              labelClassName="text-slate-300 text-xs"
+                              tooltip="Tên của cột mốc mà bạn và AI sẽ thấy trong game. VD: Cảnh Giới Tu Luyện, Thân Phận."
+                            >
+                              <StyledInput
+                                value={milestone.name}
+                                onChange={(e) =>
+                                  handleMilestoneChange(index, "name", e.target.value)
+                                }
+                                placeholder={milestoneTemplates[index]?.name || "VD: Cảnh Giới"}
+                              />
+                            </FormRow>
+                            <FormRow
+                              label="Giá trị Hiện tại"
+                              labelClassName="text-slate-300 text-xs"
+                              tooltip="Giá trị khởi đầu của cột mốc. VD: 'Luyện Khí Tầng 1', 'Nội Môn Đệ Tử'."
+                            >
+                              <StyledInput
+                                value={milestone.value}
+                                onChange={(e) =>
+                                  handleMilestoneChange(index, "value", e.target.value)
+                                }
+                                placeholder={milestoneTemplates[index]?.value || "VD: Phàm Nhân"}
+                              />
+                            </FormRow>
+                          </div>
+                          <div className="mb-2">
+                            <FormRow
+                              label="Phân Loại"
+                              labelClassName="text-slate-300 text-xs"
+                              tooltip="Phân loại cột mốc để quản lý. 'Tu Luyện' cho các cấp bậc sức mạnh, 'Thân Thể' cho các đặc tính cơ thể."
+                            >
+                              <StyledSelect
+                                value={milestoneTemplates[index]?.category || milestone.category}
+                                onChange={(e) =>
+                                  handleMilestoneChange(index, "category", e.target.value)
+                                }
+                              >
+                                {MILESTONE_CATEGORY_OPTIONS.map((opt) => (
+                                  <option key={opt} value={opt}>
+                                    {opt}
+                                  </option>
+                                ))}
+                              </StyledSelect>
+                            </FormRow>
+                          </div>
+                          <div className="mb-2">
+                            <FormRow
+                              label="Mô tả (cho AI)"
+                              labelClassName="text-slate-300 text-xs"
+                              tooltip="Giải thích cho AI biết cột mốc này có ý nghĩa gì và hệ thống cấp bậc của nó (nếu có). Đây là phần QUAN TRỌNG NHẤT để AI dẫn truyện logic."
+                            >
+                              <StyledTextArea
+                                value={milestone.description}
+                                onChange={(e) =>
+                                  handleMilestoneChange(index, "description", e.target.value)
+                                }
+                                rows={2}
+                                placeholder={
+                                  milestoneTemplates[index]?.description ||
+                                  "VD: Cấp bậc tu vi, cảnh giới sức mạnh cốt lõi của nhân vật..."
+                                }
+                              />
+                            </FormRow>
+                          </div>
+                          <div className="flex justify-end">
+                            <button
+                              onClick={() => removeMilestone(index)}
+                              className="p-1 text-red-400 hover:bg-red-500/20 rounded-full transition"
+                            >
+                              <Icon name="trash" className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
                       <Button
                         onClick={addMilestone}
                         variant="info"
@@ -2318,11 +1972,7 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
             >
               Lưu Thiết Lập
             </Button>
-            <Button
-              onClick={handleLoadConfigClick}
-              variant="special"
-              className="w-auto!"
-            >
+            <Button onClick={handleLoadConfigClick} variant="special" className="w-auto!">
               Tải Thiết Lập
             </Button>
           </div>
