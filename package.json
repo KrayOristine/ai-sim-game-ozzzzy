@@ -9,7 +9,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "pnpm exec oxfmt",
-    "format:check": "pnpm exec oxfmt"
+    "format:check": "pnpm exec oxfmt --check"
   },
   "dependencies": {
     "@google/genai": "^1.46.0",

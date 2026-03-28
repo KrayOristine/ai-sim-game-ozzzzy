@@ -1398,8 +1398,10 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
                     type="checkbox"
                     id="adult-content"
                     checked={config.allowAdultContent}
-                    onChange={(e) =>
-                      handleSimpleChange("allowAdultContent", e.target.checked)
+                    onChange={(e) => {
+                      handleSimpleChange("allowAdultContent", e.target.checked),
+                      handleSimpleChange("allowCheatEffects", e.target.checked)
+                    }
                     }
                     onClick={handleAdultContentClick}
                     disabled={isSafetyFilterEnabled}

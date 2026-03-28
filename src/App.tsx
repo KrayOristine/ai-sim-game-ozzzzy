@@ -174,6 +174,7 @@ const App: React.FC = () => {
         enableMilestoneSystem:
           state.worldConfig.enableMilestoneSystem ??
           (state.character.milestones && state.character.milestones.length > 0),
+          allowCheatEffects: true,
       },
       character: {
         ...(state.character || state.worldConfig.character), // Handle very old saves
