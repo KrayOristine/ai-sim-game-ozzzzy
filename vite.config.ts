@@ -70,7 +70,6 @@ export default defineConfig(() => {
               {
                 test: /node_modules[\\/]/i,
                 name: "vendor",
-                entriesAware: true,
               },
               {
                 test: /[\\/]services[\\/]/i,

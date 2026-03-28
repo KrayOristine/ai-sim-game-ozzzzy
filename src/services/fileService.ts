@@ -39,6 +39,7 @@ export const saveJsonToFile = (data: object, defaultFileName: string): void => {
   linkElement.setAttribute("download", defaultFileName);
   linkElement.click();
 };
+
 const ccSchema = type({
   name: "string",
   personality: "string",
@@ -48,7 +49,7 @@ const ccSchema = type({
   skills: type({
     name: "string",
     description: "string",
-  }).array,
+  }).array(),
   stats: type({
     name: "string",
     value: "number",
@@ -56,13 +57,13 @@ const ccSchema = type({
     isPercentage: "boolean",
     "description?": "string",
     "hasLimit?": "boolean",
-  }).array,
+  }).array(),
   milestones: type({
     name: "string",
     value: "string",
     description: "string",
     category: "string",
-  }).array,
+  }).array(),
   motivation: "string",
 });
 const ieSchema = type({
@@ -100,7 +101,7 @@ const wcschema = type({
   character: ccSchema,
   difficulty: "string",
   "aiResponseLength?": "string",
-  "backgroundKnowledge?": type({ name: "string", content: "string" }).array,
+  "backgroundKnowledge?": type({ name: "string", content: "string" }).array(),
   allowAdultContent: type.boolean.default(true),
   allowCheatEffects: type.boolean.default(true),
   "sexualContentStyle?": "string",
@@ -109,8 +110,8 @@ const wcschema = type({
   enableStatsSystem: type.boolean.default(true),
   enableMilestoneSystem: type.boolean.default(true),
   coreRules: "string[]",
-  initialEntities: ieSchema.array,
-  temporaryRules: trSchema.array,
+  initialEntities: ieSchema.array(),
+  temporaryRules: trSchema.array(),
 });
 const parseJESON = type("string.json.parse").to(wcschema);
 export const loadWorldConfigFromFile = (file: File): Promise<WorldConfig> => {
