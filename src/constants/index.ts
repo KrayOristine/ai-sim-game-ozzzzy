@@ -99,7 +99,7 @@ export const DEFAULT_MILESTONES: CharacterMilestone[] =
 export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   storyContext: {
     worldName: "",
-    genre: GENRES[0].name, // Usa o primeiro gênero como padrão
+    genre: GENRES[0].name,
     setting: "",
   },
   character: {
@@ -117,6 +117,7 @@ export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   aiResponseLength: AI_RESPONSE_LENGTH_OPTIONS[0],
   backgroundKnowledge: [],
   allowAdultContent: true,
+  allowCheatEffects: true,
   sexualContentStyle: SEXUAL_CONTENT_STYLE_OPTIONS[0],
   violenceLevel: VIOLENCE_LEVEL_OPTIONS[0],
   storyTone: STORY_TONE_OPTIONS[1],
@@ -125,7 +126,6 @@ export const DEFAULT_WORLD_CONFIG: WorldConfig = {
   coreRules: [],
   initialEntities: [],
   temporaryRules: [],
-  allowCheatEffects: true
 };
 
 // Safety Settings Constants

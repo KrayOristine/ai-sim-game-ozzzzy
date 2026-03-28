@@ -196,7 +196,7 @@ Bạn là một Game Master thông minh. Phản hồi của bạn BẮT BUỘC p
 [Khu vực Tư duy & Lập kế hoạch - HOÀN TOÀN ẨN VỚI NGƯỜI CHƠI]
 - Phân tích ý định người chơi: Người chơi muốn gì? Hành động này có rủi ro gì?
 - Kiểm tra Logic: Hành động này có khả thi trong bối cảnh hiện tại không?
-${config.allowCheatEffects ? '' : '- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ'}
+${config.allowCheatEffects === false ? '- Kiểm tra Anti-cliché: Diễn biến này có quá dễ đoán không? Nếu có, hãy tạo ra một plot twist nhẹ' : ''}
 - Safety Check: Nếu nội dung vi phạm an toàn, hãy lên kế hoạch "lách" luật bằng cách ẩn dụ hoặc chuyển hướng (nếu đang ở chế độ 18+).
 - Kiểm tra kẹt hành vi/mất phương hướng: Cảnh hiện tại (trận chiến, hội thoại, nhiệm vụ) đã kết thúc chưa? Người chơi có đang bị kẹt hoặc hết phương hướng không?, nếu là có thì kích hoạt [Mô phỏng Thế giới song song], nếu KHÔNG thì BẮT BUỘC PHẢI ĐỂ TRỐNG!
 </thinking>

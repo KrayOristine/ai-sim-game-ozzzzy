@@ -244,6 +244,7 @@ export async function generate(
   systemInstruction?: string,
   retryCount: number = 0,
   modelOverride?: AIModel,
+  worldConfig?: WorldConfig,
 ): Promise<string> {
   const { safetySettings, aiPerformanceSettings } = getSettings();
   const activeSafetySettings = safetySettings.enabled
@@ -307,11 +308,12 @@ export async function generate(
       model: selectedModel,
       isProOverride: isProModel || isGemini3,
       context: currentDebugContext, // Log context
-      contents: "...", // Omitted for brevity, see preview
+      contents: "...",
       config: {
         safetySettings: activeSafetySettings,
         maxOutputTokens: effectiveMaxTokens,
         thinkingConfig: thinkConfig,
+        worldConfig: worldConfig ?? {},
       },
       retries: retryCount,
     });

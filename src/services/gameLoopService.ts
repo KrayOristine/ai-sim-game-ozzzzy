@@ -38,7 +38,7 @@ export const startGame = async (
 
   const { prompt, systemInstruction } = getStartGamePrompt(config);
   // Bật thử lại 2 lần cho giai đoạn Gameplay quan trọng
-  const rawResponse = await generate(prompt, systemInstruction, 2);
+  const rawResponse = await generate(prompt, systemInstruction, 2 ,undefined,config);
 
   printRequestStats("Khởi tạo Thế giới"); // In báo cáo
 
@@ -490,7 +490,7 @@ export const getNextTurn = async (
   }
 
   // Bật thử lại 2 lần cho giai đoạn Gameplay quan trọng
-  const rawResponse = await generate(prompt, systemInstruction, 2);
+  const rawResponse = await generate(prompt, systemInstruction, 2, undefined, worldConfig);
 
   printRequestStats("Xử Lý Lượt Chơi (Bao gồm Piggyback)"); // In báo cáo thống kê request
 

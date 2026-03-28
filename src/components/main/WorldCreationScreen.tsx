@@ -97,23 +97,29 @@ const WorldCreationScreen: React.FC<WorldCreationScreenProps> = ({
   const [config, setConfig] = useState<WorldConfig>(() => {
     // Nếu tải một config đã có, chuẩn hóa nó.
     if (initialConfig) {
-      const sanitizedConfig = {
-        ...DEFAULT_WORLD_CONFIG,
-        ...initialConfig,
-        character: {
-          ...DEFAULT_WORLD_CONFIG.character,
-          ...initialConfig.character,
-          skills: Array.isArray(initialConfig.character.skills)
-            ? initialConfig.character.skills
-            : [],
-          stats:
-            initialConfig.character.stats &&
-            initialConfig.character.stats.length > 0
-              ? initialConfig.character.stats
-              : DEFAULT_STATS,
+      const sanitizedConfig = Object.assign(
+        {
+          ...DEFAULT_WORLD_CONFIG,
         },
-        backgroundKnowledge: initialConfig.backgroundKnowledge || [],
-      };
+        {
+          ...initialConfig,
+          character: {
+            ...initialConfig,
+            skills: Array.isArray(initialConfig.character.skills)
+              ? initialConfig.character.skills
+              : [],
+            stats:
+              initialConfig.character.stats &&
+              initialConfig.character.stats.length > 0
+                ? initialConfig.character.stats
+                : DEFAULT_STATS,
+          },
+          backgroundKnowledge: initialConfig.backgroundKnowledge
+            ? initialConfig.backgroundKnowledge
+            : [],
+        },
+      );
+
       sanitizedConfig.backgroundKnowledge.sort((a: any, b: any) => {
         const aIsSummary = a.name.startsWith("tom_tat_");
         const bIsSummary = b.name.startsWith("tom_tat_");
