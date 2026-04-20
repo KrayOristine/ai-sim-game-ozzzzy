@@ -1,4 +1,4 @@
-import { Type } from "@google/genai";
+import { ThinkingLevel, Type } from "@google/genai";
 import {
   PERSONALITY_OPTIONS,
   GENDER_OPTIONS,
@@ -335,7 +335,7 @@ ${milestoneInstruction}
   // Chúng ta KHÔNG dùng `aiPerformanceSettings` ở đây để tránh bị giới hạn bởi thanh trượt của người dùng.
   const creativeCallConfig: Partial<AiPerformanceSettings> = {
     maxOutputTokens: 32768, // Đủ lớn cho cấu trúc thế giới phức tạp
-    thinkingBudget: 16384, // Tư duy sâu cho World Creation
+    thinkingLevel: ThinkingLevel.HIGH
   };
 
   return { prompt, schema, creativeCallConfig };

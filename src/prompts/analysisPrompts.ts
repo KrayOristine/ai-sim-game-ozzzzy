@@ -2,7 +2,6 @@ import { Type } from "@google/genai";
 
 export const analyticalCallConfig: Partial<AiPerformanceSettings> = {
   maxOutputTokens: 8192,
-  thinkingBudget: 1000,
 };
 
 export const getGenerateSummaryPrompt = (turns: GameTurn[]): string => {

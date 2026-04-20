@@ -5,7 +5,7 @@ import { AIModel } from "#/constants";
 
 // Cấu hình Flash cho tác vụ nền - Ưu tiên tốc độ và chi phí thấp
 const backgroundConfig = {
-  maxOutputTokens: 4096,
+  maxOutputTokens: 16384, // doubled to prevent max token issue
   thinkingBudget: 0, // Tắt thinking để tiết kiệm
 };
 

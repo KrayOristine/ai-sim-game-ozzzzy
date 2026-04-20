@@ -71,7 +71,7 @@ export async function generateWorldFromIdea(
     prompt,
     schema,
     undefined,
-    AIModel.Gemini3d1FlashLite,
+    AIModel.Gemini3Flash,
     creativeCallConfig,
     0,
   );

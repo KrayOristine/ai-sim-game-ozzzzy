@@ -4,9 +4,9 @@ import { AIModel } from "#/constants";
 
 // Cấu hình riêng cho Worker AI: Ưu tiên tốc độ, chi phí thấp, nhưng output JSON chính xác.
 const workerAiConfig: Partial<AiPerformanceSettings> = {
-  maxOutputTokens: 2048,
-  thinkingBudget: 0, // Flash không cần thinking cho task này
-  selectedModel: "gemini-2.5-flash", // Force Flash model
+  maxOutputTokens: 4096,
+  thinkingBudget: 0,
+  selectedModel: AIModel.Gemini3d1FlashLite
 };
 
 export interface SmartCodexResult {
