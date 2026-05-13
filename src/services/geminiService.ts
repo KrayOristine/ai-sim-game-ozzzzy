@@ -234,7 +234,7 @@ export async function generate(
 
   // Ưu tiên sử dụng model từ tham số override, sau đó mới đến cài đặt
   let selectedModel =
-    modelOverride || perfSettings.selectedModel || "gemini-3.1-flash-lite-preview";
+    modelOverride || perfSettings.selectedModel || "gemini-3.1-flash-lite";
 
   const isProModel = selectedModel.includes("pro");
   const isGemini3 = selectedModel.includes("gemini-3");

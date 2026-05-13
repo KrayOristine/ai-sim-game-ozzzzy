@@ -475,7 +475,7 @@ const SettingsScreen: React.FC<SettingsScreenProps> = ({ onBack }) => {
               <option value="gemini-3-flash-preview">
                 Gemini 3.0 Flash (Tốc độ cao - Thông minh hơn - Mới)
               </option>
-              <option value="gemini-3.1-flash-lite-preview">
+              <option value="gemini-3.1-flash-lite">
                 Gemini 3.1 Flash Lite (Siêu tốc - Tiết kiệm - Mới)
               </option>
             </select>
